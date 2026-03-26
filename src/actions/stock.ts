@@ -1,0 +1,56 @@
+"use server";
+
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { StockMovementFormData } from "@/lib/validations/stock";
+import { SerializedStockMovement } from "@/types/stock";
+import { revalidatePath } from "next/cache";
+
+function serializedMovement(m: any): SerializedStockMovement {
+	return {
+		...m,
+		createdAt: m.createdAt.toISOString(),
+	};
+}
+
+export async function getStockMovements(): Promise<SerializedStockMovement[]> {
+	const movements = await prisma.stockMovement.findMany({
+		orderBy: { createdAt: "desc" },
+		include: {
+			product: { select: { id: true, name: true, sku: true } },
+			user: { select: { id: true, username: true } },
+			order: { select: { id: true } },
+		},
+	});
+	return movements.map(serializedMovement);
+}
+
+export async function createStockMovement(data: StockMovementFormData) {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("Unauthorized");
+
+	await prisma.$transaction(async (tx) => {
+		await tx.stockMovement.create({
+			data: {
+				productId: data.productId,
+				userId: session.user!.id!,
+				type: data.type,
+				quantity: data.quantity,
+				reason: data.reason,
+			},
+		});
+
+		tx.product.update({
+			where: { id: data.productId },
+			data: {
+				stock: {
+					increment:
+						data.type === "IN" ? data.quantity : -data.quantity,
+				},
+			},
+		});
+	});
+
+	revalidatePath("/stock");
+	revalidatePath("/products");
+}
