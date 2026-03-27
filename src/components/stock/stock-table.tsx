@@ -2,7 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import { SerializedStockMovement } from "@/types/stock";
+import { Calendar } from "lucide-react";
 import { useState } from "react";
+import { SearchInput } from "../common/search-input";
 
 export function StockTable({ movements }: { movements: SerializedStockMovement[] }) {
     const [search, setSearch] = useState('')
@@ -12,62 +14,88 @@ export function StockTable({ movements }: { movements: SerializedStockMovement[]
         m.reason?.toLowerCase().includes(search.toLowerCase())
     )
 
-    return (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="p-4 border-b border-gray-100">
-                <input
-                    type="text"
-                    placeholder="Search by product or reason..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full max-w-sm text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                />
-            </div>
+    const thClasses = "px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-left";
 
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                    {filtered.length === 0 ? (
-                        <tr>
-                            <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                                No movements found
-                            </td>
+    return (
+        <div className="flex flex-col">
+            <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Buscar por producto o motivo..."
+            />
+
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-zinc-50">
+                            <th className={thClasses}>Producto</th>
+                            <th className={thClasses}>Tipo</th>
+                            <th className={thClasses}>Cant.</th>
+                            <th className={thClasses}>Motivo</th>
+                            <th className={thClasses}>Usuario</th>
+                            <th className={thClasses}>Fecha</th>
                         </tr>
-                    ) : (
-                        filtered.map((m) => (
-                            <tr key={m.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="px-4 py-3">
-                                    <p className="font-medium text-gray-900">{m.product.name}</p>
-                                    <p className="text-xs text-gray-400 font-mono">{m.product.sku}</p>
-                                </td>
-                                <td className="px-4 py-3">
-                                    <span className={cn(
-                                        "text-xs font-medium px-2 py-1 rounded-full",
-                                        m.type === "IN" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
-                                    )}>
-                                        {m.type}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-3 text-gray-700">{m.quantity}</td>
-                                <td className="px-4 py-3 text-gray-500">{m.reason ?? "—"}</td>
-                                <td className="px-4 py-3 text-gray-500">{m.user.username}</td>
-                                <td className="px-4 py-3 text-gray-500 text-xs">
-                                    {new Date(m.createdAt).toLocaleDateString()}
+                    </thead>
+                    <tbody className="divide-y divide-zinc-50">
+                        {filtered.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} className="px-6 py-20 text-center text-zinc-400 italic font-light">
+                                    No se encontraron movimientos registrados.
                                 </td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            filtered.map((m) => (
+                                <tr key={m.id} className="group hover:bg-zinc-50/50 transition-colors">
+                                    {/* Producto y SKU */}
+                                    <td className="px-6 py-4">
+                                        <p className="font-bold text-zinc-900">{m.product.name}</p>
+                                        <p className="font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">
+                                            #{m.product.sku}
+                                        </p>
+                                    </td>
+
+                                    {/* Badge de Tipo (IN/OUT) */}
+                                    <td className="px-6 py-4">
+                                        <span className={cn(
+                                            "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                            m.type === "IN"
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                                : "bg-red-50 text-red-700 border-red-100"
+                                        )}>
+                                            {m.type === "IN" ? "Entrada" : "Salida"}
+                                        </span>
+                                    </td>
+
+                                    {/* Cantidad */}
+                                    <td className="px-6 py-4 font-bold text-zinc-900">
+                                        {m.quantity}
+                                    </td>
+
+                                    {/* Motivo */}
+                                    <td className="px-6 py-4 text-zinc-500">
+                                        {m.reason ?? "—"}
+                                    </td>
+
+                                    {/* Usuario */}
+                                    <td className="px-6 py-4">
+                                        <span className="text-xs font-medium text-zinc-600 bg-zinc-100 px-2 py-1 rounded-md">
+                                            {m.user.username}
+                                        </span>
+                                    </td>
+
+                                    {/* Fecha */}
+                                    <td className="px-6 py-4 text-zinc-400 text-xs">
+                                        <div className="flex items-center gap-2">
+                                            <Calendar className="w-3.5 h-3.5 text-zinc-300" />
+                                            {new Date(m.createdAt).toLocaleDateString('es-AR')}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    )
+    );
 }

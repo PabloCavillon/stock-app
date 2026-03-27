@@ -43,65 +43,84 @@ export default function StockMovementForm({ products }: { products: SerializedPr
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-700">Product</label>
+        <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-5 flex flex-col"
+        >
+            {/* Producto */}
+            <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                    Producto
+                </label>
                 <select
                     {...register("productId")}
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900 bg-white"
+                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all appearance-none"
                 >
-                    <option value="">Select product...</option>
+                    <option value="">Seleccionar producto...</option>
                     {products.map((p) => (
                         <option key={p.id} value={p.id}>
-                            {p.name} (stock: {p.stock})
+                            {p.name} (Stock actual: {p.stock})
                         </option>
                     ))}
                 </select>
-                {errors.productId && <p className="text-xs text-red-500">{errors.productId.message}</p>}
+                {errors.productId && <p className="text-[11px] font-medium text-red-500 ml-1">{errors.productId.message}</p>}
             </div>
 
-            <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-700">Type</label>
+            {/* Tipo de Movimiento */}
+            <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                    Tipo de Movimiento
+                </label>
                 <select
                     {...register("type")}
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900 bg-white"
+                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
                 >
-                    <option value="IN">IN — Stock entry</option>
-                    <option value="OUT">OUT — Stock exit</option>
+                    <option value="IN">ENTRADA — Ingreso de stock</option>
+                    <option value="OUT">SALIDA — Egreso de stock</option>
                 </select>
             </div>
 
-            <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-700">Quantity</label>
+            {/* Cantidad */}
+            <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                    Cantidad
+                </label>
                 <input
                     {...register("quantity")}
                     type="number"
                     min="1"
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+                    placeholder="0"
+                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
                 />
-                {errors.quantity && <p className="text-xs text-red-500">{errors.quantity.message}</p>}
+                {errors.quantity && <p className="text-[11px] font-medium text-red-500 ml-1">{errors.quantity.message}</p>}
             </div>
 
-            <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-gray-700">
-                    Reason <span className="text-gray-400 font-normal">(optional)</span>
+            {/* Motivo */}
+            <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                    Motivo <span className="lowercase opacity-50 font-normal">(opcional)</span>
                 </label>
                 <input
                     {...register("reason")}
-                    placeholder="e.g. Purchase, Loss, Adjustment..."
-                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900"
+                    placeholder="Ej: Compra, Pérdida, Ajuste..."
+                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
                 />
             </div>
 
-            {serverError && <p className="text-sm text-red-500">{serverError}</p>}
-            {success && <p className="text-sm text-green-600">Movement registered successfully.</p>}
+            {/* Feedback de Estado */}
+            {(serverError || success) && (
+                <div className={`p-3 rounded-lg text-xs font-medium ${serverError ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                    {serverError || "Movimiento registrado con éxito."}
+                </div>
+            )}
 
+            {/* Botón de Acción */}
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-gray-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors"
+                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-zinc-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 shadow-sm shadow-zinc-200"
             >
-                {isSubmitting ? "Saving..." : "Register movement"}
+                {isSubmitting ? "Guardando..." : "Registrar Movimiento"}
             </button>
         </form>
     )

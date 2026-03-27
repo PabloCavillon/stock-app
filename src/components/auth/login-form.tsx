@@ -3,27 +3,21 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-// Si no usas lucide-react, puedes omitir el icono o usar un span
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowRight } from "lucide-react";
 
-/**
- * LoginForm Component
- * Design: Minimalist Premium
- * Language: Code in English / UI in Spanish
- */
 export default function LoginForm() {
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setError(null);
 		setIsLoading(true);
 
 		const formData = new FormData(e.currentTarget);
-		const username = formData.get("username");
-		const password = formData.get("password");
+		const username = formData.get("username") as string;
+		const password = formData.get("password") as string;
 
 		try {
 			const result = await signIn("credentials", {
@@ -41,92 +35,87 @@ export default function LoginForm() {
 			router.push("/orders");
 			router.refresh();
 		} catch (err) {
-			setError("Ocurrió un error inesperado. Inténtalo de nuevo.");
+			setError("Error de conexión. Inténtalo de nuevo.");
 			setIsLoading(false);
 		}
 	};
 
-	// Shared Tailwind classes for minimalism
-	const inputStyles = "w-full border border-zinc-200 rounded-lg px-4 py-2.5 text-sm outline-none transition-all duration-200 focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 disabled:text-zinc-400";
-	const labelStyles = "text-xs font-medium text-zinc-500 mb-1.5 ml-1 uppercase tracking-wider";
+	// --- Sistema de Diseño Unificado (Coherencia Cuarzo) ---
+	const labelClasses = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
+	const inputClasses = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-300";
+	const buttonClasses = "w-full bg-zinc-900 text-white py-3.5 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm";
 
 	return (
-		<div className="w-full max-w-[400px] bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-zinc-100 p-8 md:p-10">
-			{/* Brand / Logo Section */}
-			<header className="mb-8">
-				<h1 className="text-2xl font-bold tracking-tighter text-zinc-900">
+		<div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+			{/* Header */}
+			<header className="mb-10 text-center">
+				<h1 className="text-3xl font-extrabold tracking-tighter text-zinc-900">
 					Stock App
 				</h1>
-				<p className="text-sm text-zinc-500 mt-1">
-					Ingresa tus datos para continuar.
+				<p className="text-sm text-zinc-400 mt-2 font-light">
+					Ingresa tus credenciales
 				</p>
 			</header>
 
-			<form onSubmit={handleSubmit} className="flex flex-col gap-6">
-				{/* Username Field */}
+			<form onSubmit={handleSubmit} className="space-y-6">
+				{/* Username */}
 				<div className="flex flex-col">
-					<label htmlFor="username" className={labelStyles}>
-						Usuario
-					</label>
+					<label htmlFor="username" className={labelClasses}>Usuario</label>
 					<input
 						id="username"
 						name="username"
 						type="text"
 						required
-						placeholder="nombre@ejemplo.com"
 						autoComplete="username"
+						placeholder="Nombre de usuario"
 						disabled={isLoading}
-						className={inputStyles}
+						className={inputClasses}
 					/>
 				</div>
 
-				{/* Password Field */}
+				{/* Password */}
 				<div className="flex flex-col">
-					<label htmlFor="password" className={labelStyles}>
-						Contraseña
-					</label>
+					<div className="flex justify-between items-end mb-2 px-1">
+						<label htmlFor="password" className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">
+							Contraseña
+						</label>
+					</div>
 					<input
 						id="password"
 						name="password"
 						type="password"
 						required
-						placeholder="••••••••"
 						autoComplete="current-password"
+						placeholder="••••••••"
 						disabled={isLoading}
-						className={inputStyles}
+						className={inputClasses}
 					/>
 				</div>
 
-				{/* Error Message */}
+				{/* Error Feedback */}
 				{error && (
-					<div className="animate-in fade-in slide-in-from-top-1">
-						<p className="text-xs font-medium text-red-500 bg-red-50 border border-red-100 rounded-md p-3 text-center">
-							{error}
-						</p>
+					<div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-xl text-xs font-medium text-center animate-in fade-in zoom-in-95">
+						{error}
 					</div>
 				)}
 
-				{/* Submit Button */}
-				<button
-					type="submit"
-					disabled={isLoading}
-					className="mt-2 w-full bg-zinc-900 text-white rounded-lg px-4 py-3 text-sm font-semibold hover:bg-zinc-800 active:scale-[0.98] disabled:opacity-70 disabled:pointer-events-none transition-all duration-200 flex items-center justify-center gap-2"
-				>
+				{/* Submit */}
+				<button type="submit" disabled={isLoading} className={buttonClasses}>
 					{isLoading ? (
-						<>
-							<Loader2 className="w-4 h-4 animate-spin" />
-							<span>Verificando...</span>
-						</>
+						<Loader2 className="w-4 h-4 animate-spin" />
 					) : (
-						"Iniciar Sesión"
+						<>
+							Entrar
+							<ArrowRight className="w-4 h-4" />
+						</>
 					)}
 				</button>
 			</form>
 
-			{/* Footer Info */}
-			<footer className="mt-8 pt-6 border-t border-zinc-50 text-center">
-				<p className="text-xs text-zinc-400">
-					&copy; {new Date().getFullYear()} Cuarzo Studio
+			{/* Footer Branding */}
+			<footer className="mt-10 pt-6 border-t border-zinc-50 text-center">
+				<p className="text-[10px] text-zinc-300 uppercase tracking-widest font-medium">
+					Cuarzo Studio
 				</p>
 			</footer>
 		</div>

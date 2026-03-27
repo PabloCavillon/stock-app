@@ -3,9 +3,11 @@
 import { deleteUser } from "@/actions/users";
 import { cn } from "@/lib/utils";
 import { SerializedUser } from "@/types/user";
+import { Calendar, Edit2, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SearchInput } from "../common/search-input";
 
 
 const ROLE_STYLE: Record<string, string> = {
@@ -18,7 +20,13 @@ export default function UsersTable({ users: initialUsers }: { users: SerializedU
 
     const router = useRouter()
     const [users, setUsers] = useState(initialUsers)
+    const [search, setSearch] = useState("");
     const [deleting, setDeleting] = useState<string | null>(null)
+
+   const filtered = users.filter(u =>
+        u.username?.toLowerCase().includes(search.toLowerCase()) ||
+        u.id.toLowerCase().includes(search.toLowerCase())
+    );
 
     const handleDelete = async (id: string) => {
         if (!confirm("¿Desea borrar el usuario?")) return
@@ -29,59 +37,95 @@ export default function UsersTable({ users: initialUsers }: { users: SerializedU
         router.refresh()
     }
 
+    const thClasses = "px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-left";
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                        <th className="px-4 py-3"></th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                    {users.length === 0 ? (
-                        <tr>
-                            <td colSpan={4} className="px-4 py-8 text-center text-gray-400">
-                                No users found
-                            </td>
+        <div className="flex flex-col">
+            {/* Usamos el componente SearchInput para mantener la coherencia si lo necesitas aquí también */}
+            <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Buscar por nombre de usuario o rol..."
+            />
+
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-zinc-50">
+                            <th className={thClasses}>Usuario</th>
+                            <th className={thClasses}>Rol / Permisos</th>
+                            <th className={thClasses}>Fecha de Creación</th>
+                            <th className="px-6 py-4"></th>
                         </tr>
-                    ) : (
-                        users.map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="px-4 py-3 font-medium text-gray-900">{user.username}</td>
-                                <td className="px-4 py-3">
-                                    <span className={cn("text-xs font-medium px-2 py-1 rounded-full", ROLE_STYLE[user.role])}>
-                                        {user.role}
-                                    </span>
-                                </td>
-                                <td className="px-4 py-3 text-gray-500 text-xs">
-                                    {new Date(user.createdAt).toLocaleDateString()}
-                                </td>
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <Link
-                                            href={`/users/${user.id}/edit`}
-                                            className="text-xs text-gray-500 hover:text-gray-900 font-medium transition-colors"
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(user.id)}
-                                            disabled={deleting === user.id}
-                                            className="text-xs text-red-400 hover:text-red-600 font-medium transition-colors disabled:opacity-50"
-                                        >
-                                            {deleting === user.id ? "Deleting..." : "Delete"}
-                                        </button>
-                                    </div>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-50">
+                        {users.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="px-6 py-20 text-center text-zinc-400 italic font-light">
+                                    No se encontraron usuarios registrados.
                                 </td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                        ) : (
+                            filtered.map((user) => (
+                                <tr key={user.id} className="group hover:bg-zinc-50/50 transition-colors">
+                                    {/* Username con Badge de Usuario */}
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-500 font-bold text-xs">
+                                                {user.username.charAt(0).toUpperCase()}
+                                            </div>
+                                            <span className="font-bold text-zinc-900">{user.username}</span>
+                                        </div>
+                                    </td>
+
+                                    {/* Role con estilo de Badge unificado */}
+                                    <td className="px-6 py-4">
+                                        <span className={cn(
+                                            "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                            user.role === "ADMIN"
+                                                ? "bg-purple-50 text-purple-700 border-purple-100"
+                                                : "bg-zinc-50 text-zinc-600 border-zinc-100"
+                                        )}>
+                                            {user.role}
+                                        </span>
+                                    </td>
+
+                                    {/* Fecha de creación con Icono */}
+                                    <td className="px-6 py-4 text-zinc-400 text-xs">
+                                        <div className="flex items-center gap-2">
+                                            <Calendar className="w-3.5 h-3.5 text-zinc-300" />
+                                            {new Date(user.createdAt).toLocaleDateString('es-AR')}
+                                        </div>
+                                    </td>
+
+                                    {/* Acciones en Hover */}
+                                    <td className="px-6 py-4 text-right">
+                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+                                            <Link
+                                                href={`/users/${user.id}/edit`}
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all shadow-none hover:shadow-sm"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDelete(user.id)}
+                                                disabled={deleting === user.id}
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all"
+                                            >
+                                                {deleting === user.id ? (
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                ) : (
+                                                    <Trash2 className="w-4 h-4" />
+                                                )}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

@@ -1,5 +1,7 @@
 import Link from "next/link"
 import clsx from "clsx"
+import { AlertTriangle, ArrowRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 type Product = {
     id: string
@@ -11,48 +13,73 @@ type Product = {
 export function LowStockTable({ products }: { products: Product[] }) {
     if (products.length === 0) return null
 
+    const thClasses = "px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-left";
+
     return (
-        <div className="bg-white rounded-xl border border-amber-200 overflow-hidden">
-            <div className="px-5 py-4 border-b border-amber-100 flex items-center gap-2">
-                <svg width="16" height="16" fill="none" stroke="#d97706" strokeWidth="1.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                </svg>
-                <h2 className="text-sm font-medium text-amber-700">Low stock warning</h2>
+        <div className="bg-white rounded-[2.5rem] border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
+            {/* Header de la Métrica */}
+            <div className="px-6 py-5 border-b border-zinc-50 bg-amber-50/30 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-amber-100 rounded-xl text-amber-600">
+                        <AlertTriangle size={18} />
+                    </div>
+                    <div>
+                        <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-tight">
+                            Alertas de Stock
+                        </h2>
+                        <p className="text-[10px] font-bold text-amber-600/80 uppercase tracking-widest">
+                            Nivel crítico detectado
+                        </p>
+                    </div>
+                </div>
             </div>
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                        <th className="px-4 py-3"></th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                    {products.map((p) => (
-                        <tr key={p.id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-4 py-3 font-medium text-gray-900">{p.name}</td>
-                            <td className="px-4 py-3 font-mono text-xs text-gray-500">{p.sku}</td>
-                            <td className="px-4 py-3">
-                                <span className={clsx(
-                                    "font-medium",
-                                    p.stock === 0 ? "text-red-500" : "text-amber-500"
-                                )}>
-                                    {p.stock === 0 ? "Out of stock" : `${p.stock} left`}
-                                </span>
-                            </td>
-                            <td className="px-4 py-3 text-right">
-                                <Link
-                                    href="/stock"
-                                    className="text-xs text-gray-500 hover:text-gray-900 font-medium transition-colors"
-                                >
-                                    Adjust stock
-                                </Link>
-                            </td>
+
+            {/* Tabla de Productos con Bajo Stock */}
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-zinc-50">
+                            <th className={thClasses}>Producto</th>
+                            <th className={thClasses}>SKU</th>
+                            <th className={thClasses}>Estado Actual</th>
+                            <th className="px-6 py-4"></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-50">
+                        {products.map((p) => (
+                            <tr key={p.id} className="group hover:bg-zinc-50/50 transition-colors">
+                                <td className="px-6 py-4 font-bold text-zinc-900">
+                                    {p.name}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-tighter bg-zinc-100/50 px-2 py-1 rounded">
+                                        #{p.sku}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <span className={cn(
+                                        "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                        p.stock === 0
+                                            ? "bg-red-50 text-red-700 border-red-100"
+                                            : "bg-amber-50 text-amber-700 border-amber-100"
+                                    )}>
+                                        {p.stock === 0 ? "Sin Stock" : `${p.stock} Unidades`}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <Link
+                                        href="/stock"
+                                        className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors group/link"
+                                    >
+                                        Ajustar
+                                        <ArrowRight size={12} className="group-hover/link:translate-x-1 transition-transform" />
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    )
+    );
 }

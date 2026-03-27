@@ -1,111 +1,85 @@
 'use client';
 
-import { updateOrderStatus } from '@/actions/orders';
-import { OrderStatus } from '@/generated/prisma/enums';
-import { cn } from '@/lib/utils';
-import { SerializedOrder } from '@/types/order';
-import { STATUS_FLOW, STATUS_LABEL, STATUS_STYLE } from '@/types/order-status';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState } from "react";
+import Link from "next/link";
+import { Eye, MoreHorizontal, Calendar } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { SearchInput } from "../common/search-input";
 
-export default function OrdersTable({ orders: initialOrders }: { orders: SerializedOrder[] }) {
-
-    const router = useRouter();
-    const [orders, setOrders] = useState<SerializedOrder[]>(initialOrders)
-    const [updating, setUpdating] = useState<string | null>(null)
-    const [search, setSearch] = useState<string>('')
+export default function OrdersTable({ orders }: { orders: any[] }) {
+    const [search, setSearch] = useState("");
 
     const filtered = orders.filter(o =>
-        o.customer.name.toLowerCase().includes(search.toLowerCase()) ||
-        o.status.toLowerCase().includes(search.toLowerCase())
-    )
+        o.customer?.name.toLowerCase().includes(search.toLowerCase()) ||
+        o.id.toLowerCase().includes(search.toLowerCase())
+    );
 
-    const handleAdvanceStatus = async (order: SerializedOrder) => {
-        const nextStatus = STATUS_FLOW[order.status];
-        if (!nextStatus) return;
-
-        setUpdating(order.id)
-        await updateOrderStatus(order.id, nextStatus as OrderStatus);
-        setOrders(prev =>
-            prev.map(o => (o.id === order.id ? { ...o, status: nextStatus } : o))
-        )
-        setUpdating(null);
-        router.refresh()
-    }
+    const thClasses = "px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-left";
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="p-4 border-b border-gray-100">
-                <input
-                    type="text"
-                    placeholder="Search by customer or status..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full max-w-sm text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                />
-            </div>
+        <div className="flex flex-col">
+            
+            <SearchInput value={search} onChange={setSearch} />
 
-            <table className="w-full text-sm">
-                <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-4 py-3"></th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                    {filtered.length === 0 ? (
-                        <tr>
-                            <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                                No orders found
-                            </td>
+            <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-zinc-50">
+                            <th className={thClasses}>ID Orden</th>
+                            <th className={thClasses}>Cliente</th>
+                            <th className={thClasses}>Fecha</th>
+                            <th className={thClasses}>Total</th>
+                            <th className={thClasses}>Estado</th>
+                            <th className="px-6 py-4"></th>
                         </tr>
-                    ) : (
-                        filtered.map((order) => {
-                            const nextStatus = STATUS_FLOW[order.status]
-                            return (
-                                <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-4 py-3 font-medium text-gray-900">{order.customer.name}</td>
-                                    <td className="px-4 py-3 text-gray-500">{order.items.length} item(s)</td>
-                                    <td className="px-4 py-3 text-gray-700">${order.total.toFixed(2)}</td>
-                                    <td className="px-4 py-3">
-                                        <span className={cn("text-xs font-medium px-2 py-1 rounded-full", STATUS_STYLE[order.status])}>
-                                            {STATUS_LABEL[order.status]}
+                    </thead>
+                    <tbody className="divide-y divide-zinc-50">
+                        {filtered.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} className="px-6 py-20 text-center text-zinc-400 italic font-light">
+                                    No se encontraron órdenes registradas.
+                                </td>
+                            </tr>
+                        ) : (
+                            filtered.map((order) => (
+                                <tr key={order.id} className="group hover:bg-zinc-50/50 transition-colors">
+                                    <td className="px-6 py-4 font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">
+                                        #{order.id.slice(-6)}
+                                    </td>
+                                    <td className="px-6 py-4 font-bold text-zinc-900">
+                                        {order.customer?.name || "Consumidor Final"}
+                                    </td>
+                                    <td className="px-6 py-4 text-zinc-500 flex items-center gap-2">
+                                        <Calendar className="w-3.5 h-3.5 text-zinc-300" />
+                                        {new Date(order.createdAt).toLocaleDateString('es-AR')}
+                                    </td>
+                                    <td className="px-6 py-4 font-bold text-zinc-900">
+                                        ${Number(order.total).toLocaleString('es-AR')}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={cn(
+                                            "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                            order.status === "DELIVERED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
+                                                order.status === "PENDING" ? "bg-amber-50 text-amber-700 border-amber-100" :
+                                                    "bg-zinc-50 text-zinc-500 border-zinc-100"
+                                        )}>
+                                            {order.status}
                                         </span>
                                     </td>
-                                    <td className="px-4 py-3 text-gray-500 text-xs">
-                                        {new Date(order.createdAt).toLocaleDateString()}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Link
-                                                href={`/orders/${order.id}`}
-                                                className="text-xs text-gray-500 hover:text-gray-900 font-medium transition-colors"
-                                            >
-                                                View
-                                            </Link>
-                                            {nextStatus && (
-                                                <button
-                                                    onClick={() => handleAdvanceStatus(order)}
-                                                    disabled={updating === order.id}
-                                                    className="text-xs text-blue-500 hover:text-blue-700 font-medium transition-colors disabled:opacity-50"
-                                                >
-                                                    {updating === order.id ? "Updating..." : `Mark as ${STATUS_LABEL[nextStatus]}`}
-                                                </button>
-                                            )}
-                                        </div>
+                                    <td className="px-6 py-4 text-right">
+                                        <Link
+                                            href={`/orders/${order.id}`}
+                                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all shadow-none hover:shadow-sm"
+                                        >
+                                            <Eye className="w-4 h-4" />
+                                        </Link>
                                     </td>
                                 </tr>
-                            )
-                        })
-                    )}
-                </tbody>
-            </table>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
-

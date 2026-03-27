@@ -1,7 +1,7 @@
 import { getProduct } from "@/actions/products";
 import { ProductForm } from "@/components/products/product-form";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Edit3 } from "lucide-react";
 import Link from "next/link";
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -11,24 +11,35 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     if (!product) notFound();
 
     return (
-        <div className="max-w-3xl mx-auto p-6 md:p-10 space-y-8 animate-in fade-in duration-500">
-            <header className="space-y-4">
+        <div className="max-w-3xl mx-auto p-6 md:p-12 space-y-10 animate-in fade-in duration-500">
+
+            {/* Navegación y Header */}
+            <header className="space-y-6">
                 <Link
                     href="/products"
-                    className="inline-flex items-center text-sm text-zinc-500 hover:text-zinc-900 transition-colors gap-1 group"
+                    className="inline-flex items-center text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 transition-colors gap-2 group"
                 >
-                    <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    Volver a productos
+                    <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                    Volver al Inventario
                 </Link>
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-900">Editar Producto</h1>
-                    <p className="text-sm text-zinc-500 mt-1">
-                        Actualizando: <span className="font-medium text-zinc-900">{product.name}</span> (SKU: {product.sku})
-                    </p>
+
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-zinc-900 rounded-[1.2rem]">
+                        <Edit3 className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl font-extrabold tracking-tighter text-zinc-900">
+                            Editar Producto
+                        </h1>
+                        <p className="text-sm text-zinc-400 mt-1 font-light italic">
+                            Modificando: <span className="text-zinc-900 font-medium not-italic">{product.name}</span>
+                        </p>
+                    </div>
                 </div>
             </header>
 
-            <section className="bg-white p-8 rounded-2xl border border-zinc-200 shadow-sm">
+            {/* Contenedor Unificado */}
+            <section className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
                 <ProductForm product={product} />
             </section>
         </div>
