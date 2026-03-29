@@ -36,7 +36,7 @@ export type SerializedOrder = {
 export type ChartOrder = {
 	id: string
     customerName: string
-    status: string
+    status: OrderStatus
     total: number
     createdAt: string
 }
