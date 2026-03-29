@@ -1,5 +1,6 @@
 "use client"
 
+import { STATUS_LABEL } from "@/types/order-status";
 import { ChartBarIcon } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts"
 
@@ -15,17 +16,9 @@ const COLORS: Record<string, string> = {
     CANCELLED: "#ef4444",
 }
 
-const LABELS: Record<string, string> = {
-    PENDING: "Pending",
-    CONFIRMED: "Confirmed",
-    SHIPPED: "Shipped",
-    DELIVERED: "Delivered",
-    CANCELLED: "Cancelled",
-}
-
 export function OrdersByStatusChart({ data }: Props) {
     const formatted = data.map((d) => ({
-        name: LABELS[d.status] ?? d.status,
+        name: STATUS_LABEL[d.status] ?? d.status,
         value: d.count,
         color: COLORS[d.status] ?? "#6b7280",
     }))

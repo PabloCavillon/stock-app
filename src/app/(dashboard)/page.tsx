@@ -12,7 +12,7 @@ export default async function DashboardPage() {
         <div className="p-8 flex flex-col gap-8">
             <div>
                 <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
-                <p className="text-sm text-gray-500 mt-0.5">Overview of your store</p>
+                <p className="text-sm text-gray-500 mt-0.5">Resumen de tu tienda</p>
             </div>
 
             <StatsCards stats={data.stats} />

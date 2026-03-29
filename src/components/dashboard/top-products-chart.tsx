@@ -32,7 +32,6 @@ export function TopProductsChart({ data }: Props) {
 			) : (
 				<ResponsiveContainer width="100%" height={240}>
 					<BarChart data={data} layout="vertical" margin={{ left: -20, right: 20 }}>
-						{/* Cuadrícula vertical sutil */}
 						<CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f4f4f5" />
 
 						<XAxis

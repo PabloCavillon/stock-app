@@ -10,6 +10,7 @@ import { updateOrderStatus } from "@/actions/orders";
 import { SerializedOrder } from "@/types/order";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { useRouter } from "next/navigation";
+import OrderStatusTooltip from './order-status-tooltip';
 
 export default function OrdersTable({ orders: initialOrders }: { orders: SerializedOrder[] }) {
     const router = useRouter()
@@ -23,7 +24,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
     )
 
     const handleAdvanceStatus = async (order: SerializedOrder) => {
-        const nextStatus = STATUS_FLOW[order.status]
+        const nextStatus: OrderStatus = STATUS_FLOW[order.status]
         if (!nextStatus) return
         setUpdating(order.id)
         await updateOrderStatus(order.id, nextStatus as OrderStatus)
@@ -80,16 +81,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                             ${Number(order.total).toLocaleString('es-AR')}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className={cn(
-                                                "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
-                                                order.status === "DELIVERED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
-                                                    order.status === "PENDING" ? "bg-amber-50 text-amber-700 border-amber-100" :
-                                                        order.status === "CONFIRMED" ? "bg-blue-50 text-blue-700 border-blue-100" :
-                                                            order.status === "SHIPPED" ? "bg-purple-50 text-purple-700 border-purple-100" :
-                                                                "bg-zinc-50 text-zinc-500 border-zinc-100"
-                                            )}>
-                                                {STATUS_LABEL[order.status]}
-                                            </span>
+                                            <OrderStatusTooltip order={order} />
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center justify-end gap-2">

@@ -50,7 +50,6 @@ export function StatsCards({ stats }: { stats: Stats }) {
                             isWarning ? "border-amber-100 bg-amber-50/10" : "border-zinc-100"
                         )}
                     >
-                        {/* Contenedor del Icono */}
                         <div className={cn(
                             "p-3 rounded-2xl transition-all duration-300",
                             isWarning
@@ -60,7 +59,6 @@ export function StatsCards({ stats }: { stats: Stats }) {
                             <Icon size={24} strokeWidth={2} />
                         </div>
 
-                        {/* Textos */}
                         <div className="flex flex-col">
                             <span className="text-2xl font-black text-zinc-900 tracking-tight leading-none">
                                 {value}

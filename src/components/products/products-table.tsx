@@ -99,7 +99,7 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                                 product.stock > 0 ? "bg-amber-50 text-amber-700 border-amber-100" :
                                                     "bg-red-50 text-red-700 border-red-100"
                                         )}>
-                                            {product.stock} disp.
+                                            {product.stock} {product.stock > 1 ? 'disponibles' : 'disponible'}
                                         </span>
                                     </td>
 

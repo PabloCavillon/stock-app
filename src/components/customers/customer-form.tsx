@@ -9,8 +9,9 @@ import { CustomerFormData, CustomerFormInput, customerSchema } from '@/lib/valid
 import { Customer } from "@/generated/prisma/client";
 import { Loader2, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SerializedCustomer } from "@/types/customer";
 
-export function CustomerForm({ customer }: { customer?: Customer }) {
+export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
 

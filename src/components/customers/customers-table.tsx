@@ -1,17 +1,17 @@
 'use client';
 
 import { deleteCustomer } from "@/actions/customers";
-import { Customer } from "@/generated/prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SearchInput } from "../common/search-input";
 import { Edit2, Loader2, Trash2 } from "lucide-react";
+import { SerializedCustomer } from "@/types/customer";
 
-export default function CustomersTable({ customers: initialCustomers }: { customers: Customer[] }) {
+export default function CustomersTable({ customers: initialCustomers }: { customers: SerializedCustomer[] }) {
 
     const router = useRouter();
-    const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
+    const [customers, setCustomers] = useState<SerializedCustomer[]>(initialCustomers);
     const [search, setSearch] = useState("");
     const [deleting, setDeleting] = useState<string | null>(null);
 
