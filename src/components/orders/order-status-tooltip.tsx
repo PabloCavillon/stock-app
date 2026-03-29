@@ -2,11 +2,11 @@
 
 import { OrderStatus } from '@/generated/prisma/enums';
 import { cn } from '@/lib/utils';
-import { SerializedOrder } from '@/types/order';
+import { ChartOrder, SerializedOrder } from '@/types/order';
 import { STATUS_DESCRIPTION, STATUS_LABEL } from '@/types/order-status';
 import * as Tooltip from '@radix-ui/react-tooltip'
 
-export default function OrderStatusTooltip({ order }: {order:  any}) {
+export default function OrderStatusTooltip({ order }: {order:  SerializedOrder | ChartOrder}) {
 	return (
 		<Tooltip.Provider delayDuration={100}>
 			<Tooltip.Root>
