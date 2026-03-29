@@ -24,7 +24,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
     )
 
     const handleAdvanceStatus = async (order: SerializedOrder) => {
-        const nextStatus: OrderStatus = STATUS_FLOW[order.status]
+        const nextStatus = STATUS_FLOW[order.status] as OrderStatus
         if (!nextStatus) return
         setUpdating(order.id)
         await updateOrderStatus(order.id, nextStatus as OrderStatus)
