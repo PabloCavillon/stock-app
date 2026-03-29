@@ -2,19 +2,33 @@
 
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { SerializedCustomer } from "@/types/customer";
 import { revalidatePath } from "next/cache";
 
-export const getCustomers = async () => {
-	return prisma.customer.findMany({
+function serialize(c: any): SerializedCustomer {
+	return {
+		...c,
+		createdAt: c.createdAt.toISOString(),
+		updatedAt: c.updatedAt.toISOString(),
+		deletedAt: c.deletedAt?.toISOString(),
+	};
+}
+
+export const getCustomers = async (): Promise<SerializedCustomer[]> => {
+	const customers = await prisma.customer.findMany({
 		where: { deletedAt: null },
 		orderBy: { name: "asc" },
 	});
+
+	return customers.map(serialize);
 };
 
-export const getCustomer = async (id: string) => {
-	return prisma.customer.findUnique({
+export const getCustomer = async (id: string): Promise<SerializedCustomer> => {
+	const customer = await prisma.customer.findUnique({
 		where: { id, deletedAt: null },
 	});
+
+	return serialize(customer);
 };
 
 export const createCustomer = async (data: {

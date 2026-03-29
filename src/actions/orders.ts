@@ -58,7 +58,7 @@ export async function createOrder(data: OrderFormData) {
 	if (!session?.user?.id) throw new Error("Unauthorized");
 
 	const total = data.items.reduce(
-		(acc, item) => acc + item.unitPrice + item.quantity,
+		(acc, item) => acc + item.unitPrice * item.quantity,
 		0,
 	);
 

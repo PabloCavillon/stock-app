@@ -55,8 +55,8 @@ export const updateProduct = async (
 		sku: string;
 		name: string;
 		description?: string;
-		price: number;
 		stock: number;
+		price: number;
 		category: string;
 	},
 ) => {

@@ -29,6 +29,7 @@ export async function createStockMovement(data: StockMovementFormData) {
 	const session = await auth();
 	if (!session?.user?.id) throw new Error("Unauthorized");
 
+	console.log(data)
 	await prisma.$transaction(async (tx) => {
 		await tx.stockMovement.create({
 			data: {
@@ -40,7 +41,7 @@ export async function createStockMovement(data: StockMovementFormData) {
 			},
 		});
 
-		tx.product.update({
+		await tx.product.update({
 			where: { id: data.productId },
 			data: {
 				stock: {

@@ -1,6 +1,6 @@
 import { getCustomers } from "@/actions/customers";
 import { getProducts } from "@/actions/products";
-import OrderForm from "@/components/orders/orders-from";
+import { OrderForm } from "@/components/orders/orders-from";
 import { ChevronLeft, FilePlus2 } from "lucide-react";
 import Link from "next/link";
 

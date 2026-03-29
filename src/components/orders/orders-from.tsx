@@ -2,81 +2,172 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Save, X, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Plus, Trash2, Save, X } from "lucide-react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { type OrderFormData, type OrderFormInput, orderSchema } from "@/lib/validations/order";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createOrder } from "@/actions/orders";
+import type { SerializedProduct } from "@/types/product";
+import { SerializedCustomer } from "@/types/customer";
 
-export default function OrderForm({ customers, products }: { customers: any[], products: any[] }) {
+export function OrderForm({ customers, products }: { customers: SerializedCustomer[], products: SerializedProduct[] }) {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
-    const [selectedItems, setSelectedItems] = useState<{ productId: string, quantity: number, price: number }[]>([]);
+    const [serverError, setServerError] = useState<string | null>(null)
 
-    // Estilos Unificados Cuarzo Studio
     const labelClasses = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
     const inputClasses = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-300";
 
-    const addItem = () => {
-        setSelectedItems([...selectedItems, { productId: "", quantity: 1, price: 0 }]);
-    };
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        setValue,
+        formState: { errors, isSubmitting }
+    } = useForm<OrderFormInput, unknown, OrderFormData>({
+        resolver: zodResolver(orderSchema),
+        defaultValues: {
+            customerId: "",
+            notes: "",
+            items: [{ productId: "", quantity: 1, unitPrice: 0 }]
+        }
+    })
 
-    const removeItem = (index: number) => {
-        setSelectedItems(selectedItems.filter((_, i) => i !== index));
-    };
+    const { fields, append, remove } = useFieldArray({ control, name: "items" });
+    const watchedItems = watch("items");
+
+    const total = watchedItems.reduce((acc, item) => {
+        const product = products.find((p) => p.id === item.productId)
+        const price = product ? product.price : Number(item.unitPrice) || 0
+        return acc + price * (Number(item.quantity) || 0)
+    }, 0);
+
+    const handleProductChange = (index: number, productId: string) => {
+        const product = products.find((p) => p.id === productId)
+        if (product) {
+            setValue(`items.${index}.unitPrice`, product.price, { shouldValidate: true })
+        } else {
+            setValue(`items.${index}.unitPrice`, 0, { shouldValidate: true })
+        }
+    }
+
+    const onSubmit = async (data: OrderFormData) => {
+        setServerError(null);
+        try {
+            await createOrder(data);
+            router.push("/orders");
+            router.refresh();
+        } catch {
+            setServerError("Algo salió mal. Por favor intente de nuevo")
+        }
+    }
 
     return (
-        <form className="space-y-10">
-            {/* Selección de Cliente */}
+        <form className="space-y-10" onSubmit={handleSubmit(onSubmit)}>
+
+            {/* Customer */}
             <div className="flex flex-col">
                 <label className={labelClasses}>Seleccionar Cliente</label>
-                <select className={inputClasses}>
+                <select
+                    {...register("customerId")}
+                    className={inputClasses}
+                >
                     <option value="">Elegir cliente...</option>
                     {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
+                {errors.customerId && <p className="text-xs text-red-500 mt-1">{errors.customerId.message}</p>}
             </div>
 
-            {/* Lista de Productos */}
+            {/* Items */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
                     <label className={labelClasses}>Productos en la Orden</label>
                     <button
                         type="button"
-                        onClick={addItem}
+                        onClick={() => append({ productId: "", quantity: 1, unitPrice: 0 })}
                         className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest flex items-center gap-1 hover:underline"
                     >
                         <Plus className="w-3 h-3" /> Agregar Ítem
                     </button>
                 </div>
 
+                {errors.items?.root && (
+                    <p className="text-xs text-red-500">{errors.items.root.message}</p>
+                )}
+
                 <div className="space-y-3">
-                    {selectedItems.map((item, index) => (
-                        <div key={index} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-50/50 rounded-2xl border border-zinc-100 animate-in fade-in zoom-in-95">
+                    {fields.map((field, index) => (
+                        <div key={field.id} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-50/50 rounded-2xl border border-zinc-100">
                             <div className="flex-1">
-                                <select className={inputClasses}>
+                                <select
+                                    {...register(`items.${index}.productId`)}
+                                    onChange={(e) => {
+                                        register(`items.${index}.productId`).onChange(e)
+                                        handleProductChange(index, e.target.value)
+                                    }}
+                                    className={inputClasses}
+                                >
                                     <option value="">Producto...</option>
-                                    {products.map(p => <option key={p.id} value={p.id}>{p.name} (${p.price})</option>)}
+                                    {products.map(p => (
+                                        <option key={p.id} value={p.id}>
+                                            {p.name} (stock: {p.stock})
+                                        </option>
+                                    ))}
                                 </select>
+                                {errors.items?.[index]?.productId && (
+                                    <p className="text-xs text-red-500 mt-0.5">
+                                        {errors.items[index].productId?.message}
+                                    </p>
+                                )}
                             </div>
                             <div className="w-full md:w-32">
-                                <input type="number" placeholder="Cant." className={inputClasses} min="1" />
+                                <input
+                                    type="number"
+                                    placeholder="Cantidad"
+                                    className={inputClasses}
+                                    min="1"
+                                    {...register(`items.${index}.quantity`)}
+                                />
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => removeItem(index)}
-                                className="p-3 text-zinc-400 hover:text-red-500 transition-colors"
-                            >
-                                <Trash2 className="w-4 h-4" />
-                            </button>
+                            {fields.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                    className="p-3 text-zinc-400 hover:text-red-500 transition-colors"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            )}
                         </div>
                     ))}
 
-                    {selectedItems.length === 0 && (
-                        <div className="text-center py-10 border-2 border-dashed border-zinc-100 rounded-[2rem]">
+                    {fields.length === 0 && (
+                        <div className="text-center py-10 border-2 border-dashed border-zinc-100 rounded-2xl">
                             <p className="text-xs text-zinc-400 uppercase tracking-widest font-medium">No hay productos seleccionados</p>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Botonera de Acción */}
+            {/* Notes */}
+            <div className="flex flex-col">
+                <label className={labelClasses}>Notas <span className="normal-case text-zinc-300">(opcional)</span></label>
+                <textarea
+                    {...register("notes")}
+                    rows={2}
+                    className={`${inputClasses} resize-none`}
+                />
+            </div>
+
+            {/* Total */}
+            <div className="flex items-center justify-between py-3 border-t border-zinc-100">
+                <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest text-[10px]">Total</span>
+                <span className="text-lg font-semibold text-zinc-900">${total.toFixed(2)}</span>
+            </div>
+
+            {serverError && <p className="text-sm text-red-500">{serverError}</p>}
+
+            {/* Actions */}
             <div className="flex flex-col-reverse md:flex-row gap-3 pt-8 border-t border-zinc-50">
                 <button
                     type="button"
@@ -87,11 +178,11 @@ export default function OrderForm({ customers, products }: { customers: any[], p
                 </button>
                 <button
                     type="submit"
-                    disabled={isLoading || selectedItems.length === 0}
+                    disabled={isSubmitting}
                     className="flex-1 md:flex-none px-10 py-3.5 rounded-xl text-sm font-bold bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm flex items-center justify-center gap-2"
                 >
-                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                    Finalizar Orden
+                    <Save className="w-4 h-4" />
+                    {isSubmitting ? "Creando..." : "Finalizar Orden"}
                 </button>
             </div>
         </form>
