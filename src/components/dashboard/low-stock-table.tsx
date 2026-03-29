@@ -1,5 +1,4 @@
 import Link from "next/link"
-import clsx from "clsx"
 import { AlertTriangle, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 

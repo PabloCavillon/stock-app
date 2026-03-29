@@ -1,11 +1,12 @@
 "use client"
 
+import { OrderStatus } from "@/generated/prisma/enums";
 import { STATUS_LABEL } from "@/types/order-status";
 import { ChartBarIcon } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts"
 
 type Props = {
-    data: { status: string; count: number }[]
+    data: { status: OrderStatus; count: number }[]
 }
 
 const COLORS: Record<string, string> = {
