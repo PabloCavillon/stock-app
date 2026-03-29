@@ -62,7 +62,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                             </tr>
                         ) : (
                             filtered.map((order) => {
-                                const nextStatus = STATUS_FLOW[order.status]
+                                const nextStatus = STATUS_FLOW[order.status] as OrderStatus | undefined;
                                 return (
                                     <tr key={order.id} className="group hover:bg-zinc-50/50 transition-colors">
                                         <td className="px-6 py-4 font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">
