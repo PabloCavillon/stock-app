@@ -16,18 +16,25 @@ import {
     ChevronRight
 } from "lucide-react";
 
+// Agregamos 'roles' a la configuración. 
+// Si no tiene 'roles', asumimos que es público para cualquier logueado.
 const navigation = [
-    { label: "Dashboard", href: "/", icon: LayoutDashboard },
-    { label: "Órdenes", href: "/orders", icon: ShoppingCart },
-    { label: "Productos", href: "/products", icon: Package },
-    { label: "Clientes", href: "/customers", icon: UserCircle },
-    { label: "Stock", href: "/stock", icon: Database },
-    { label: "Usuarios", href: "/users", icon: TeamIcon },
+    { label: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["ADMIN", "SELLER", "WATCHER"] },
+    { label: "Órdenes", href: "/orders", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WAREHOUSE"] },
+    { label: "Productos", href: "/products", icon: Package, roles: ["ADMIN", "SELLER"] },
+    { label: "Clientes", href: "/customers", icon: UserCircle, roles: ["ADMIN", "SELLER"] },
+    { label: "Stock", href: "/stock", icon: Database, roles: ["ADMIN"] },
+    { label: "Usuarios", href: "/users", icon: TeamIcon, roles: ["ADMIN"] },
 ];
 
 export default function SidebarClient({ role }: { role: string }) {
     const [collapsed, setCollapsed] = useState(false);
     const pathname = usePathname();
+
+    // FILTRO CRUCIAL: Solo mostramos lo que el rol del usuario permite
+    const filteredNavigation = navigation.filter(item =>
+        !item.roles || item.roles.includes(role)
+    );
 
     return (
         <aside
@@ -58,7 +65,8 @@ export default function SidebarClient({ role }: { role: string }) {
 
             {/* Nav */}
             <nav className="flex-1 px-3 py-6 flex flex-col gap-1.5">
-                {navigation.map((item) => {
+                {/* Usamos el array filtrado aquí */}
+                {filteredNavigation.map((item) => {
                     const isActive = pathname === item.href;
                     const Icon = item.icon;
 
