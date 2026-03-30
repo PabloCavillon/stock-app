@@ -66,6 +66,7 @@ export function TopProductsChart({ data }: Props) {
 						/>
 
 						<Bar
+							name="Cantidad"
 							dataKey="quantity"
 							fill="#18181b"
 							radius={[0, 8, 8, 0]}
