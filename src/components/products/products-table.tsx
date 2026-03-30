@@ -19,11 +19,15 @@ export default function ProductsTable({ products: initialProducts }: Props) {
     const [search, setSearch] = useState("");
     const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
 
-    const filtered = products.filter(p =>
-        [p.name, p.sku, p.category].some(field =>
-            field.toLowerCase().includes(search.toLowerCase())
-        )
-    );
+    const filtered = products.filter(p => {
+        const searchTerm = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        return [p.name, p.sku, p.category].some(field => {
+            if (!field) return false;
+            const normalizedField = field.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return normalizedField.includes(searchTerm);
+        });
+    });
 
     const handleDelete = async (id: string) => {
         if (!confirm("¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.")) return;

@@ -18,10 +18,19 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
     const [search, setSearch] = useState("")
     const [updating, setUpdating] = useState<string | null>(null)
 
-    const filtered = orders.filter(o =>
-        o.customer?.name.toLowerCase().includes(search.toLowerCase()) ||
-        o.id.toLowerCase().includes(search.toLowerCase())
-    )
+    const filtered = orders.filter(o => {
+        const searchTerm = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        const customerName = o.customer?.name
+            ? o.customer.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            : "";
+
+        const orderId = o.id
+            ? o.id.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            : "";
+
+        return customerName.includes(searchTerm) || orderId.includes(searchTerm);
+    });
 
     const handleAdvanceStatus = async (order: SerializedOrder) => {
         const nextStatus: OrderStatus = STATUS_FLOW[order.status] as OrderStatus

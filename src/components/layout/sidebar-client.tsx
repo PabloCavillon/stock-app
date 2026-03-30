@@ -8,8 +8,8 @@ import {
     LayoutDashboard,
     ShoppingCart,
     Package,
-    UserCircle, // Ícono para Clientes (individual)
-    Users as TeamIcon, // Ícono para Usuarios (equipo)
+    UserCircle,
+    Users as TeamIcon,
     Database,
     LogOut,
     ChevronLeft,

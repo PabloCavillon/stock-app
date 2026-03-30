@@ -8,11 +8,15 @@ import { SearchInput } from "../common/search-input";
 
 export function StockTable({ movements }: { movements: SerializedStockMovement[] }) {
     const [search, setSearch] = useState('')
-    const filtered = movements.filter(m =>
-        m.product.name.toLowerCase().includes(search.toLowerCase()) ||
-        m.product.sku.toLowerCase().includes(search.toLowerCase()) ||
-        m.reason?.toLowerCase().includes(search.toLowerCase())
-    )
+
+    const filtered = movements.filter(m => {
+        const s = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return (
+            (m.product?.name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(s) ||
+            (m.product?.sku || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(s) ||
+            (m.reason || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(s)
+        );
+    });
 
     const thClasses = "px-6 py-4 text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] text-left";
 

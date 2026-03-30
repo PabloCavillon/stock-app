@@ -23,10 +23,13 @@ export default function UsersTable({ users: initialUsers }: { users: SerializedU
     const [search, setSearch] = useState("");
     const [deleting, setDeleting] = useState<string | null>(null)
 
-   const filtered = users.filter(u =>
-        u.username?.toLowerCase().includes(search.toLowerCase()) ||
-        u.id.toLowerCase().includes(search.toLowerCase())
-    );
+    const filtered = users.filter(u => {
+        const s = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return (
+            (u.username || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(s) ||
+            (u.id || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(s)
+        );
+    });
 
     const handleDelete = async (id: string) => {
         if (!confirm("¿Desea borrar el usuario?")) return
