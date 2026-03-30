@@ -1,6 +1,15 @@
 import { Sidebar } from "@/components/layout/sidebar"
+import { Metadata } from "next";
 
-export default function DashboardLayout ({
+export const metadata: Metadata = {
+    title: {
+        template: '%s | Projaska', // El %s se reemplaza por el título de la página hija
+        default: 'Dashboard | Projaska', // Título si la página hija no define uno
+    },
+    description: "Sistema de gestión de inventario profesional",
+};
+
+export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode

@@ -4,6 +4,10 @@ import { ChevronLeft, Receipt } from "lucide-react";
 import Link from "next/link";
 import { STATUS_LABEL, STATUS_STYLE } from "@/types/order-status";
 
+export const metadata = {
+    title: 'Orden',
+}
+
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const order = await getOrder(id)

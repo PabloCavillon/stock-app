@@ -1,5 +1,9 @@
 import UserForm from "@/components/user/user-form";
 
+export const metadata = {
+    title: 'Nuevo usuario',
+}
+
 export default function NewUserPage() {
     return (
         <div className="p-8">

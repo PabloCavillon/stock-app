@@ -3,6 +3,10 @@ import OrdersTable from "@/components/orders/orders-table";
 import { ShoppingCart } from "lucide-react";
 import { PageLayout } from "@/components/common/layout-page";
 
+export const metadata = {
+    title: 'Ordenes',
+}
+
 export default async function OrdersPage() {
 	const orders = await getOrders();
 

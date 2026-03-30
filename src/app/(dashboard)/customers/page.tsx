@@ -3,6 +3,10 @@ import CustomersTable from "@/components/customers/customers-table";
 import { UserCircle } from "lucide-react";
 import { PageLayout } from '../../../components/common/layout-page';
 
+export const metadata = {
+  title: 'Clientes', 
+};
+
 export default async function CustomersPage() {
 	const customers = await getCustomers();
 

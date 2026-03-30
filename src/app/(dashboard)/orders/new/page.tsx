@@ -4,8 +4,11 @@ import { OrderForm } from "@/components/orders/orders-from";
 import { ChevronLeft, FilePlus2 } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+    title: 'Nueva orden',
+};
+
 export default async function NewOrderPage() {
-    // Necesitamos los datos para los selectores del formulario
     const [customers, products] = await Promise.all([
         getCustomers(),
         getProducts()

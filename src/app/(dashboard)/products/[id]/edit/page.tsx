@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, Edit3 } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+    title: 'Producto',
+}
+
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const product = await getProduct(id);

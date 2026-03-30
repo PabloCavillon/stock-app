@@ -4,10 +4,10 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, Users } from "lucide-react";
 import Link from "next/link";
 
-/**
- * Edit Customer Page - Cuarzo Studio ADN
- * Design: High-end Minimalist
- */
+export const metadata = {
+    title: 'Cliente',
+};
+
 export default async function EditCustomerPage({
     params
 }: {

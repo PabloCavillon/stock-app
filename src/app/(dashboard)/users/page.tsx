@@ -3,6 +3,10 @@ import { PageLayout } from "@/components/common/layout-page";
 import UsersTable from "@/components/user/users-table";
 import { Users } from "lucide-react";
 
+export const metadata = {
+    title: 'Usuario',
+}
+
 export default async function UsersPage() {
     const users = await getUsers();
 

@@ -1,9 +1,10 @@
 import LoginForm from "@/components/auth/login-form";
 
-/**
- * Login Page - ADN Cuarzo Studio
- * Minimalismo extremo: Centrado perfecto y fondo sutil.
- */
+
+export const metadata = {
+  title: 'Login', 
+};
+
 export default function LoginPage() {
   return (
     <main className="min-h-screen w-full flex items-center justify-center bg-[#FAFAFA] p-4">

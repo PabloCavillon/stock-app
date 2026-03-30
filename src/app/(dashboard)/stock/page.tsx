@@ -4,6 +4,10 @@ import StockMovementForm from "@/components/stock/stock-movement-form";
 import { StockTable } from "@/components/stock/stock-table";
 import { Database, History, PlusCircle } from "lucide-react";
 
+export const metadata = {
+    title: 'Stock',
+}
+
 export default async function StockPage() {
 
 	const [movements, products] = await Promise.all([
