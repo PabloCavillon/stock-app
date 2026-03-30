@@ -8,12 +8,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SearchInput } from "../common/search-input";
+import { Role } from "@/generated/prisma/enums";
 
 
-const ROLE_STYLE: Record<string, string> = {
+const ROLE_STYLE: Record<Role, string> = {
     ADMIN: "bg-purple-50 text-purple-700",
     SELLER: "bg-blue-50 text-blue-700",
     WAREHOUSE: "bg-amber-50 text-amber-700",
+    WATCHER: "bg-amber-50 text-amber-700",
+}
+
+const ROLE_TRANSLATE: Record<Role, string> = {
+    ADMIN: "Administrador",
+    SELLER: "Vendedor",
+    WAREHOUSE: "Depósito",
+    WATCHER: "Observador",
 }
 
 export default function UsersTable({ users: initialUsers }: { users: SerializedUser[] }) {
@@ -85,11 +94,11 @@ export default function UsersTable({ users: initialUsers }: { users: SerializedU
                                     <td className="px-6 py-4">
                                         <span className={cn(
                                             "inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border",
-                                            user.role === "ADMIN"
+                                            user.role === Role.ADMIN
                                                 ? "bg-purple-50 text-purple-700 border-purple-100"
                                                 : "bg-zinc-50 text-zinc-600 border-zinc-100"
                                         )}>
-                                            {user.role}
+                                            {ROLE_TRANSLATE[user.role]}
                                         </span>
                                     </td>
 

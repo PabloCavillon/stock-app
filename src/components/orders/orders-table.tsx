@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, MoreHorizontal, Calendar, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Eye, Calendar, ChevronRight } from "lucide-react";
 import { SearchInput } from "../common/search-input";
 import { STATUS_FLOW, STATUS_LABEL } from "@/types/order-status";
 import { updateOrderStatus } from "@/actions/orders";

@@ -1,6 +1,7 @@
 'use client';
 
 import { createUser, updateUser } from "@/actions/users";
+import { Role } from "@/generated/prisma/enums";
 import { CreateUserFormData, createUserSchema, UpdateUserFormData, UserFormData, UserFormInput, userSchema } from "@/lib/validations/user";
 import { SerializedUser } from "@/types/user";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,9 +62,10 @@ export default function UserForm({ user }: { user?: SerializedUser }) {
                     {...register("role")}
                     className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900 bg-white"
                 >
-                    <option value="SELLER">Vendedor</option>
-                    <option value="WAREHOUSE">Depósito</option>
-                    <option value="ADMIN">Admin</option>
+                    <option value={Role.SELLER}>Vendedor</option>
+                    <option value={Role.WAREHOUSE}>Depósito</option>
+                    <option value={Role.ADMIN}>Admin</option>
+                    <option value={Role.WATCHER}>Observador</option>
                 </select>
                 {errors.role && <p className="text-xs text-red-500">{errors.role.message}</p>}
             </div>
