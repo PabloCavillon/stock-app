@@ -106,7 +106,7 @@ export async function updateOrderStatus(id: string, status: OrderStatus) {
 						userId: session.user!.id!,
 						type: "OUT",
 						quantity: item.quantity,
-						reason: "Sale",
+						reason: "Venta",
 					},
 				});
 			}
