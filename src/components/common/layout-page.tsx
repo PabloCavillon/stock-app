@@ -21,7 +21,6 @@ export const PageLayout = ({
     return (
         <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-10 animate-in fade-in duration-700">
 
-            {/* Header Unificado */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-2">
                     <div className="flex items-center gap-3">
@@ -46,7 +45,6 @@ export const PageLayout = ({
                 </Link>
             </header>
 
-            {/* Contenedor de Tabla/Contenido */}
             <div className="bg-white rounded-[2.5rem] border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
                 {children}
             </div>

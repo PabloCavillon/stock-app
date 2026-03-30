@@ -50,7 +50,12 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col">
                     <label className={labelClasses}>Código SKU</label>
-                    <input {...register("sku")} placeholder="PROD-001" className={cn(inputClasses, errors.sku && "border-red-200")} />
+                    <input 
+                        {...register("sku")} 
+                        placeholder="PROD-001" 
+                        className={cn(inputClasses, errors.sku && "border-red-200")}
+                        disabled={!!product}
+                    />
                     {errors.sku && <p className="text-xs text-red-500 mt-2 ml-1">{errors.sku.message}</p>}
                 </div>
 
