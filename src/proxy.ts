@@ -14,30 +14,36 @@ const roleRoutes: Record<string, string[]> = {
 
 export default auth((req) => {
 	const isLoggedIn = !!req.auth;
-	const isLoginPage = req.nextUrl.pathname === "/login";
+	const { pathname } = req.nextUrl;
+	const isLoginPage = pathname === "/login";
 
 	if (!isLoggedIn && !isLoginPage) {
-		return NextResponse.redirect(new URL("/login", req.url));
+		return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
 	}
 
 	if (isLoggedIn && isLoginPage) {
 		const role = (req.auth?.user as any)?.role ?? "SELLER";
-		const defaultRoute = role === "WAREHOUSE" ? "/orders" : "/orders";
-		return NextResponse.redirect(new URL(defaultRoute, req.url));
+		const defaultRoute = role === "WAREHOUSE" ? "/stock" : "/orders";
+		return NextResponse.redirect(new URL(defaultRoute, req.nextUrl.origin));
 	}
 
 	if (isLoggedIn) {
-		const role = (req.auth?.user as any)?.role ?? "SELLER";
-		const pathname = req.nextUrl.pathname;
+		const role = (req.auth?.user as any)?.role;
 
 		for (const [route, allowedRoles] of Object.entries(roleRoutes)) {
-			if (pathname.startsWith(route) && !allowedRoles.includes(role)) {
-				return NextResponse.redirect(new URL("/orders", req.url));
+			if (pathname.startsWith(route)) {
+				if (!role || !allowedRoles.includes(role)) {
+					return NextResponse.redirect(
+						new URL("/orders", req.nextUrl.origin),
+					);
+				}
 			}
 		}
 	}
+
+	return NextResponse.next();
 });
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+	matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico|public).*)"],
 };
