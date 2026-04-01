@@ -21,7 +21,7 @@ export default function LoginForm() {
 
 		try {
 			const result = await signIn("credentials", {
-				username,
+				username: username.toLowerCase(),
 				password,
 				redirect: false,
 			});
