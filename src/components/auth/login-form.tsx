@@ -3,12 +3,13 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Loader2, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight, Eye, EyeClosed } from "lucide-react";
 
 export default function LoginForm() {
 	const router = useRouter();
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -80,16 +81,26 @@ export default function LoginForm() {
 							Contraseña
 						</label>
 					</div>
-					<input
-						id="password"
-						name="password"
-						type="password"
-						required
-						autoComplete="current-password"
-						placeholder="••••••••"
-						disabled={isLoading}
-						className={inputClasses}
-					/>
+					<div className="relative">
+						<input
+							id="password"
+							name="password"
+							type={!showPassword ? "password" : "text"}
+							required
+							autoComplete="current-password"
+							placeholder="••••••••"
+							disabled={isLoading}
+							className={inputClasses}
+						/>
+						<div className="absolute right-2 top-1/4 text-zinc-500">
+							<div onClick={() => setShowPassword(!showPassword)}>
+								{showPassword
+									? <Eye size={24} />
+									: <EyeClosed size={24} />
+								}
+							</div>
+						</div>
+					</div>
 				</div>
 
 				{/* Error Feedback */}
