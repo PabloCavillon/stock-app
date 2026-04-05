@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, Receipt } from "lucide-react";
 import Link from "next/link";
 import { STATUS_LABEL, STATUS_STYLE } from "@/types/order-status";
+import DownloadReceiptButton from "@/components/receipts/DownloadReceiptButton";
 
 export const metadata = {
     title: 'Orden',
@@ -110,6 +111,10 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 </div>
 
             </section>
+
+            <div className="w-full flex justify-center items-center">
+                <DownloadReceiptButton orderId={order.id} orderCode={order.code} />
+            </div>
         </div>
     )
 }
