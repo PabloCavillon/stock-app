@@ -10,6 +10,7 @@ import { SerializedOrder } from "@/types/order";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { useRouter } from "next/navigation";
 import OrderStatusTooltip from './order-status-tooltip';
+import DownloadReceiptButton from "../receipts/DownloadReceiptButton";
 
 export default function OrdersTable({ orders: initialOrders }: { orders: SerializedOrder[] }) {
     const router = useRouter()
@@ -52,7 +53,6 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
     return (
         <div className="flex flex-col">
             <SearchInput value={search} onChange={setSearch} />
-
             <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                     <thead>
@@ -113,7 +113,8 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                                             </>
                                                         )}
                                                     </button>
-                                                )}
+                                                )} 
+                                                <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
                                                 <Link
                                                     href={`/orders/${order.id}`}
                                                     className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all hover:shadow-sm"

@@ -1,4 +1,7 @@
 import { OrderStatus } from "@/generated/prisma/enums";
+import { SerializedCustomer } from "./customer";
+import { SerializedUser } from "./user";
+import { SerializedProduct } from "./product";
 
 export type SerializedOrderItem = {
 	id: string;
@@ -6,16 +9,13 @@ export type SerializedOrderItem = {
 	orderId: string;
 	quantity: number;
 	unitPrice: number;
-	product: {
-		id: string;
-		name: string;
-		sku: string;
-	};
+	product: SerializedProduct;
 };
 
 export type SerializedOrder = {
 	id: string;
 	code: string;
+	dollarRate: number;
 	customerId: string;
 	userId: string;
 	status: OrderStatus;
@@ -23,21 +23,15 @@ export type SerializedOrder = {
 	notes: string | null;
 	createdAt: string;
 	updatedAt: string;
-	customer: {
-		id: string;
-		name: string;
-	};
-	user: {
-		id: string;
-		username: string;
-	};
+	customer: SerializedCustomer;
+	user: SerializedUser;
 	items: SerializedOrderItem[];
 };
 
 export type ChartOrder = {
-	id: string
-    customerName: string
-    status: OrderStatus
-    total: number
-    createdAt: string
-}
+	id: string;
+	customerName: string;
+	status: OrderStatus;
+	total: number;
+	createdAt: string;
+};
