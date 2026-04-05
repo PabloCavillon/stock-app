@@ -28,13 +28,13 @@ enum MovementType {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
+  id        String    @id @default(uuid())
+  username  String    @unique
   password  String
-  role      Role     @default(SELLER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt  DateTime?
+  role      Role      @default(SELLER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   orders         Order[]
   stockMovements StockMovement[]
@@ -72,6 +72,7 @@ model Product {
 
 model Order {
   id         String      @id @default(uuid())
+  code       String?     @unique
   customerId String
   customer   Customer    @relation(fields: [customerId], references: [id])
   userId     String
@@ -82,6 +83,7 @@ model Order {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   deletedAt  DateTime?
+  dollarRate Decimal?    @db.Decimal(10, 2)
 
   items          OrderItem[]
   stockMovements StockMovement[]

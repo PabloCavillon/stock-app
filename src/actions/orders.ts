@@ -6,6 +6,13 @@ import { prisma } from "@/lib/prisma";
 import { OrderFormData } from "@/lib/validations/order";
 import { SerializedOrder } from "@/types/order";
 import { revalidatePath } from "next/cache";
+import { customAlphabet } from "nanoid";
+
+/*******************  NANOID  **********************/
+
+const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
+
+/*******************  NANOID  **********************/
 
 function serializeOrder(order: any): SerializedOrder {
 	return {
@@ -66,6 +73,7 @@ export async function createOrder(data: OrderFormData) {
 		data: {
 			customerId: data.customerId,
 			userId: session.user.id,
+			code: `ORD-${nanoid()}`,
 			total,
 			notes: data.notes,
 			items: {

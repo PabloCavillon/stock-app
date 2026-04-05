@@ -15,6 +15,7 @@ export type SerializedOrderItem = {
 
 export type SerializedOrder = {
 	id: string;
+	code: string;
 	customerId: string;
 	userId: string;
 	status: OrderStatus;

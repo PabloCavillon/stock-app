@@ -32,7 +32,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                         </div>
                         <div>
                             <h1 className="text-4xl font-extrabold tracking-tighter text-zinc-900">
-                                Orden #{id.slice(-6).toUpperCase()}
+                                Orden #{order.code.split('-')[1]}
                             </h1>
                             <p className="text-sm text-zinc-400 mt-1 font-light">
                                 Cliente: <span className="text-zinc-900 font-medium">{order.customer.name}</span>

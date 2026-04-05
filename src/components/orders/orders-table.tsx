@@ -17,18 +17,22 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
     const [search, setSearch] = useState("")
     const [updating, setUpdating] = useState<string | null>(null)
 
-    const filtered = orders.filter(o => {
+    const filtered: SerializedOrder[] = orders.filter(order => {
         const searchTerm = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-        const customerName = o.customer?.name
-            ? o.customer.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        const customerName = order.customer?.name
+            ? order.customer.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             : "";
 
-        const orderId = o.id
-            ? o.id.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        const orderId = order.id
+            ? order.id.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             : "";
 
-        return customerName.includes(searchTerm) || orderId.includes(searchTerm);
+        const orderCode = order.code
+            ? order.code.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            : "";
+
+        return customerName.includes(searchTerm) || orderId.includes(searchTerm) || orderCode.includes(searchTerm);
     });
 
     const handleAdvanceStatus = async (order: SerializedOrder) => {
@@ -73,8 +77,8 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                 const nextStatus = STATUS_FLOW[order.status] as OrderStatus | undefined;
                                 return (
                                     <tr key={order.id} className="group hover:bg-zinc-50/50 transition-colors">
-                                        <td className="px-6 py-4 font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">
-                                            #{order.id.slice(-6)}
+                                        <td className="px-6 py-4 font-mono text-[10px] text-zinc-500 uppercase tracking-tighter">
+                                            {order.code.split('-')[1]}
                                         </td>
                                         <td className="px-6 py-4 font-bold text-zinc-900">
                                             {order.customer?.name || "Consumidor Final"}

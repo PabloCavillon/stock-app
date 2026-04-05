@@ -1,0 +1,1 @@
+ALTER TABLE "Order" ADD COLUMN "dollarRate" DECIMAL(10,2);
