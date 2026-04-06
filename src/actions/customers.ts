@@ -56,7 +56,22 @@ export const updateCustomer = async (
 ) => {
 	const session = await auth();
 	if (!session?.user?.id) throw new Error("Unauthorized");
-	await prisma.customer.update({ where: { id }, data });
+
+	await prisma.$transaction(async (tx) => {
+		await tx.customer.update({ where: { id }, data });
+
+		// Sincronizar con StoreCustomer si existe vínculo
+		await tx.storeCustomer.updateMany({
+			where: { customerId: id, deletedAt: null },
+			data: {
+				name: data.name,
+				email: data.email,
+				phone: data.phone,
+				address: data.address,
+			},
+		});
+	});
+
 	revalidatePath("/customers");
 };
 

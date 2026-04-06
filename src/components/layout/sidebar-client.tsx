@@ -13,18 +13,20 @@ import {
     Database,
     LogOut,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    ScrollText
 } from "lucide-react";
 
 // Agregamos 'roles' a la configuración. 
 // Si no tiene 'roles', asumimos que es público para cualquier logueado.
 const navigation = [
     { label: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["ADMIN", "SELLER", "WATCHER"] },
-    { label: "Órdenes", href: "/orders", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WAREHOUSE"] },
+    { label: "Órdenes", href: "/orders", icon: ScrollText, roles: ["ADMIN", "SELLER", "WAREHOUSE"] },
     { label: "Productos", href: "/products", icon: Package, roles: ["ADMIN", "SELLER"] },
     { label: "Clientes", href: "/customers", icon: UserCircle, roles: ["ADMIN", "SELLER"] },
     { label: "Stock", href: "/stock", icon: Database, roles: ["ADMIN"] },
     { label: "Usuarios", href: "/users", icon: TeamIcon, roles: ["ADMIN"] },
+    { label: "Tienda", href: "/store", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WATCHER"] },
 ];
 
 export default function SidebarClient({ role }: { role: string }) {

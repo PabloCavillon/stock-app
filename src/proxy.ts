@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { authConfig } from "./auth.config";
 import NextAuth from "next-auth";
+import { jwtVerify } from "jose";
 
 const { auth } = NextAuth(authConfig);
 
-const roleRoutes: Record<string, string[]> = {
+const STORE_JWT_SECRET = new TextEncoder().encode(process.env.STORE_JWT_SECRET);
+const STORE_COOKIE_NAME = "store-token";
+
+const ROLE_ROUTES: Record<string, string[]> = {
 	"/products": ["ADMIN", "SELLER"],
 	"/customers": ["ADMIN", "SELLER"],
 	"/stock": ["ADMIN", "WAREHOUSE"],
@@ -12,13 +16,61 @@ const roleRoutes: Record<string, string[]> = {
 	"/orders": ["ADMIN", "SELLER", "WAREHOUSE"],
 };
 
-export default auth((req) => {
-	const isLoggedIn = !!req.auth;
+const STORE_PROTECTED_ROUTES = [
+	"/store/orders",
+	"/store/checkout",
+	"/store/cart",
+];
+
+const ADMIN_LOGIN_PAGE = "/login";
+const STORE_LOGIN_PAGE = "/store/login";
+const STORE_PREFIX = "/store";
+
+async function verifyStoreToken(token: string): Promise<boolean> {
+	try {
+		await jwtVerify(token, STORE_JWT_SECRET);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export default auth(async (req) => {
 	const { pathname } = req.nextUrl;
-	const isLoginPage = pathname === "/login";
+
+	// ─── STORE ────────────────────────────────────────────────────────────────
+	if (pathname.startsWith(STORE_PREFIX)) {
+		const isProtectedRoute = STORE_PROTECTED_ROUTES.some((route) =>
+			pathname.startsWith(route),
+		);
+
+		if (isProtectedRoute) {
+			const token = req.cookies.get(STORE_COOKIE_NAME)?.value;
+			const isAuthenticated = token
+				? await verifyStoreToken(token)
+				: false;
+
+			if (!isAuthenticated) {
+				const redirectUrl = new URL(
+					STORE_LOGIN_PAGE,
+					req.nextUrl.origin,
+				);
+				redirectUrl.searchParams.set("redirect", pathname);
+				return NextResponse.redirect(redirectUrl);
+			}
+		}
+
+		return NextResponse.next();
+	}
+
+	// ─── ADMIN PANEL ──────────────────────────────────────────────────────────
+	const isLoggedIn = !!req.auth;
+	const isLoginPage = pathname === ADMIN_LOGIN_PAGE;
 
 	if (!isLoggedIn && !isLoginPage) {
-		return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
+		return NextResponse.redirect(
+			new URL(ADMIN_LOGIN_PAGE, req.nextUrl.origin),
+		);
 	}
 
 	if (isLoggedIn && isLoginPage) {
@@ -30,11 +82,11 @@ export default auth((req) => {
 	if (isLoggedIn) {
 		const role = (req.auth?.user as any)?.role;
 
-		for (const [route, allowedRoles] of Object.entries(roleRoutes)) {
+		for (const [route, allowedRoles] of Object.entries(ROLE_ROUTES)) {
 			if (pathname.startsWith(route)) {
 				if (!role || !allowedRoles.includes(role)) {
 					return NextResponse.redirect(
-						new URL("/orders", req.nextUrl.origin),
+						new URL("/", req.nextUrl.origin),
 					);
 				}
 			}
