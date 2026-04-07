@@ -1,5 +1,5 @@
 import { getUsers } from "@/actions/users";
-import { PageLayout } from "@/components/common/layout-page";
+import { PageLayout } from "@/components/ui/layout-page";
 import UsersTable from "@/components/user/users-table";
 import { Users } from "lucide-react";
 

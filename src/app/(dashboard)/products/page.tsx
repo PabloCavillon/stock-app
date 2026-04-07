@@ -1,7 +1,7 @@
 import { getProducts } from "@/actions/products";
 import ProductsTable from "@/components/products/products-table";
 import { Package } from "lucide-react";
-import { PageLayout } from "@/components/common/layout-page";
+import { PageLayout } from "@/components/ui/layout-page";
 
 export const metadata = {
     title: 'Productos',

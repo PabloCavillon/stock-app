@@ -7,7 +7,7 @@ import { Calendar, Edit2, Loader2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { SearchInput } from "../common/search-input";
+import { SearchInput } from "../ui/search-input";
 import { Role } from "@/generated/prisma/enums";
 
 

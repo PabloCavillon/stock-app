@@ -4,7 +4,7 @@ import { deleteCustomer } from "@/actions/customers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { SearchInput } from "../common/search-input";
+import { SearchInput } from "../ui/search-input";
 import { Edit2, Loader2, Trash2 } from "lucide-react";
 import { SerializedCustomer } from "@/types/customer";
 

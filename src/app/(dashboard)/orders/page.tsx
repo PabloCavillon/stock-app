@@ -1,7 +1,7 @@
 import { getOrders } from "@/actions/orders";
 import OrdersTable from "@/components/orders/orders-table";
 import { ShoppingCart } from "lucide-react";
-import { PageLayout } from "@/components/common/layout-page";
+import { PageLayout } from "@/components/ui/layout-page";
 
 export const metadata = {
     title: 'Ordenes',

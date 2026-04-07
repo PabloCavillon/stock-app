@@ -1,7 +1,7 @@
 import { getCustomers } from "@/actions/customers";
 import CustomersTable from "@/components/customers/customers-table";
 import { UserCircle } from "lucide-react";
-import { PageLayout } from '../../../components/common/layout-page';
+import { PageLayout } from '../../../components/ui/layout-page';
 
 export const metadata = {
   title: 'Clientes', 

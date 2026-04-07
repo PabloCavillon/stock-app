@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createOrder } from "@/actions/orders";
 import type { SerializedProduct } from "@/types/product";
 import { SerializedCustomer } from "@/types/customer";
+import Combobox from "../ui/combobox";
 
 export function OrderForm({ customers, products }: { customers: SerializedCustomer[], products: SerializedProduct[] }) {
     const router = useRouter();
@@ -68,10 +69,18 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
             {/* Cliente */}
             <div className="flex flex-col">
                 <label className={labelClasses}>Seleccionar Cliente</label>
-                <select {...register("customerId")} className={inputClasses}>
-                    <option value="">Elegir cliente...</option>
-                    {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
+                <Combobox
+                    options={customers.map((c) => ({
+                        value: c.id,
+                        label: c.name,
+                        sublabel: c.email ?? undefined,
+                    }))}
+                    value={watch("customerId")}
+                    onChange={(val) => setValue("customerId", val, { shouldValidate: true })}
+                    placeholder="Elegir cliente..."
+                    searchPlaceholder="Buscar por nombre o email..."
+                    emptyMessage="No se encontraron clientes."
+                />
                 {errors.customerId && <p className="text-sm text-red-500 mt-1 ml-1">{errors.customerId.message}</p>}
             </div>
 
@@ -94,23 +103,23 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
 
                 <div className="space-y-3">
                     {fields.map((field, index) => (
-                        <div key={field.id} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-50 rounded-2xl border border-zinc-200">
+                        <div key={field.id} className="flex flex-col md:flex-row gap-3 p-2 bg-zinc-50 rounded-2xl border border-zinc-200">
                             <div className="flex-1">
-                                <select
-                                    {...register(`items.${index}.productId`)}
-                                    onChange={(e) => {
-                                        register(`items.${index}.productId`).onChange(e)
-                                        handleProductChange(index, e.target.value)
+                                <Combobox
+                                    options={products.map((p) => ({
+                                        value: p.id,
+                                        label: p.name,
+                                        sublabel: `#${p.sku} · stock: ${p.stock}`,
+                                    }))}
+                                    value={watch(`items.${index}.productId`)}
+                                    onChange={(val) => {
+                                        setValue(`items.${index}.productId`, val, { shouldValidate: true });
+                                        handleProductChange(index, val);
                                     }}
-                                    className={inputClasses}
-                                >
-                                    <option value="">Producto...</option>
-                                    {products.map(p => (
-                                        <option key={p.id} value={p.id}>
-                                            {p.name} (stock: {p.stock})
-                                        </option>
-                                    ))}
-                                </select>
+                                    placeholder="Producto..."
+                                    searchPlaceholder="Buscar por nombre o SKU..."
+                                    emptyMessage="No se encontraron productos."
+                                />
                                 {errors.items?.[index]?.productId && (
                                     <p className="text-sm text-red-500 mt-1 ml-1">
                                         {errors.items[index].productId?.message}

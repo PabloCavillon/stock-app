@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Eye, Calendar, ChevronRight } from "lucide-react";
-import { SearchInput } from "../common/search-input";
+import { SearchInput } from "../ui/search-input";
 import { STATUS_FLOW, STATUS_LABEL } from "@/types/order-status";
 import { updateOrderStatus } from "@/actions/orders";
 import { SerializedOrder } from "@/types/order";

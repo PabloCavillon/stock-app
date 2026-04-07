@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { SerializedStockMovement } from "@/types/stock";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
-import { SearchInput } from "../common/search-input";
+import { SearchInput } from "../ui/search-input";
 
 export function StockTable({ movements }: { movements: SerializedStockMovement[] }) {
     const [search, setSearch] = useState('')

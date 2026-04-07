@@ -7,7 +7,7 @@ import { deleteProduct } from "@/actions/products";
 import { cn } from "@/lib/utils";
 import { SerializedProduct } from "@/types/product";
 import { Search, Edit2, Trash2, Loader2 } from "lucide-react";
-import { SearchInput } from "../common/search-input";
+import { SearchInput } from "../ui/search-input";
 
 interface Props {
     products: SerializedProduct[];
