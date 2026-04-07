@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-export async function getDashhboardData() {
+export async function getDashboardData() {
 	const [
 		totalProducts,
 		totalCustomers,

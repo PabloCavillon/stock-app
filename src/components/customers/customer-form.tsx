@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createCustomer, updateCustomer } from "@/actions/customers";
 import { CustomerFormData, CustomerFormInput, customerSchema } from '@/lib/validations/customer';
-import { Customer } from "@/generated/prisma/client";
 import { Loader2, Save, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SerializedCustomer } from "@/types/customer";
@@ -37,31 +36,30 @@ export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
         }
     };
 
-    // --- ADN CUARZO STUDIO (COHERENCIA TOTAL) ---
-    const labelClasses = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
-    const inputClasses = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-300";
-    const btnPrimary = "flex-1 md:flex-none inline-flex items-center justify-center px-10 py-3.5 rounded-xl text-sm font-bold bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.98] gap-2 shadow-sm";
-    const btnSecondary = "flex-1 md:flex-none inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-sm font-bold text-zinc-500 hover:bg-zinc-100 transition-all gap-2";
+    const labelClasses = "text-xs font-bold text-zinc-600 uppercase tracking-[0.2em] mb-2 ml-1 block";
+    const inputClasses = "w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-base transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-400 text-zinc-900";
+    const btnPrimary = "flex-1 md:flex-none inline-flex items-center justify-center px-10 py-3.5 rounded-xl text-base font-bold bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.98] gap-2 shadow-sm";
+    const btnSecondary = "flex-1 md:flex-none inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-base font-bold text-zinc-500 hover:bg-zinc-100 transition-all gap-2";
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="flex flex-col">
                 <label className={labelClasses}>Nombre Completo / Razón Social</label>
                 <input {...register("name")} placeholder="Juan Pérez o Projaska SRL" className={cn(inputClasses, errors.name && "border-red-200")} />
-                {errors.name && <p className="text-xs text-red-500 mt-2 ml-1">{errors.name.message}</p>}
+                {errors.name && <p className="text-sm text-red-500 mt-2 ml-1">{errors.name.message}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col">
                     <label className={labelClasses}>Email</label>
                     <input {...register("email")} type="email" placeholder="cliente@correo.com" className={cn(inputClasses, errors.email && "border-red-200")} />
-                    {errors.email && <p className="text-xs text-red-500 mt-2 ml-1">{errors.email.message}</p>}
+                    {errors.email && <p className="text-sm text-red-500 mt-2 ml-1">{errors.email.message}</p>}
                 </div>
 
                 <div className="flex flex-col">
                     <label className={labelClasses}>Teléfono</label>
                     <input {...register("phone")} placeholder="+54 387 ..." className={cn(inputClasses, errors.phone && "border-red-200")} />
-                    {errors.phone && <p className="text-xs text-red-500 mt-2 ml-1">{errors.phone.message}</p>}
+                    {errors.phone && <p className="text-sm text-red-500 mt-2 ml-1">{errors.phone.message}</p>}
                 </div>
             </div>
 
@@ -70,9 +68,13 @@ export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
                 <input {...register("address")} placeholder="Calle, Número, Localidad" className={inputClasses} />
             </div>
 
-            {serverError && <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-xs font-medium animate-in fade-in">{serverError}</div>}
+            {serverError && (
+                <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm font-medium animate-in fade-in">
+                    {serverError}
+                </div>
+            )}
 
-            <div className="flex flex-col-reverse md:flex-row gap-3 pt-8 border-t border-zinc-50">
+            <div className="flex flex-col-reverse md:flex-row gap-3 pt-8 border-t border-zinc-100">
                 <button type="button" onClick={() => router.back()} className={btnSecondary}>
                     <X className="w-4 h-4" /> Cancelar
                 </button>

@@ -223,7 +223,8 @@ const BUSINESS = {
     name: "Projaska",
     address: "Salta, Argentina",
     phone: '+54 3873 44-3522',
-    email: 'info@projaska.com'
+    email: 'info@projaska.com',
+    //web: 'projaska.com'
     //logoUrl: '/logo.png'
 }
 

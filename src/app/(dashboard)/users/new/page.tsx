@@ -1,4 +1,6 @@
 import UserForm from "@/components/user/user-form";
+import { ChevronLeft, UserPlus } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
     title: 'Nuevo usuario',
@@ -6,12 +8,33 @@ export const metadata = {
 
 export default function NewUserPage() {
     return (
-        <div className="p-8">
-            <div className="mb-6">
-                <h1 className="text-xl font-semibold text-gray-900">Nuevo usuario</h1>
-                <p className="text-sm text-gray-500 mt-0.5">Crear nuevo usuario del sistema</p>
-            </div>
-            <UserForm />
+        <div className="max-w-3xl mx-auto p-4 md:p-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <header className="space-y-6">
+                <Link
+                    href="/users"
+                    className="inline-flex items-center text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors gap-2 group"
+                >
+                    <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                    Volver a Usuarios
+                </Link>
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-zinc-100 rounded-[1.2rem] shrink-0">
+                        <UserPlus className="w-6 h-6 text-zinc-900" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tighter text-zinc-900">
+                            Nuevo Usuario
+                        </h1>
+                        <p className="text-sm text-zinc-500 mt-1 font-light italic">
+                            Crear nuevo usuario del sistema
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <section className="bg-white p-6 md:p-12 rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                <UserForm />
+            </section>
         </div>
     );
 }

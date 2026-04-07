@@ -14,9 +14,6 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null)
 
-    const labelClasses = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
-    const inputClasses = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-zinc-900 placeholder:text-zinc-300";
-
     const {
         register,
         handleSubmit,
@@ -62,20 +59,20 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
         }
     }
 
-    return (
-        <form className="space-y-10" onSubmit={handleSubmit(onSubmit)}>
+    const labelClasses = "text-xs font-bold text-zinc-600 uppercase tracking-[0.2em] mb-2 ml-1 block";
+    const inputClasses = "w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-base text-zinc-900 transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 placeholder:text-zinc-400";
 
-            {/* Customer */}
+    return (
+        <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+
+            {/* Cliente */}
             <div className="flex flex-col">
                 <label className={labelClasses}>Seleccionar Cliente</label>
-                <select
-                    {...register("customerId")}
-                    className={inputClasses}
-                >
+                <select {...register("customerId")} className={inputClasses}>
                     <option value="">Elegir cliente...</option>
                     {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
-                {errors.customerId && <p className="text-xs text-red-500 mt-1">{errors.customerId.message}</p>}
+                {errors.customerId && <p className="text-sm text-red-500 mt-1 ml-1">{errors.customerId.message}</p>}
             </div>
 
             {/* Items */}
@@ -85,19 +82,19 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
                     <button
                         type="button"
                         onClick={() => append({ productId: "", quantity: 1, unitPrice: 0 })}
-                        className="text-[10px] font-bold text-zinc-900 uppercase tracking-widest flex items-center gap-1 hover:underline"
+                        className="text-xs font-bold text-zinc-900 uppercase tracking-widest flex items-center gap-1 hover:underline"
                     >
-                        <Plus className="w-3 h-3" /> Agregar Ítem
+                        <Plus className="w-3.5 h-3.5" /> Agregar Ítem
                     </button>
                 </div>
 
                 {errors.items?.root && (
-                    <p className="text-xs text-red-500">{errors.items.root.message}</p>
+                    <p className="text-sm text-red-500 ml-1">{errors.items.root.message}</p>
                 )}
 
                 <div className="space-y-3">
                     {fields.map((field, index) => (
-                        <div key={field.id} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-50/50 rounded-2xl border border-zinc-100">
+                        <div key={field.id} className="flex flex-col md:flex-row gap-3 p-4 bg-zinc-50 rounded-2xl border border-zinc-200">
                             <div className="flex-1">
                                 <select
                                     {...register(`items.${index}.productId`)}
@@ -115,7 +112,7 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
                                     ))}
                                 </select>
                                 {errors.items?.[index]?.productId && (
-                                    <p className="text-xs text-red-500 mt-0.5">
+                                    <p className="text-sm text-red-500 mt-1 ml-1">
                                         {errors.items[index].productId?.message}
                                     </p>
                                 )}
@@ -133,7 +130,7 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
                                 <button
                                     type="button"
                                     onClick={() => remove(index)}
-                                    className="p-3 text-zinc-400 hover:text-red-500 transition-colors"
+                                    className="self-center p-3 text-zinc-400 hover:text-red-500 transition-colors"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>
@@ -142,16 +139,20 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
                     ))}
 
                     {fields.length === 0 && (
-                        <div className="text-center py-10 border-2 border-dashed border-zinc-100 rounded-2xl">
-                            <p className="text-xs text-zinc-400 uppercase tracking-widest font-medium">No hay productos seleccionados</p>
+                        <div className="text-center py-10 border-2 border-dashed border-zinc-200 rounded-2xl">
+                            <p className="text-sm text-zinc-400 uppercase tracking-widest font-medium">
+                                No hay productos seleccionados
+                            </p>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Notes */}
+            {/* Notas */}
             <div className="flex flex-col">
-                <label className={labelClasses}>Notas <span className="normal-case text-zinc-300">(opcional)</span></label>
+                <label className={labelClasses}>
+                    Notas <span className="normal-case text-zinc-400 font-normal">(opcional)</span>
+                </label>
                 <textarea
                     {...register("notes")}
                     rows={2}
@@ -160,26 +161,30 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
             </div>
 
             {/* Total */}
-            <div className="flex items-center justify-between py-3 border-t border-zinc-100">
-                <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest text-[10px]">Total</span>
-                <span className="text-lg font-semibold text-zinc-900">${total.toFixed(2)}</span>
+            <div className="flex items-center justify-between py-4 border-t border-zinc-100">
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Total</span>
+                <span className="text-xl font-bold text-zinc-900">${total.toFixed(2)}</span>
             </div>
 
-            {serverError && <p className="text-sm text-red-500">{serverError}</p>}
+            {serverError && (
+                <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm font-medium">
+                    {serverError}
+                </div>
+            )}
 
-            {/* Actions */}
-            <div className="flex flex-col-reverse md:flex-row gap-3 pt-8 border-t border-zinc-50">
+            {/* Acciones */}
+            <div className="flex flex-col-reverse md:flex-row gap-3 pt-6 border-t border-zinc-100">
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="flex-1 md:flex-none px-8 py-3.5 rounded-xl text-sm font-bold text-zinc-500 hover:bg-zinc-100 transition-all"
+                    className="flex-1 md:flex-none inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-base font-bold text-zinc-500 hover:bg-zinc-100 transition-all gap-2"
                 >
-                    <X className="w-4 h-4 inline mr-2" /> Cancelar
+                    <X className="w-4 h-4" /> Cancelar
                 </button>
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 md:flex-none px-10 py-3.5 rounded-xl text-sm font-bold bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm flex items-center justify-center gap-2"
+                    className="flex-1 md:flex-none inline-flex items-center justify-center px-10 py-3.5 rounded-xl text-base font-bold bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm gap-2"
                 >
                     <Save className="w-4 h-4" />
                     {isSubmitting ? "Creando..." : "Finalizar Orden"}

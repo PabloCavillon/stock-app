@@ -42,20 +42,15 @@ export default function StockMovementForm({ products }: { products: SerializedPr
         }
     }
 
+    const labelClass = "text-xs font-bold text-zinc-600 uppercase tracking-wider ml-1";
+    const inputClass = "w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-base text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all placeholder:text-zinc-400";
+
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-5 flex flex-col"
-        >
-            {/* Producto */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 flex flex-col">
+
             <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
-                    Producto
-                </label>
-                <select
-                    {...register("productId")}
-                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all appearance-none"
-                >
+                <label className={labelClass}>Producto</label>
+                <select {...register("productId")} className={`${inputClass} appearance-none`}>
                     <option value="">Seleccionar producto...</option>
                     {products.map((p) => (
                         <option key={p.id} value={p.id}>
@@ -63,65 +58,53 @@ export default function StockMovementForm({ products }: { products: SerializedPr
                         </option>
                     ))}
                 </select>
-                {errors.productId && <p className="text-[11px] font-medium text-red-500 ml-1">{errors.productId.message}</p>}
+                {errors.productId && <p className="text-sm font-medium text-red-500 ml-1">{errors.productId.message}</p>}
             </div>
 
-            {/* Tipo de Movimiento */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
-                    Tipo de Movimiento
-                </label>
-                <select
-                    {...register("type")}
-                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
-                >
+                <label className={labelClass}>Tipo de Movimiento</label>
+                <select {...register("type")} className={inputClass}>
                     <option value="IN">ENTRADA — Ingreso de stock</option>
                     <option value="OUT">SALIDA — Egreso de stock</option>
                 </select>
             </div>
 
-            {/* Cantidad */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
-                    Cantidad
-                </label>
+                <label className={labelClass}>Cantidad</label>
                 <input
                     {...register("quantity")}
                     type="number"
                     min="1"
                     placeholder="0"
-                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
+                    className={inputClass}
                 />
-                {errors.quantity && <p className="text-[11px] font-medium text-red-500 ml-1">{errors.quantity.message}</p>}
+                {errors.quantity && <p className="text-sm font-medium text-red-500 ml-1">{errors.quantity.message}</p>}
             </div>
 
-            {/* Motivo */}
             <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider ml-1">
+                <label className={labelClass}>
                     Motivo <span className="lowercase opacity-50 font-normal">(opcional)</span>
                 </label>
                 <input
                     {...register("reason")}
                     placeholder="Ej: Compra, Pérdida, Ajuste..."
-                    className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-sm text-zinc-900 outline-none focus:ring-2 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all"
+                    className={inputClass}
                 />
             </div>
 
-            {/* Feedback de Estado */}
             {(serverError || success) && (
-                <div className={`p-3 rounded-lg text-xs font-medium ${serverError ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                <div className={`p-3 rounded-xl text-sm font-medium ${serverError ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
                     {serverError || "Movimiento registrado con éxito."}
                 </div>
             )}
 
-            {/* Botón de Acción */}
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-zinc-900 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 shadow-sm shadow-zinc-200"
+                className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-zinc-900 text-white px-6 py-3 rounded-xl text-base font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 shadow-sm"
             >
                 {isSubmitting ? "Guardando..." : "Registrar Movimiento"}
             </button>
         </form>
-    )
+    );
 }

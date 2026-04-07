@@ -45,22 +45,22 @@ export default function DownloadReceiptButton({
                 onClick={handleDownload}
                 disabled={loading}
                 title="Descargar recibo"
-                className="p-2 rounded-md hover:bg-gray-100 disabled:opacity-50 transition-colors"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-lg hover:bg-zinc-100 disabled:opacity-50 transition-colors text-zinc-400 hover:text-zinc-700"
             >
                 {loading ? (
-                    <Loader2 className='w-4 h-4 animate-spin' />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                    <FileDown className='w-4 h-4 text-gray-400 hover:text-gray-700 hover:cursor-pointer' />
+                    <FileDown className="w-4 h-4" />
                 )}
             </button>
-        )
+        );
     }
 
     return (
         <button
             onClick={handleDownload}
             disabled={loading}
-            className='flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm rounded-md hover:bg-gray-700 disabled:opacity-50 transition-all hover:cursor-pointer hover:scale-105 '
+            className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 text-white text-base font-bold rounded-xl hover:bg-zinc-800 disabled:opacity-50 transition-all hover:cursor-pointer active:scale-[0.98]"
         >
             {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

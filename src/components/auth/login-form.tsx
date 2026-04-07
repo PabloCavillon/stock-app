@@ -41,20 +41,20 @@ export default function LoginForm() {
 		}
 	};
 
-	// --- Sistema de Diseño Unificado (Coherencia Cuarzo) ---
-	const labelClasses = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
-	const inputClasses = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-300";
-	const buttonClasses = "w-full bg-zinc-900 text-white py-3.5 rounded-xl text-sm font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm";
+	// LoginForm
+	const labelClasses = "text-xs font-bold text-zinc-600 uppercase tracking-[0.2em] mb-2 ml-1 block";
+	const inputClasses = "w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-base transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-400 text-zinc-900";
+	const buttonClasses = "w-full bg-zinc-900 text-white py-3.5 rounded-xl text-base font-bold hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm";
 
 	return (
-		<div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-zinc-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+		<div className="bg-white p-8 md:p-10 rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
 			{/* Header */}
 			<header className="mb-10 text-center">
 				<h1 className="text-3xl font-extrabold tracking-tighter text-zinc-900">
 					Stock App
 				</h1>
-				<p className="text-sm text-zinc-400 mt-2 font-light">
-					Ingresa tus credenciales
+				<p className="text-sm text-zinc-500 mt-2 font-light">
+					Ingresá tus credenciales
 				</p>
 			</header>
 
@@ -77,7 +77,7 @@ export default function LoginForm() {
 				{/* Password */}
 				<div className="flex flex-col">
 					<div className="flex justify-between items-end mb-2 px-1">
-						<label htmlFor="password" className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">
+						<label htmlFor="password" className="text-xs font-bold text-zinc-600 uppercase tracking-[0.2em]">
 							Contraseña
 						</label>
 					</div>
@@ -92,20 +92,17 @@ export default function LoginForm() {
 							disabled={isLoading}
 							className={inputClasses}
 						/>
-						<div className="absolute right-2 top-1/4 text-zinc-500">
+						<div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 cursor-pointer">
 							<div onClick={() => setShowPassword(!showPassword)}>
-								{showPassword
-									? <Eye size={24} />
-									: <EyeClosed size={24} />
-								}
+								{showPassword ? <Eye size={22} /> : <EyeClosed size={22} />}
 							</div>
 						</div>
 					</div>
 				</div>
 
-				{/* Error Feedback */}
+				{/* Error */}
 				{error && (
-					<div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-xl text-xs font-medium text-center animate-in fade-in zoom-in-95">
+					<div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-xl text-sm font-medium text-center animate-in fade-in zoom-in-95">
 						{error}
 					</div>
 				)}
@@ -113,19 +110,19 @@ export default function LoginForm() {
 				{/* Submit */}
 				<button type="submit" disabled={isLoading} className={buttonClasses}>
 					{isLoading ? (
-						<Loader2 className="w-4 h-4 animate-spin" />
+						<Loader2 className="w-5 h-5 animate-spin" />
 					) : (
 						<>
 							Entrar
-							<ArrowRight className="w-4 h-4" />
+							<ArrowRight className="w-5 h-5" />
 						</>
 					)}
 				</button>
 			</form>
 
-			{/* Footer Branding */}
-			<footer className="mt-10 pt-6 border-t border-zinc-50 text-center">
-				<p className="text-[10px] text-zinc-300 uppercase tracking-widest font-medium">
+			{/* Footer */}
+			<footer className="mt-10 pt-6 border-t border-zinc-100 text-center">
+				<p className="text-xs text-zinc-400 uppercase tracking-widest font-medium">
 					Cuarzo Studio
 				</p>
 			</footer>

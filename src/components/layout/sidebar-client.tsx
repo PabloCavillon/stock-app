@@ -116,8 +116,8 @@ export default function SidebarClient({ role }: { role: string }) {
             </aside>
 
             {/* ── MOBILE: bottom navigation bar ── */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-100 px-2 pb-safe">
-                <div className="flex items-center justify-around">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-100">
+                <div className="flex items-center overflow-x-auto scrollbar-none px-2">
                     {mobileNav.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
@@ -127,9 +127,9 @@ export default function SidebarClient({ role }: { role: string }) {
                                 key={item.href}
                                 href={item.href}
                                 className={`
-                                    flex flex-col items-center gap-1 px-3 py-3 rounded-xl transition-all min-w-15
-                                    ${isActive ? "text-zinc-900" : "text-zinc-400"}
-                                `}
+                        flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all shrink-0
+                        ${isActive ? "text-zinc-900" : "text-zinc-400"}
+                    `}
                             >
                                 <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
                                 <span className={`text-[10px] font-bold uppercase tracking-wide ${isActive ? "text-zinc-900" : "text-zinc-400"}`}>
@@ -139,10 +139,10 @@ export default function SidebarClient({ role }: { role: string }) {
                         );
                     })}
 
-                    {/* Logout siempre visible en mobile */}
+                    {/* Logout */}
                     <button
                         onClick={() => signOut({ callbackUrl: "/login" })}
-                        className="flex flex-col items-center gap-1 px-3 py-3 rounded-xl text-zinc-400 hover:text-red-500 transition-all min-w-15"
+                        className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0"
                     >
                         <LogOut size={22} strokeWidth={1.8} />
                         <span className="text-[10px] font-bold uppercase tracking-wide">Salir</span>
