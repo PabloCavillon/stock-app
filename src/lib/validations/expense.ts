@@ -1,12 +1,19 @@
 import { z } from "zod";
 
+// HTML number inputs emit "" when empty; z.coerce converts "" → 0 which fails
+// .positive(). Pre-process empty strings to undefined so optional() can accept them.
+const optionalPositiveNumber = z.preprocess(
+    (v) => (v === "" ? undefined : v),
+    z.coerce.number().positive().optional(),
+);
+
 export const expenseSchema = z
     .object({
         type: z.enum(["PURCHASE", "SHIPPING", "OTHER"]),
         description: z.string().min(1, "La descripción es requerida"),
-        amountUsd: z.coerce.number().positive().optional(),
-        amountArs: z.coerce.number().positive().optional(),
-        dollarRate: z.coerce.number().positive().optional(),
+        amountUsd: optionalPositiveNumber,
+        amountArs: optionalPositiveNumber,
+        dollarRate: optionalPositiveNumber,
         date: z.string().min(1, "La fecha es requerida"),
         notes: z.string().optional(),
     })

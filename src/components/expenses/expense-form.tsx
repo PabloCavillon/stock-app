@@ -108,7 +108,10 @@ export function ExpenseForm() {
                                 className={cn(inputClasses, "pl-8")}
                             />
                         </div>
-                        <p className="text-xs text-zinc-400 mt-2 ml-1">Opcional, para cálculo de P&L en ARS</p>
+                        {errors.dollarRate
+                            ? <p className="text-sm text-red-500 mt-2 ml-1">{errors.dollarRate.message}</p>
+                            : <p className="text-xs text-zinc-400 mt-2 ml-1">Opcional, para cálculo de P&L en ARS</p>
+                        }
                     </div>
                 </div>
             ) : (

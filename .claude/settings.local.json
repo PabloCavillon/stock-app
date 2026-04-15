@@ -11,7 +11,12 @@
       "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp ok'\\)\")",
       "Bash(node -e ':*)",
       "Bash(ls e:/projects/stock-app/src/app/store/kits/[id]/)",
-      "Bash(ls e:/projects/stock-app/src/app/store/products/[id]/)"
+      "Bash(ls e:/projects/stock-app/src/app/store/products/[id]/)",
+      "Bash(ls *.config.*)",
+      "Bash(npm install *)",
+      "Bash(npm test *)",
+      "Bash(node -e \"const z = require\\('zod'\\); console.log\\(Object.keys\\(z\\).slice\\(0,10\\)\\); const r = require\\('zod/v4/core'\\); console.log\\(typeof r.parse\\);\")",
+      "Bash(node -e ' *)"
     ]
   }
 }
