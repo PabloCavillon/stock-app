@@ -43,7 +43,7 @@ export default async function StorePage() {
                             Kits & Ofertas <span className="text-gray-300 font-normal">({kits.length})</span>
                         </h2>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                         {kits.map((kit) => (
                             <KitCard key={kit.id} kit={kit} />
                         ))}
@@ -65,7 +65,7 @@ export default async function StorePage() {
                             <h2 className="text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-3">
                                 {category} <span className="text-gray-300 font-normal">({catProducts.length})</span>
                             </h2>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                                 {catProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}

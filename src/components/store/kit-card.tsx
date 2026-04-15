@@ -33,14 +33,14 @@ export function KitCard({ kit }: { kit: StoreKit }) {
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 flex flex-col gap-4 hover:shadow-md hover:shadow-gray-200/60 transition-all group relative">
+        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-5 flex flex-col gap-3 sm:gap-4 hover:shadow-md hover:shadow-gray-200/60 transition-all group relative">
             {/* Badge "Kit" */}
             <span className="absolute top-3 left-3 z-10 text-[9px] font-black uppercase tracking-widest bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">
                 Kit
             </span>
 
             {/* Imagen */}
-            <div className="w-full aspect-square max-h-36 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
+            <div className="w-full aspect-square max-h-28 sm:max-h-36 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
                 {kit.imageUrl && !imgError ? (
                     <Image
                         src={kit.imageUrl}
@@ -77,25 +77,22 @@ export function KitCard({ kit }: { kit: StoreKit }) {
             </div>
 
             {/* Precio + botón */}
-            <div className="flex items-end justify-between gap-3 pt-3 border-t border-gray-100">
+            <div className="flex items-end justify-between gap-2 pt-2 sm:pt-3 border-t border-gray-100">
                 <div>
-                    <p className="text-xl font-black text-gray-900">{fmtArs(kit.priceArs)}</p>
+                    <p className="text-base sm:text-xl font-black text-gray-900">{fmtArs(kit.priceArs)}</p>
                     <p className="text-[10px] text-gray-400">USD {kit.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
                 </div>
                 <button
                     onClick={handleAdd}
-                    className={`
-                        flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all
-                        ${added
-                            ? "bg-emerald-600 text-white"
-                            : inCart
-                                ? "bg-violet-50 text-violet-700 hover:bg-violet-100"
-                                : "bg-gray-900 text-white hover:bg-gray-700"
-                        }
-                    `}
+                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                        added ? "bg-emerald-600 text-white"
+                        : inCart ? "bg-violet-50 text-violet-700 hover:bg-violet-100"
+                        : "bg-gray-900 text-white hover:bg-gray-700"
+                    }`}
                 >
-                    {added ? <Check size={13} /> : <ShoppingCart size={13} />}
-                    {added ? "Agregado" : inCart ? `En carrito (${inCart.quantity})` : "Agregar"}
+                    {added ? <Check size={12} /> : <ShoppingCart size={12} />}
+                    <span className="hidden sm:inline">{added ? "Agregado" : inCart ? `(${inCart.quantity})` : "Agregar"}</span>
+                    <span className="sm:hidden">{added ? "✓" : inCart ? `${inCart.quantity}` : "+"}</span>
                 </button>
             </div>
         </div>

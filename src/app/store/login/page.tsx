@@ -14,7 +14,7 @@ export default async function StoreLoginPage({ searchParams }: LoginPageProps) {
     if (session) redirect(params.redirect ?? "/store");
 
     return (
-        <div className="min-h-[calc(100vh-56px)] flex items-center justify-center px-4 py-12">
+        <div className="min-h-[calc(100vh-56px)] flex items-center justify-center px-4 py-8 sm:py-12">
             <div className="w-full max-w-sm">
                 <div className="mb-8 text-center">
                     <h1 className="text-2xl font-black text-gray-900 uppercase tracking-tight">

@@ -33,9 +33,9 @@ export function ProductCard({ product }: { product: StoreProduct }) {
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 flex flex-col gap-4 hover:shadow-md hover:shadow-gray-200/60 transition-all group">
+        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-5 flex flex-col gap-3 sm:gap-4 hover:shadow-md hover:shadow-gray-200/60 transition-all group">
             {/* Imagen del producto */}
-            <div className="w-full aspect-square max-h-36 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
+            <div className="w-full aspect-square max-h-28 sm:max-h-36 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
                 {product.imageUrl && !imgError ? (
                     <Image
                         src={product.imageUrl}
@@ -61,27 +61,23 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             </div>
 
             {/* Precio + botón */}
-            <div className="flex items-end justify-between gap-3 pt-3 border-t border-gray-100">
+            <div className="flex items-end justify-between gap-2 pt-2 sm:pt-3 border-t border-gray-100">
                 <div>
-                    <p className="text-xl font-black text-gray-900">{fmtArs(product.priceArs)}</p>
+                    <p className="text-base sm:text-xl font-black text-gray-900">{fmtArs(product.priceArs)}</p>
                     <p className="text-[10px] text-gray-400">USD {product.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
                 </div>
                 <button
                     onClick={handleAdd}
                     disabled={product.stock === 0}
-                    className={`
-                        flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all
-                        ${added
-                            ? "bg-emerald-600 text-white"
-                            : inCart
-                                ? "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-                                : "bg-gray-900 text-white hover:bg-gray-700"
-                        }
-                        disabled:opacity-40 disabled:cursor-not-allowed
-                    `}
+                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                        added ? "bg-emerald-600 text-white"
+                        : inCart ? "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                        : "bg-gray-900 text-white hover:bg-gray-700"
+                    }`}
                 >
-                    {added ? <Check size={13} /> : <ShoppingCart size={13} />}
-                    {added ? "Agregado" : inCart ? `En carrito (${inCart.quantity})` : "Agregar"}
+                    {added ? <Check size={12} /> : <ShoppingCart size={12} />}
+                    <span className="hidden sm:inline">{added ? "Agregado" : inCart ? `(${inCart.quantity})` : "Agregar"}</span>
+                    <span className="sm:hidden">{added ? "✓" : inCart ? `${inCart.quantity}` : "+"}</span>
                 </button>
             </div>
         </div>

@@ -55,36 +55,35 @@ export default function CartPage() {
                             </p>
                         </div>
 
-                        {/* Cantidad */}
-                        <div className="flex items-center gap-2 shrink-0">
-                            <button
-                                onClick={() => updateQuantity(item.cartKey, item.quantity - 1)}
-                                className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
-                            >
-                                <Minus size={12} />
-                            </button>
-                            <span className="w-6 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
-                            <button
-                                onClick={() => updateQuantity(item.cartKey, item.quantity + 1)}
-                                className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
-                            >
-                                <Plus size={12} />
-                            </button>
+                        {/* Cantidad + eliminar */}
+                        <div className="flex flex-col items-end gap-1.5 shrink-0">
+                            <div className="flex items-center gap-1.5">
+                                <button
+                                    onClick={() => updateQuantity(item.cartKey, item.quantity - 1)}
+                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                                >
+                                    <Minus size={13} />
+                                </button>
+                                <span className="w-7 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
+                                <button
+                                    onClick={() => updateQuantity(item.cartKey, item.quantity + 1)}
+                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                                >
+                                    <Plus size={13} />
+                                </button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <p className="font-bold text-gray-900 text-sm">
+                                    USD {(item.priceUsd * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                                </p>
+                                <button
+                                    onClick={() => removeItem(item.cartKey)}
+                                    className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                >
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
                         </div>
-
-                        {/* Subtotal */}
-                        <div className="text-right shrink-0 w-24">
-                            <p className="font-bold text-gray-900 text-sm">
-                                USD {(item.priceUsd * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                            </p>
-                        </div>
-
-                        <button
-                            onClick={() => removeItem(item.cartKey)}
-                            className="ml-1 p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                        >
-                            <Trash2 size={15} />
-                        </button>
                     </div>
                 ))}
             </div>

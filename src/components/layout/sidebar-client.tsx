@@ -41,8 +41,7 @@ export default function SidebarClient({ role }: { role: string }) {
         !item.roles || item.roles.includes(role)
     );
 
-    // Mobile: máximo 5 items en la bottom bar
-    const mobileNav = filteredNavigation.slice(0, 5);
+    const mobileNav = filteredNavigation;
 
     return (
         <>
@@ -122,23 +121,20 @@ export default function SidebarClient({ role }: { role: string }) {
             </aside>
 
             {/* ── MOBILE: bottom navigation bar ── */}
-            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-100">
-                <div className="flex items-center overflow-x-auto scrollbar-none px-2">
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-100 safe-area-inset-bottom">
+                <div className="flex items-center overflow-x-auto scrollbar-none px-1">
                     {mobileNav.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
                         const Icon = item.icon;
 
                         return (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`
-                        flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all shrink-0
-                        ${isActive ? "text-zinc-900" : "text-zinc-400"}
-                    `}
+                                className={`flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl transition-all shrink-0 min-w-14 ${isActive ? "text-zinc-900" : "text-zinc-400"}`}
                             >
-                                <Icon size={22} strokeWidth={isActive ? 2.5 : 1.8} />
-                                <span className={`text-[10px] font-bold uppercase tracking-wide ${isActive ? "text-zinc-900" : "text-zinc-400"}`}>
+                                <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
+                                <span className={`text-[9px] font-bold uppercase tracking-wide leading-none ${isActive ? "text-zinc-900" : "text-zinc-400"}`}>
                                     {item.label}
                                 </span>
                             </Link>
@@ -148,16 +144,16 @@ export default function SidebarClient({ role }: { role: string }) {
                     {/* Logout */}
                     <button
                         onClick={() => signOut({ callbackUrl: "/login" })}
-                        className="flex flex-col items-center gap-1 px-4 py-3 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0"
+                        className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0 min-w-14"
                     >
-                        <LogOut size={22} strokeWidth={1.8} />
-                        <span className="text-[10px] font-bold uppercase tracking-wide">Salir</span>
+                        <LogOut size={20} strokeWidth={1.8} />
+                        <span className="text-[9px] font-bold uppercase tracking-wide leading-none">Salir</span>
                     </button>
                 </div>
             </nav>
 
             {/* Espaciado para que el contenido no quede tapado por la bottom bar */}
-            <div className="md:hidden h-20" />
+            <div className="md:hidden h-16" />
         </>
     );
 }

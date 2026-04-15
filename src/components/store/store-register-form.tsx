@@ -8,7 +8,7 @@ import { registerSchema, type RegisterFormData } from "@/lib/validations/store-a
 import { Loader2 } from "lucide-react";
 
 const labelClass = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
-const inputClass = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-indigo-400 placeholder:text-zinc-300";
+const inputClass = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-base sm:text-sm transition-all outline-none focus:ring-1 focus:ring-indigo-400 placeholder:text-zinc-300";
 
 interface StoreRegisterFormProps {
     action: (data: RegisterFormData) => Promise<{ error: string } | { redirectTo: string }>;

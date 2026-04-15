@@ -36,7 +36,7 @@ export default async function MyOrdersPage() {
     const orders = await getMyStoreOrders();
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-2xl mx-auto space-y-6 px-0 sm:px-0">
             <div>
                 <h1 className="text-2xl font-black text-gray-900 tracking-tight">Mis pedidos</h1>
                 <p className="text-sm text-gray-400 mt-1">{orders.length} pedidos realizados</p>
