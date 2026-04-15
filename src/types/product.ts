@@ -3,6 +3,7 @@ export type SerializedProduct = {
 	sku: string;
 	name: string;
 	description: string | null;
+	imageUrl: string | null;
 	price: number;
 	stock: number;
 	category: string;

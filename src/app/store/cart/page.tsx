@@ -1,8 +1,118 @@
+'use client';
+
+import { useCart } from "@/contexts/cart-context";
+import { Minus, Plus, ShoppingCart, Trash2, ArrowRight, Boxes, Package } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
-  return (
-    <div>
-      <h1>Cart Page</h1>
-    </div>
-  );
+    const { items, removeItem, updateQuantity } = useCart();
+    const router = useRouter();
+
+    if (items.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center py-24 text-center gap-6">
+                <div className="p-5 bg-gray-100 rounded-2xl">
+                    <ShoppingCart size={40} className="text-gray-400" />
+                </div>
+                <div>
+                    <p className="font-bold text-gray-900 text-lg">Tu carrito está vacío</p>
+                    <p className="text-sm text-gray-400 mt-1">Explorá el catálogo y agregá productos</p>
+                </div>
+                <Link
+                    href="/store"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
+                >
+                    Ver catálogo
+                </Link>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-2xl mx-auto space-y-6">
+            <div>
+                <h1 className="text-2xl font-black text-gray-900 tracking-tight">Tu carrito</h1>
+                <p className="text-sm text-gray-400 mt-1">{items.reduce((a, i) => a + i.quantity, 0)} artículos</p>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100 overflow-hidden">
+                {items.map((item) => (
+                    <div key={item.cartKey} className="flex items-center gap-4 px-5 py-4">
+                        <div className="shrink-0 text-gray-300">
+                            {item.type === "kit" ? <Boxes size={18} /> : <Package size={18} />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                                {item.type === "kit" && (
+                                    <span className="text-[9px] font-black uppercase tracking-widest bg-violet-100 text-violet-700 px-1.5 py-0.5 rounded-full">Kit</span>
+                                )}
+                                <p className="font-bold text-gray-900 text-sm leading-snug">{item.name}</p>
+                            </div>
+                            <p className="text-xs text-gray-400 font-mono uppercase tracking-wider mt-0.5">#{item.sku}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                                USD {item.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })} / u.
+                            </p>
+                        </div>
+
+                        {/* Cantidad */}
+                        <div className="flex items-center gap-2 shrink-0">
+                            <button
+                                onClick={() => updateQuantity(item.cartKey, item.quantity - 1)}
+                                className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                            >
+                                <Minus size={12} />
+                            </button>
+                            <span className="w-6 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
+                            <button
+                                onClick={() => updateQuantity(item.cartKey, item.quantity + 1)}
+                                className="w-7 h-7 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                            >
+                                <Plus size={12} />
+                            </button>
+                        </div>
+
+                        {/* Subtotal */}
+                        <div className="text-right shrink-0 w-24">
+                            <p className="font-bold text-gray-900 text-sm">
+                                USD {(item.priceUsd * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={() => removeItem(item.cartKey)}
+                            className="ml-1 p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                        >
+                            <Trash2 size={15} />
+                        </button>
+                    </div>
+                ))}
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+                <div className="flex justify-between items-center text-sm text-gray-500">
+                    <span>Subtotal (USD)</span>
+                    <span className="font-bold text-gray-900">
+                        USD {items.reduce((a, i) => a + i.priceUsd * i.quantity, 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                    </span>
+                </div>
+                <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-4 py-3">
+                    El precio final en pesos se confirma al momento del pedido según la cotización del día. Pueden aplicar descuentos de gremio o por volumen.
+                </p>
+                <button
+                    onClick={() => router.push("/store/checkout")}
+                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition-colors"
+                >
+                    Confirmar pedido
+                    <ArrowRight size={16} />
+                </button>
+                <Link
+                    href="/store"
+                    className="block text-center text-sm text-gray-400 hover:text-gray-700 transition-colors"
+                >
+                    Seguir comprando
+                </Link>
+            </div>
+        </div>
+    );
 }

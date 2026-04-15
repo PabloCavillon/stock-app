@@ -20,6 +20,7 @@
     "@react-pdf/renderer": "^4.3.3",
     "@thednp/dommatrix": "^3.0.4",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.3.3",
     "@vercel/speed-insights": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",

@@ -61,8 +61,13 @@ export default function CustomersTable({ customers: initialCustomers }: { custom
                             <tbody className="divide-y divide-zinc-50">
                                 {filtered.map((customer) => (
                                     <tr key={customer.id} className="group hover:bg-zinc-50/50 transition-colors">
-                                        <td className="px-6 py-4 font-bold text-base text-zinc-900">
-                                            {customer.name}
+                                        <td className="px-6 py-4">
+                                            <p className="font-bold text-base text-zinc-900">{customer.name}</p>
+                                            {customer.isGuild && (
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full mt-1">
+                                                    Gremio
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-zinc-500">
                                             {customer.email ?? "—"}
@@ -105,9 +110,16 @@ export default function CustomersTable({ customers: initialCustomers }: { custom
                         {filtered.map((customer) => (
                             <div key={customer.id} className="flex items-start justify-between px-4 py-4 hover:bg-zinc-50/50 transition-colors">
                                 <div className="flex flex-col gap-1 flex-1 min-w-0">
-                                    <p className="font-bold text-base text-zinc-900 leading-snug">
-                                        {customer.name}
-                                    </p>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <p className="font-bold text-base text-zinc-900 leading-snug">
+                                            {customer.name}
+                                        </p>
+                                        {customer.isGuild && (
+                                            <span className="inline-flex items-center text-[10px] font-bold uppercase tracking-widest text-indigo-700 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">
+                                                Gremio
+                                            </span>
+                                        )}
+                                    </div>
                                     {customer.email && (
                                         <p className="text-sm text-zinc-500 truncate">{customer.email}</p>
                                     )}

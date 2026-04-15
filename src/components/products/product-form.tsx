@@ -1,18 +1,24 @@
 'use client'
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { upload } from "@vercel/blob/client";
 import { createProduct, updateProduct } from "@/actions/products";
 import { ProductFormData, ProductFormInput, productSchema } from '@/lib/validations/product';
 import { SerializedProduct } from "@/types/product";
-import { Loader2, Save, X } from "lucide-react";
+import { ImagePlus, Loader2, Save, X } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export function ProductForm({ product }: { product?: SerializedProduct }) {
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string>(product?.imageUrl ?? "");
+    const [uploading, setUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ProductFormInput, unknown, ProductFormData>({
         resolver: zodResolver(productSchema),
@@ -20,17 +26,37 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             sku: product?.sku ?? '',
             name: product?.name ?? '',
             description: product?.description ?? '',
+            imageUrl: product?.imageUrl ?? '',
             price: product ? Number(product.price) : undefined,
             stock: product?.stock ?? 0,
             category: product?.category ?? '',
         }
     });
 
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setUploading(true);
+        setUploadError(null);
+        try {
+            const blob = await upload(file.name, file, {
+                access: "public",
+                handleUploadUrl: "/api/upload",
+            });
+            setImageUrl(blob.url);
+        } catch {
+            setUploadError("Error al subir la imagen. Intentá de nuevo.");
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const onSubmit = async (data: ProductFormData) => {
         setServerError(null);
         try {
-            if (product) await updateProduct(product.id, data);
-            else await createProduct(data);
+            const payload = { ...data, imageUrl: imageUrl || undefined };
+            if (product) await updateProduct(product.id, payload);
+            else await createProduct(payload);
             router.push("/products");
             router.refresh();
         } catch {
@@ -69,6 +95,65 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             <div className="flex flex-col">
                 <label className={labelClasses}>Descripción</label>
                 <textarea {...register("description")} rows={3} placeholder="Detalles técnicos..." className={cn(inputClasses, "resize-none")} />
+            </div>
+
+            {/* Imagen */}
+            <div className="flex flex-col">
+                <label className={labelClasses}>Imagen del producto</label>
+                <div className="flex items-start gap-4">
+                    {/* Preview */}
+                    <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className={cn(
+                            "w-28 h-28 rounded-2xl border-2 border-dashed flex items-center justify-center cursor-pointer overflow-hidden shrink-0 transition-all",
+                            uploading ? "opacity-60 cursor-wait" : "hover:border-zinc-400 hover:bg-zinc-50",
+                            imageUrl ? "border-zinc-300 bg-white" : "border-zinc-200 bg-zinc-50"
+                        )}
+                    >
+                        {uploading ? (
+                            <Loader2 size={24} className="text-zinc-400 animate-spin" />
+                        ) : imageUrl ? (
+                            <div className="relative w-full h-full">
+                                <Image src={imageUrl} alt="Preview" fill className="object-contain p-2" unoptimized />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center gap-1 text-zinc-400">
+                                <ImagePlus size={22} />
+                                <span className="text-[10px] font-bold uppercase tracking-wider">Subir</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-2 pt-1">
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={uploading}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-300 bg-white text-sm font-bold text-zinc-600 hover:bg-zinc-50 hover:border-zinc-400 disabled:opacity-60 transition-all"
+                        >
+                            <ImagePlus size={15} />
+                            {imageUrl ? "Cambiar imagen" : "Subir imagen"}
+                        </button>
+                        {imageUrl && (
+                            <button
+                                type="button"
+                                onClick={() => setImageUrl("")}
+                                className="text-xs text-red-500 hover:text-red-700 text-left transition-colors"
+                            >
+                                Quitar imagen
+                            </button>
+                        )}
+                        <p className="text-xs text-zinc-400">JPG, PNG o WebP · máx. 5 MB</p>
+                        {uploadError && <p className="text-xs text-red-500">{uploadError}</p>}
+                    </div>
+                </div>
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={handleImageChange}
+                />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

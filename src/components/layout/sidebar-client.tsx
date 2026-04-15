@@ -14,7 +14,10 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
-    ScrollText
+    ScrollText,
+    Settings,
+    Receipt,
+    Boxes,
 } from "lucide-react";
 
 const navigation = [
@@ -23,8 +26,11 @@ const navigation = [
     { label: "Productos", href: "/products", icon: Package, roles: ["ADMIN", "SELLER"] },
     { label: "Clientes", href: "/customers", icon: UserCircle, roles: ["ADMIN", "SELLER"] },
     { label: "Stock", href: "/stock", icon: Database, roles: ["ADMIN"] },
+    { label: "Kits", href: "/kits", icon: Boxes, roles: ["ADMIN", "SELLER"] },
+    { label: "Gastos", href: "/expenses", icon: Receipt, roles: ["ADMIN", "SELLER"] },
     { label: "Usuarios", href: "/users", icon: TeamIcon, roles: ["ADMIN"] },
     { label: "Tienda", href: "/store", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WATCHER"] },
+    { label: "Configuración", href: "/config", icon: Settings, roles: ["ADMIN"] },
 ];
 
 export default function SidebarClient({ role }: { role: string }) {

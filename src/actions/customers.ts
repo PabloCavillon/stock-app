@@ -37,6 +37,7 @@ export const createCustomer = async (data: {
 	phone?: string;
 	address?: string;
 	notes?: string;
+	isGuild?: boolean;
 }) => {
 	const session = await auth();
 	if (!session?.user?.id) throw new Error("Unauthorized");
@@ -52,6 +53,7 @@ export const updateCustomer = async (
 		phone?: string;
 		address?: string;
 		notes?: string;
+		isGuild?: boolean;
 	},
 ) => {
 	const session = await auth();
@@ -60,7 +62,7 @@ export const updateCustomer = async (
 	await prisma.$transaction(async (tx) => {
 		await tx.customer.update({ where: { id }, data });
 
-		// Sincronizar con StoreCustomer si existe vínculo
+		// Sincronizar datos de contacto con StoreCustomer si existe vínculo
 		await tx.storeCustomer.updateMany({
 			where: { customerId: id, deletedAt: null },
 			data: {

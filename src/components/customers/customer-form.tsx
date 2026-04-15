@@ -14,15 +14,18 @@ export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<CustomerFormInput, unknown, CustomerFormData>({
+    const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<CustomerFormInput, unknown, CustomerFormData>({
         resolver: zodResolver(customerSchema),
         defaultValues: {
             name: customer?.name ?? '',
             email: customer?.email ?? '',
             phone: customer?.phone ?? '',
             address: customer?.address ?? '',
+            isGuild: customer?.isGuild ?? false,
         }
     });
+
+    const isGuild = watch('isGuild');
 
     const onSubmit = async (data: CustomerFormData) => {
         setServerError(null);
@@ -66,6 +69,28 @@ export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
             <div className="flex flex-col">
                 <label className={labelClasses}>Dirección</label>
                 <input {...register("address")} placeholder="Calle, Número, Localidad" className={inputClasses} />
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-xl border border-zinc-200">
+                <div>
+                    <p className="text-sm font-bold text-zinc-900">Cliente del gremio</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">Aplica descuento de gremio en la tienda</p>
+                </div>
+                <button
+                    type="button"
+                    role="switch"
+                    aria-checked={isGuild}
+                    onClick={() => setValue('isGuild', !isGuild, { shouldDirty: true })}
+                    className={cn(
+                        "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none",
+                        isGuild ? "bg-zinc-900" : "bg-zinc-300"
+                    )}
+                >
+                    <span className={cn(
+                        "inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform",
+                        isGuild ? "translate-x-6" : "translate-x-1"
+                    )} />
+                </button>
             </div>
 
             {serverError && (

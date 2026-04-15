@@ -1,5 +1,6 @@
 'use client';
 
+import { useCart } from "@/contexts/cart-context";
 import { StoreSession } from "@/lib/store-auth";
 import { LogIn, LogOut, Menu, Package, ShoppingCart, UserPlus, X } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +12,7 @@ interface StoreNavbarProps {
 }
 
 export default function StoreNavbar({ session }: StoreNavbarProps) {
-
+    const { itemCount } = useCart();
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
     return (
@@ -54,18 +55,25 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
 
                 {/* Actions — desktop */}
                 <div className="hidden md:flex items-center gap-2">
+                    {/* Carrito — siempre visible */}
+                    <Link
+                        href="/store/cart"
+                        className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
+                        title="Carrito"
+                    >
+                        <ShoppingCart size={18} />
+                        {itemCount > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-black px-1">
+                                {itemCount}
+                            </span>
+                        )}
+                    </Link>
+
                     {session ? (
                         <>
                             <span className="text-sm text-gray-400 mr-1">
                                 Hola, {session.name.split(" ")[0]}
                             </span>
-                            <Link
-                                href="/store/cart"
-                                className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
-                                title="Carrito"
-                            >
-                                <ShoppingCart size={18} />
-                            </Link>
                             <LogoutButton />
                         </>
                     ) : (
@@ -90,15 +98,18 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
 
                 {/* Mobile: carrito + hamburguesa */}
                 <div className="flex md:hidden items-center gap-1">
-                    {session && (
-                        <Link
-                            href="/store/cart"
-                            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
-                            title="Carrito"
-                        >
-                            <ShoppingCart size={20} />
-                        </Link>
-                    )}
+                    <Link
+                        href="/store/cart"
+                        className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
+                        title="Carrito"
+                    >
+                        <ShoppingCart size={20} />
+                        {itemCount > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-4.5 h-4.5 flex items-center justify-center rounded-full bg-indigo-600 text-white text-[10px] font-black px-1">
+                                {itemCount}
+                            </span>
+                        )}
+                    </Link>
                     <button
                         onClick={() => setMenuOpen((prev) => !prev)}
                         className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"

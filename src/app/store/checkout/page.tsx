@@ -1,8 +1,39 @@
+import { redirect } from "next/navigation";
+import { getStoreSession } from "@/lib/store-auth";
+import { getPriceConfig } from "@/actions/config";
+import { prisma } from "@/lib/prisma";
+import { CheckoutClient } from "@/components/store/checkout-client";
 
-export default function CheckoutPage() {
-  return (
-    <div>
-      <h1>Hello Page</h1>
-    </div>
-  );
+export const metadata = { title: "Checkout | Projaska" };
+
+export default async function CheckoutPage() {
+    const session = await getStoreSession();
+    if (!session) redirect("/store/login?redirect=/store/checkout");
+
+    const config = await getPriceConfig();
+    if (!config) redirect("/store");
+
+    // Obtener si el cliente es del gremio (vía customer vinculado)
+    const storeCustomer = await prisma.storeCustomer.findUnique({
+        where: { id: session.id },
+        include: { customer: { select: { isGuild: true } } },
+    });
+    const isGuild = storeCustomer?.customer?.isGuild ?? false;
+
+    return (
+        <div className="max-w-lg mx-auto">
+            <CheckoutClient
+                config={{
+                    dollarRate: config.dollarRate,
+                    shippingPct: config.shippingPct,
+                    profitPct: config.profitPct,
+                    guildDiscountPct: config.guildDiscountPct,
+                    volumeDiscountPct: config.volumeDiscountPct,
+                    volumeThresholdArs: config.volumeThresholdArs,
+                }}
+                isGuild={isGuild}
+                customerName={session.name}
+            />
+        </div>
+    );
 }

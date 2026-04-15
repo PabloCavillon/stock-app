@@ -5,6 +5,7 @@ export type SerializedCustomer = {
 	phone: string | null;
 	address: string | null;
 	notes: string | null;
+	isGuild: boolean;
 	createdAt: string;
 	updatedAt: string;
 	deletedAt: string | null;

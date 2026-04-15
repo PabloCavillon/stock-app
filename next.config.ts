@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
 	turbopack: {
 		root: __dirname,
 	},
+	images: {
+		remotePatterns: [
+			{ protocol: "http", hostname: "googleusercontent.com" },
+			{ protocol: "https", hostname: "googleusercontent.com" },
+			{ protocol: "https", hostname: "*.googleusercontent.com" },
+			{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+		],
+	},
 	async headers() {
 		return [
 			{
@@ -21,7 +29,7 @@ const nextConfig: NextConfig = {
 					},
 					{
 						key: "Content-Security-Policy",
-						value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self';",
+						value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: http://googleusercontent.com https://googleusercontent.com https://*.googleusercontent.com https://*.public.blob.vercel-storage.com; font-src 'self';",
 					},
 				],
 			},

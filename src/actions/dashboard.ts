@@ -81,12 +81,36 @@ export async function getDashboardData() {
 		monthlyMap[month] = (monthlyMap[month] ?? 0) + Number(order.total);
 	}
 
+	// P&L: ingresos de órdenes confirmadas/entregadas + gastos
+	const [confirmedOrders, expenses] = await Promise.all([
+		prisma.order.findMany({
+			where: { status: { in: ["CONFIRMED", "SHIPPED", "DELIVERED"] } },
+			select: { total: true },
+		}),
+		prisma.expense.findMany({
+			select: { type: true, amountUsd: true, amountArs: true, dollarRate: true },
+		}),
+	]);
+
+	const totalRevenueArs = confirmedOrders.reduce((acc, o) => acc + Number(o.total), 0);
+
+	let totalExpensesArs = 0;
+	for (const e of expenses) {
+		if (e.type === "PURCHASE" && e.amountUsd && e.dollarRate) {
+			totalExpensesArs += Number(e.amountUsd) * Number(e.dollarRate);
+		} else if ((e.type === "SHIPPING" || e.type === "OTHER") && e.amountArs) {
+			totalExpensesArs += Number(e.amountArs);
+		}
+	}
+
 	return {
 		stats: {
 			totalProducts,
 			totalCustomers,
 			totalOrders,
 			lowStockCount: lowStockProducts.length,
+			totalRevenueArs: Math.round(totalRevenueArs),
+			totalExpensesArs: Math.round(totalExpensesArs),
 		},
 		lowStockProducts,
 		recentOrders: recentOrders.map((o) => ({

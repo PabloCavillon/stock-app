@@ -6,6 +6,7 @@ export const customerSchema = z.object({
 	phone: z.string().optional(),
 	address: z.string().optional(),
 	notes: z.string().optional(),
+	isGuild: z.boolean().optional().default(false),
 });
 
 export type CustomerFormInput = z.input<typeof customerSchema>;
