@@ -16,6 +16,24 @@ export type StoreProduct = {
     priceArs: number; // calculado: USD × cotización × (1+envío%) × (1+ganancia%)
 };
 
+export async function getStoreProduct(id: string): Promise<StoreProduct | null> {
+    const [product, config] = await Promise.all([
+        prisma.product.findUnique({
+            where: { id, deletedAt: null },
+            select: { id: true, sku: true, name: true, description: true, imageUrl: true, category: true, stock: true, price: true },
+        }),
+        getPriceConfig(),
+    ]);
+    if (!product || !config) return null;
+    const priceInfo: PriceInfo = { dollarRate: config.dollarRate, shippingPct: config.shippingPct, profitPct: config.profitPct };
+    return {
+        id: product.id, sku: product.sku, name: product.name, description: product.description,
+        imageUrl: product.imageUrl, category: product.category, stock: product.stock,
+        priceUsd: Number(product.price),
+        priceArs: Math.round(calcPriceArs(Number(product.price), priceInfo)),
+    };
+}
+
 export async function getStoreProducts(): Promise<{ products: StoreProduct[]; config: PriceInfo | null }> {
     const [products, config] = await Promise.all([
         prisma.product.findMany({

@@ -22,6 +22,10 @@ export const metadata: Metadata = {
 	description: "Sistema de gestión de inventario y tienda para Projaska — tecnología y seguridad.",
 	authors: [{ name: "Projaska" }],
 	creator: "Projaska",
+	icons: {
+		icon: "/icon-192.png",
+		apple: "/icon-192.png",
+	},
 };
 
 export default function RootLayout({
@@ -33,10 +37,17 @@ export default function RootLayout({
 		<html
 			lang="es"
 			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+			suppressHydrationWarning
 		>
+			<head>
+				<meta name="theme-color" content="#111827" />
+				{/* Aplica el tema antes de que React hidrate para evitar flash */}
+				<script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}` }} />
+			</head>
 			<body className="min-h-full flex flex-col">
 				{children}
 				<Analytics />
+				<SpeedInsights />
 			</body>
 		</html>
 	);

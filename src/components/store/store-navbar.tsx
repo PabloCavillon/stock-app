@@ -2,6 +2,7 @@
 
 import { useCart } from "@/contexts/cart-context";
 import { StoreSession } from "@/lib/store-auth";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { LogIn, LogOut, Menu, Package, ShoppingCart, UserPlus, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -25,7 +26,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-baseline gap-1.5 shrink-0"
                 >
-                    <span className="text-[#1a1a1a] font-black text-lg sm:text-xl tracking-tight uppercase">
+                    <span className="text-[#1a1a1a] dark:text-gray-100 font-black text-lg sm:text-xl tracking-tight uppercase">
                         Projaska
                     </span>
                     <span className="text-indigo-600 font-black text-lg sm:text-xl">·</span>
@@ -55,6 +56,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
 
                 {/* Actions — desktop */}
                 <div className="hidden md:flex items-center gap-2">
+                    <ThemeToggle className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all" />
                     {/* Carrito — siempre visible */}
                     <Link
                         href="/store/cart"
@@ -96,8 +98,9 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     )}
                 </div>
 
-                {/* Mobile: carrito + hamburguesa */}
+                {/* Mobile: toggle + carrito + hamburguesa */}
                 <div className="flex md:hidden items-center gap-1">
+                    <ThemeToggle className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all" />
                     <Link
                         href="/store/cart"
                         className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"

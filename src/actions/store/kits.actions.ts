@@ -19,6 +19,31 @@ export type StoreKit = {
     }[];
 };
 
+export async function getStoreKit(id: string): Promise<StoreKit | null> {
+    const [kit, config] = await Promise.all([
+        prisma.kit.findUnique({
+            where: { id, deletedAt: null, isActive: true },
+            include: {
+                items: {
+                    include: {
+                        product: { select: { name: true } },
+                        childKit: { select: { name: true } },
+                    },
+                },
+            },
+        }),
+        getPriceConfig(),
+    ]);
+    if (!kit || !config) return null;
+    const priceInfo: PriceInfo = { dollarRate: config.dollarRate, shippingPct: config.shippingPct, profitPct: config.profitPct };
+    return {
+        id: kit.id, sku: kit.sku, name: kit.name, description: kit.description, imageUrl: kit.imageUrl,
+        priceUsd: Number(kit.price),
+        priceArs: Math.round(calcPriceArs(Number(kit.price), priceInfo)),
+        items: kit.items.map((i) => ({ productName: i.product?.name ?? null, childKitName: i.childKit?.name ?? null, quantity: i.quantity })),
+    };
+}
+
 export async function getStoreKits(): Promise<{ kits: StoreKit[]; config: PriceInfo | null }> {
     const [kits, config] = await Promise.all([
         prisma.kit.findMany({

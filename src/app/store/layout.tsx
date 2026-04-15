@@ -1,5 +1,6 @@
 import StoreNavbar from "@/components/store/store-navbar";
 import { CartProvider } from "@/contexts/cart-context";
+import { ServiceWorkerRegistrar } from "@/components/store/service-worker-registrar";
 import { getStoreSession } from "@/lib/store-auth";
 import { Metadata } from "next";
 
@@ -17,7 +18,8 @@ export default async function StoreLayout({
 
     return (
         <CartProvider>
-            <div className="min-h-screen flex flex-col bg-[#f7f8fa]">
+            <ServiceWorkerRegistrar />
+            <div className="min-h-screen flex flex-col bg-zinc-50">
                 <StoreNavbar session={session} />
                 <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     {children}

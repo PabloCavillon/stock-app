@@ -2,8 +2,9 @@
 
 import { useCart } from "@/contexts/cart-context";
 import { StoreProduct } from "@/actions/store/products.actions";
-import { ShoppingCart, Check, Package } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Package } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 function fmtArs(n: number) {
@@ -11,8 +12,7 @@ function fmtArs(n: number) {
 }
 
 export function ProductCard({ product }: { product: StoreProduct }) {
-    const { addItem, items } = useCart();
-    const [added, setAdded] = useState(false);
+    const { addItem, updateQuantity, items } = useCart();
     const [imgError, setImgError] = useState(false);
 
     const cartKey = `product:${product.id}`;
@@ -28,57 +28,72 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             priceUsd: product.priceUsd,
             imageUrl: product.imageUrl,
         });
-        setAdded(true);
-        setTimeout(() => setAdded(false), 1500);
     };
 
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-5 flex flex-col gap-3 sm:gap-4 hover:shadow-md hover:shadow-gray-200/60 transition-all group">
-            {/* Imagen del producto */}
-            <div className="w-full aspect-square max-h-28 sm:max-h-36 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
-                {product.imageUrl && !imgError ? (
-                    <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        fill
-                        className="object-contain p-2"
-                        onError={() => setImgError(true)}
-                        unoptimized
-                    />
-                ) : (
-                    <Package size={40} className="text-gray-300" />
-                )}
-            </div>
+        <div className="bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 flex flex-col gap-3 hover:shadow-md hover:shadow-gray-200/60 transition-all group">
+            {/* Imagen — clickeable para ver detalle */}
+            <Link href={`/store/products/${product.id}`} className="block">
+                <div className="w-full aspect-square bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden group-hover:bg-gray-100 transition-colors relative">
+                    {product.imageUrl && !imgError ? (
+                        <Image
+                            src={product.imageUrl}
+                            alt={product.name}
+                            fill
+                            className="object-contain p-2"
+                            onError={() => setImgError(true)}
+                            unoptimized
+                        />
+                    ) : (
+                        <Package size={36} className="text-gray-300" />
+                    )}
+                </div>
+            </Link>
 
             {/* Info */}
-            <div className="flex flex-col gap-1 flex-1">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{product.category}</span>
-                <h3 className="font-bold text-gray-900 leading-snug text-sm">{product.name}</h3>
-                {product.description && (
-                    <p className="text-xs text-gray-400 line-clamp-2 mt-0.5">{product.description}</p>
-                )}
-                <p className="text-[10px] font-mono text-gray-300 uppercase tracking-wider mt-auto pt-2">#{product.sku}</p>
+            <div className="flex flex-col gap-0.5 flex-1">
+                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{product.category}</span>
+                <Link href={`/store/products/${product.id}`}>
+                    <h3 className="font-bold text-gray-900 leading-snug text-xs sm:text-sm hover:text-indigo-600 transition-colors line-clamp-2">
+                        {product.name}
+                    </h3>
+                </Link>
             </div>
 
-            {/* Precio + botón */}
-            <div className="flex items-end justify-between gap-2 pt-2 sm:pt-3 border-t border-gray-100">
+            {/* Precio + controles */}
+            <div className="pt-2 border-t border-gray-100 space-y-2">
                 <div>
-                    <p className="text-base sm:text-xl font-black text-gray-900">{fmtArs(product.priceArs)}</p>
+                    <p className="text-base sm:text-lg font-black text-gray-900">{fmtArs(product.priceArs)}</p>
                     <p className="text-[10px] text-gray-400">USD {product.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
                 </div>
-                <button
-                    onClick={handleAdd}
-                    disabled={product.stock === 0}
-                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
-                        added ? "bg-emerald-600 text-white"
-                        : inCart ? "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
-                        : "bg-gray-900 text-white hover:bg-gray-700"
-                    }`}
-                >
-                    {added ? <Check size={12} /> : <ShoppingCart size={12} />}
-                    <span className="hidden sm:inline">{added ? "Agregado" : inCart ? `(${inCart.quantity})` : "Agregar"}</span>
-                    <span className="sm:hidden">{added ? "✓" : inCart ? `${inCart.quantity}` : "+"}</span>
-                </button>
+
+                {product.stock === 0 ? (
+                    <p className="text-[11px] font-bold text-red-400 uppercase tracking-wider">Sin stock</p>
+                ) : inCart ? (
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => updateQuantity(cartKey, inCart.quantity - 1)}
+                            className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors shrink-0"
+                        >
+                            <Minus size={13} />
+                        </button>
+                        <span className="flex-1 text-center text-sm font-black text-gray-900">{inCart.quantity}</span>
+                        <button
+                            onClick={() => updateQuantity(cartKey, inCart.quantity + 1)}
+                            className="w-8 h-8 rounded-lg border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0"
+                        >
+                            <Plus size={13} />
+                        </button>
+                    </div>
+                ) : (
+                    <button
+                        onClick={handleAdd}
+                        className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold bg-gray-900 text-white hover:bg-gray-700 transition-all active:scale-[0.97]"
+                    >
+                        <ShoppingCart size={12} />
+                        Agregar
+                    </button>
+                )}
             </div>
         </div>
     );

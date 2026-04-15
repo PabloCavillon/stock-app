@@ -4,6 +4,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import {
     LayoutDashboard,
     ShoppingCart,
@@ -103,8 +104,16 @@ export default function SidebarClient({ role }: { role: string }) {
                     })}
                 </nav>
 
-                {/* Sign out */}
-                <div className="p-4 border-t border-zinc-100">
+                {/* Sign out + theme */}
+                <div className="p-4 border-t border-zinc-100 flex flex-col gap-1">
+                    <ThemeToggle
+                        showLabel={!collapsed}
+                        className={`
+                            w-full flex items-center gap-3 px-3 py-3 rounded-xl text-base font-bold text-zinc-500
+                            hover:bg-zinc-50 hover:text-zinc-900 transition-all active:scale-[0.98]
+                            ${collapsed ? "justify-center" : ""}
+                        `}
+                    />
                     <button
                         onClick={() => signOut({ callbackUrl: "/login" })}
                         className={`
@@ -140,6 +149,9 @@ export default function SidebarClient({ role }: { role: string }) {
                             </Link>
                         );
                     })}
+
+                    {/* Theme toggle */}
+                    <ThemeToggle className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-zinc-900 transition-all shrink-0 min-w-14" />
 
                     {/* Logout */}
                     <button

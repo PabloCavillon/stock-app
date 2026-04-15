@@ -3,7 +3,15 @@
     "allow": [
       "Bash(npx tsc:*)",
       "Bash(xargs grep:*)",
-      "Bash(npx prisma:*)"
+      "Bash(npx prisma:*)",
+      "Bash(mkdir -p \"e:/projects/stock-app/src/app/store/products/[id]\")",
+      "Bash(mkdir -p \"e:/projects/stock-app/src/app/store/kits/[id]\")",
+      "Bash(npm run:*)",
+      "Bash(npm show:*)",
+      "Bash(node -e \"require\\('sharp'\\); console.log\\('sharp ok'\\)\")",
+      "Bash(node -e ':*)",
+      "Bash(ls e:/projects/stock-app/src/app/store/kits/[id]/)",
+      "Bash(ls e:/projects/stock-app/src/app/store/products/[id]/)"
     ]
   }
 }
