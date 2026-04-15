@@ -54,6 +54,16 @@
   Como --color-zinc-900 está mapeado a blanco para el texto, re-anclamos
   los fondos con estas reglas (mayor especificidad que las utilidades).
 */
+/*
+  --color-white se overrideó a #1a1b25 para que bg-white sea oscuro,
+  pero eso rompe text-white (texto oscuro sobre fondo oscuro).
+  Lo restauramos explícitamente.
+*/
+.dark .text-white,
+.dark .hover\:text-white:hover {
+	color: #ffffff;
+}
+
 .dark .bg-zinc-900,
 .dark .bg-gray-900 {
 	background-color: #2e3047;
