@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "@/lib/validations/store-auth";
@@ -10,10 +11,11 @@ const labelClass = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2e
 const inputClass = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm transition-all outline-none focus:ring-1 focus:ring-indigo-400 placeholder:text-zinc-300";
 
 interface StoreRegisterFormProps {
-    action: (data: RegisterFormData) => Promise<{ error: string }>;
+    action: (data: RegisterFormData) => Promise<{ error: string } | { redirectTo: string }>;
 }
 
 export default function StoreRegisterForm({ action }: StoreRegisterFormProps) {
+    const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
 
     const {
@@ -29,9 +31,13 @@ export default function StoreRegisterForm({ action }: StoreRegisterFormProps) {
         setServerError(null);
         try {
             const result = await action(data);
-            if (result?.error) setServerError(result.error);
+            if ("error" in result) {
+                setServerError(result.error);
+            } else {
+                router.push(result.redirectTo);
+            }
         } catch {
-            // redirect() lanza internamente
+            setServerError("Ocurrió un error inesperado. Intentá de nuevo.");
         }
     };
 

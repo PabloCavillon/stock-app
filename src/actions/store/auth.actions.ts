@@ -8,13 +8,13 @@ import {
 } from "@/lib/store-auth";
 import { LoginFormData, RegisterFormData } from "@/lib/validations/store-auth";
 import { compare, hash } from "bcryptjs";
-import { redirect } from "next/navigation";
+import { redirect } from "next/navigation"; // used by logoutStoreCustomer
 
 const SALT_ROUNDS = 12;
 
 export async function loginStoreCustomer(
 	data: LoginFormData,
-): Promise<{ error: string }> {
+): Promise<{ error: string } | { redirectTo: string }> {
 	const customer = await prisma.storeCustomer.findUnique({
 		where: { email: data.email, deletedAt: null },
 	});
@@ -30,12 +30,12 @@ export async function loginStoreCustomer(
 		email: customer.email,
 	});
 
-	redirect(data.redirect ?? "/store");
+	return { redirectTo: data.redirect ?? "/store" };
 }
 
 export async function registerStoreCustomer(
 	data: RegisterFormData,
-): Promise<{ error: string }> {
+): Promise<{ error: string } | { redirectTo: string }> {
 	const existing = await prisma.storeCustomer.findUnique({
 		where: { email: data.email.toLowerCase() },
 	});
@@ -64,7 +64,7 @@ export async function registerStoreCustomer(
 		email: newCustomer.email,
 	});
 
-	redirect("/store");
+	return { redirectTo: "/store" };
 }
 
 export async function logoutStoreCustomer(): Promise<void> {
