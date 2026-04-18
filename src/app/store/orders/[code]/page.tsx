@@ -113,7 +113,7 @@ export default async function OrderDetailPage({
                                 <div>
                                     <p className="font-bold text-gray-900 text-sm">{item.productName ?? "Producto"}</p>
                                     <p className="text-xs text-gray-400">
-                                        {item.quantity} × USD {item.unitPriceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                                        Cantidad: {item.quantity}
                                     </p>
                                 </div>
                             </div>
@@ -151,9 +151,6 @@ export default async function OrderDetailPage({
                     </div>
                 )}
 
-                <p className="text-xs text-gray-400">
-                    Cotización de referencia: ${order.dollarRateAtCreation.toLocaleString("es-AR")} ARS/USD
-                </p>
             </div>
         </div>
     );

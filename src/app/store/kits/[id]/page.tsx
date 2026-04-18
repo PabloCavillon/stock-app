@@ -32,7 +32,7 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                 {/* Imagen */}
-                <div className="w-full aspect-square bg-gray-50 rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-100">
+                <div className="w-full aspect-square bg-[#f5f5f5] rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-200">
                     {kit.imageUrl ? (
                         <Image
                             src={kit.imageUrl}
@@ -57,7 +57,7 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                         <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-tight">
                             {kit.name}
                         </h1>
-                        <p className="text-xs font-mono text-gray-300 uppercase tracking-widest">#{kit.sku}</p>
+                        <p className="text-xs font-mono text-gray-500 uppercase tracking-widest">#{kit.sku}</p>
                     </div>
 
                     {/* Descripción */}
@@ -92,9 +92,6 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                     {/* Precio */}
                     <div className="bg-violet-50 border border-violet-100 rounded-2xl p-4 space-y-1">
                         <p className="text-3xl font-black text-gray-900">{fmtArs(kit.priceArs)}</p>
-                        <p className="text-sm text-gray-400">
-                            USD {kit.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })} · precio de referencia
-                        </p>
                     </div>
 
                     {/* Controles de carrito */}

@@ -19,7 +19,7 @@ export default async function StoreLayout({
     return (
         <CartProvider>
             <ServiceWorkerRegistrar />
-            <div className="min-h-screen flex flex-col bg-zinc-50">
+            <div className="min-h-screen flex flex-col bg-gray-200">
                 <StoreNavbar session={session} />
                 <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     {children}

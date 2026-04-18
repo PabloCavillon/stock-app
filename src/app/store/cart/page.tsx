@@ -50,9 +50,6 @@ export default function CartPage() {
                                 <p className="font-bold text-gray-900 text-sm leading-snug">{item.name}</p>
                             </div>
                             <p className="text-xs text-gray-400 font-mono uppercase tracking-wider mt-0.5">#{item.sku}</p>
-                            <p className="text-xs text-gray-500 mt-1">
-                                USD {item.priceUsd.toLocaleString("en-US", { minimumFractionDigits: 2 })} / u.
-                            </p>
                         </div>
 
                         {/* Cantidad + eliminar */}
@@ -72,29 +69,18 @@ export default function CartPage() {
                                     <Plus size={13} />
                                 </button>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <p className="font-bold text-gray-900 text-sm">
-                                    USD {(item.priceUsd * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                                </p>
-                                <button
-                                    onClick={() => removeItem(item.cartKey)}
-                                    className="p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                                >
-                                    <Trash2 size={14} />
-                                </button>
-                            </div>
+                            <button
+                                onClick={() => removeItem(item.cartKey)}
+                                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                            >
+                                <Trash2 size={14} />
+                            </button>
                         </div>
                     </div>
                 ))}
             </div>
 
             <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                    <span>Subtotal (USD)</span>
-                    <span className="font-bold text-gray-900">
-                        USD {items.reduce((a, i) => a + i.priceUsd * i.quantity, 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}
-                    </span>
-                </div>
                 <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-4 py-3">
                     El precio final en pesos se confirma al momento del pedido según la cotización del día. Pueden aplicar descuentos de gremio o por volumen.
                 </p>

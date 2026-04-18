@@ -40,7 +40,7 @@ export default async function StorePage() {
                     <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
                         <Boxes size={15} className="text-violet-500" />
                         <h2 className="text-xs font-black text-gray-400 uppercase tracking-widest">
-                            Kits & Ofertas <span className="text-gray-300 font-normal">({kits.length})</span>
+                            Kits & Ofertas <span className="text-gray-400 font-normal">({kits.length})</span>
                         </h2>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
@@ -63,7 +63,7 @@ export default async function StorePage() {
                     return (
                         <section key={category} className="space-y-4">
                             <h2 className="text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-3">
-                                {category} <span className="text-gray-300 font-normal">({catProducts.length})</span>
+                                {category} <span className="text-gray-400 font-normal">({catProducts.length})</span>
                             </h2>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                                 {catProducts.map((product) => (

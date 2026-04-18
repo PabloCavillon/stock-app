@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { upload } from "@vercel/blob/client";
+
 import { createKit, updateKit } from "@/actions/kits";
 import { KitFormData, KitFormInput, kitSchema } from "@/lib/validations/kit";
 import { SerializedKit } from "@/types/kit";
@@ -57,10 +57,11 @@ export function KitForm({ kit, products, kits }: Props) {
         setUploading(true);
         setUploadError(null);
         try {
-            const blob = await upload(file.name, file, {
-                access: "public",
-                handleUploadUrl: "/api/upload",
-            });
+            const fd = new FormData();
+            fd.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            if (!res.ok) throw new Error(await res.text());
+            const blob = await res.json();
             setImageUrl(blob.url);
         } catch {
             setUploadError("Error al subir la imagen. Intentá de nuevo.");

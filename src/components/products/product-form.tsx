@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { upload } from "@vercel/blob/client";
+
 import { createProduct, updateProduct } from "@/actions/products";
 import { ProductFormData, ProductFormInput, productSchema } from '@/lib/validations/product';
 import { SerializedProduct } from "@/types/product";
@@ -39,10 +39,11 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
         setUploading(true);
         setUploadError(null);
         try {
-            const blob = await upload(file.name, file, {
-                access: "public",
-                handleUploadUrl: "/api/upload",
-            });
+            const fd = new FormData();
+            fd.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body: fd });
+            if (!res.ok) throw new Error(await res.text());
+            const blob = await res.json();
             setImageUrl(blob.url);
         } catch {
             setUploadError("Error al subir la imagen. Intentá de nuevo.");

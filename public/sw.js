@@ -1,4 +1,4 @@
-const CACHE_NAME = "projaska-v1";
+const CACHE_NAME = "projaska-v3";
 const STATIC_PREFIXES = ["/_next/static/", "/icon-", "/favicon"];
 
 self.addEventListener("install", (event) => {

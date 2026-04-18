@@ -47,6 +47,34 @@
 	--color-zinc-800: #d8dfe8;
 	--color-gray-900: #edf0f7;
 	--color-zinc-900: #edf0f7;
+
+	/* Violet (badges de kit, acentos) */
+	--color-violet-50: #1e1b2e;
+	--color-violet-100: #2d2652;
+	--color-violet-200: #3d3375;
+	--color-violet-700: #c4b5fd;
+
+	/* Indigo (botones primarios, carrito) */
+	--color-indigo-50: #1a1e35;
+	--color-indigo-100: #232850;
+	--color-indigo-200: #2e3570;
+	--color-indigo-600: #818cf8;
+
+	/* Emerald (badge stock disponible) */
+	--color-emerald-50: #0a2318;
+	--color-emerald-100: #112e20;
+	--color-emerald-700: #34d399;
+
+	/* Red (sin stock, errores) */
+	--color-red-50: #2a1515;
+	--color-red-100: #381a1a;
+	--color-red-400: #f87171;
+	--color-red-500: #ef4444;
+	--color-red-600: #f87171;
+
+	/* Blue (badge producto en kit-form) */
+	--color-blue-50: #172033;
+	--color-blue-700: #93c5fd;
 }
 
 /*

@@ -26,11 +26,11 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     onClick={() => setMenuOpen(false)}
                     className="flex items-baseline gap-1.5 shrink-0"
                 >
-                    <span className="text-[#1a1a1a] dark:text-gray-100 font-black text-lg sm:text-xl tracking-tight uppercase">
+                    <span className="text-[#1a1a1a] dark:text-gray-900 font-black text-lg sm:text-xl tracking-tight uppercase">
                         Projaska
                     </span>
                     <span className="text-indigo-600 font-black text-lg sm:text-xl">·</span>
-                    <span className="text-[10px] sm:text-xs font-semibold text-gray-400 tracking-widest uppercase hidden sm:block">
+                    <span className="text-[10px] sm:text-xs font-semibold text-gray-500 tracking-widest uppercase hidden sm:block">
                         Store
                     </span>
                 </Link>
