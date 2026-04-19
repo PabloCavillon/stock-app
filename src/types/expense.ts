@@ -12,3 +12,12 @@ export type SerializedExpense = {
     user: { username: string };
     createdAt: string;
 };
+
+export type SerializedRecurringExpense = {
+    id: string;
+    type: "SHIPPING" | "OTHER" | "ADVERTISING";
+    description: string;
+    amountArs: number;
+    notes: string | null;
+    user: { username: string };
+};

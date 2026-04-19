@@ -11,12 +11,14 @@ import { SearchInput } from "../ui/search-input";
 const TYPE_LABEL: Record<string, string> = {
     PURCHASE: "Compra",
     SHIPPING: "Envío",
+    ADVERTISING: "Publicidad",
     OTHER: "Otro",
 };
 
 const TYPE_STYLE: Record<string, string> = {
     PURCHASE: "bg-blue-50 text-blue-700 border-blue-100",
     SHIPPING: "bg-amber-50 text-amber-700 border-amber-100",
+    ADVERTISING: "bg-purple-50 text-purple-700 border-purple-100",
     OTHER: "bg-zinc-50 text-zinc-600 border-zinc-200",
 };
 

@@ -45,10 +45,11 @@ export function ExpenseForm() {
             {/* Tipo de gasto */}
             <div className="flex flex-col">
                 <label className={labelClasses}>Tipo de gasto</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {([
                         { value: "PURCHASE", label: "Compra", desc: "Mercadería al proveedor (USD)" },
                         { value: "SHIPPING", label: "Envío", desc: "Flete BsAs → Salta (ARS)" },
+                        { value: "ADVERTISING", label: "Publicidad", desc: "MercadoLibre, redes, etc. (ARS)" },
                         { value: "OTHER", label: "Otro", desc: "Gastos varios (ARS)" },
                     ] as const).map((opt) => (
                         <label
@@ -73,7 +74,7 @@ export function ExpenseForm() {
                 <label className={labelClasses}>Descripción</label>
                 <input
                     {...register("description")}
-                    placeholder={type === "PURCHASE" ? "Compra lote cámaras IP — factura #123" : type === "SHIPPING" ? "Flete Andreani marzo" : "Gasto varios"}
+                    placeholder={type === "PURCHASE" ? "Compra lote cámaras IP — factura #123" : type === "SHIPPING" ? "Flete Andreani marzo" : type === "ADVERTISING" ? "Publicidad MercadoLibre abril" : "Gasto varios"}
                     className={cn(inputClasses, errors.description && "border-red-200")}
                 />
                 {errors.description && <p className="text-sm text-red-500 mt-2 ml-1">{errors.description.message}</p>}

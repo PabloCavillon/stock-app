@@ -71,7 +71,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
                     {/* Descripción */}
                     {product.description && (
-                        <div className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        <div className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4 whitespace-pre-line">
                             {product.description}
                         </div>
                     )}

@@ -9,7 +9,7 @@ const optionalPositiveNumber = z.preprocess(
 
 export const expenseSchema = z
     .object({
-        type: z.enum(["PURCHASE", "SHIPPING", "OTHER"]),
+        type: z.enum(["PURCHASE", "SHIPPING", "OTHER", "ADVERTISING"]),
         description: z.string().min(1, "La descripción es requerida"),
         amountUsd: optionalPositiveNumber,
         amountArs: optionalPositiveNumber,
@@ -20,7 +20,7 @@ export const expenseSchema = z
     .refine(
         (d) => {
             if (d.type === "PURCHASE") return d.amountUsd !== undefined && d.amountUsd > 0;
-            return d.amountArs !== undefined && d.amountArs > 0;
+            return d.amountArs !== undefined && d.amountArs > 0;  // SHIPPING, OTHER, ADVERTISING
         },
         { message: "Ingresá el monto correspondiente al tipo de gasto" },
     );

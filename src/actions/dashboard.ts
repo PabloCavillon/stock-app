@@ -95,11 +95,15 @@ export async function getDashboardData() {
 	const totalRevenueArs = confirmedOrders.reduce((acc, o) => acc + Number(o.total), 0);
 
 	let totalExpensesArs = 0;
+	let totalAdvertisingArs = 0;
 	for (const e of expenses) {
 		if (e.type === "PURCHASE" && e.amountUsd && e.dollarRate) {
 			totalExpensesArs += Number(e.amountUsd) * Number(e.dollarRate);
 		} else if ((e.type === "SHIPPING" || e.type === "OTHER") && e.amountArs) {
 			totalExpensesArs += Number(e.amountArs);
+		} else if (e.type === "ADVERTISING" && e.amountArs) {
+			totalExpensesArs += Number(e.amountArs);
+			totalAdvertisingArs += Number(e.amountArs);
 		}
 	}
 
@@ -111,6 +115,7 @@ export async function getDashboardData() {
 			lowStockCount: lowStockProducts.length,
 			totalRevenueArs: Math.round(totalRevenueArs),
 			totalExpensesArs: Math.round(totalExpensesArs),
+			totalAdvertisingArs: Math.round(totalAdvertisingArs),
 		},
 		lowStockProducts,
 		recentOrders: recentOrders.map((o) => ({

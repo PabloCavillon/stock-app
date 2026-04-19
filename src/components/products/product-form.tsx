@@ -95,7 +95,7 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
 
             <div className="flex flex-col">
                 <label className={labelClasses}>Descripción</label>
-                <textarea {...register("description")} rows={3} placeholder="Detalles técnicos..." className={cn(inputClasses, "resize-none")} />
+                <textarea {...register("description")} rows={5} placeholder="Detalles técnicos..." className={cn(inputClasses, "resize-none")} />
             </div>
 
             {/* Imagen */}

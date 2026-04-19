@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from "@/lib/utils";
-import { Package, Users as UsersIcon, ShoppingBag, AlertTriangle, TrendingUp, TrendingDown } from "lucide-react";
+import { Package, Users as UsersIcon, ShoppingBag, AlertTriangle, TrendingUp, TrendingDown, Megaphone } from "lucide-react";
 
 type Stats = {
     totalProducts: number;
@@ -10,6 +10,7 @@ type Stats = {
     lowStockCount: number;
     totalRevenueArs: number;
     totalExpensesArs: number;
+    totalAdvertisingArs: number;
 };
 
 const countCards = [
@@ -65,27 +66,36 @@ export function StatsCards({ stats }: { stats: Stats }) {
             </div>
 
             {/* P&L */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-                <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-4 flex items-center gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-4 flex items-center gap-3">
                     <div className="p-2 bg-emerald-100 rounded-xl shrink-0">
                         <TrendingUp size={18} className="text-emerald-700" />
                     </div>
-                    <div>
-                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Ingresos confirmados</p>
+                    <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Ingresos</p>
                         <p className="text-xl sm:text-2xl font-black text-emerald-900">$ {fmtArs(stats.totalRevenueArs)}</p>
                     </div>
                 </div>
-                <div className="bg-red-50 border border-red-100 rounded-3xl p-4 flex items-center gap-4">
+                <div className="bg-red-50 border border-red-100 rounded-3xl p-4 flex items-center gap-3">
                     <div className="p-2 bg-red-100 rounded-xl shrink-0">
                         <TrendingDown size={18} className="text-red-700" />
                     </div>
-                    <div>
-                        <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest">Gastos registrados</p>
+                    <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-red-600 uppercase tracking-widest">Gastos</p>
                         <p className="text-xl sm:text-2xl font-black text-red-900">$ {fmtArs(stats.totalExpensesArs)}</p>
                     </div>
                 </div>
+                <div className="bg-purple-50 border border-purple-100 rounded-3xl p-4 flex items-center gap-3">
+                    <div className="p-2 bg-purple-100 rounded-xl shrink-0">
+                        <Megaphone size={18} className="text-purple-700" />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest">Publicidad</p>
+                        <p className="text-xl sm:text-2xl font-black text-purple-900">$ {fmtArs(stats.totalAdvertisingArs)}</p>
+                    </div>
+                </div>
                 <div className={cn(
-                    "rounded-3xl p-4 flex items-center gap-4 border",
+                    "rounded-3xl p-4 flex items-center gap-3 border",
                     isProfit ? "bg-zinc-900 border-zinc-900" : "bg-red-900 border-red-900"
                 )}>
                     <div className="p-2 rounded-xl shrink-0 bg-white/10">
@@ -94,10 +104,10 @@ export function StatsCards({ stats }: { stats: Stats }) {
                             : <TrendingDown size={18} className="text-white" />
                         }
                     </div>
-                    <div>
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Resultado neto est.</p>
+                    <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Resultado</p>
                         <p className="text-xl sm:text-2xl font-black text-white">$ {fmtArs(Math.abs(netArs))}</p>
-                        <p className="text-[10px] text-zinc-500 mt-0.5">{isProfit ? "ganancia estimada" : "pérdida estimada"}</p>
+                        <p className="text-[10px] text-zinc-500 mt-0.5">{isProfit ? "ganancia est." : "pérdida est."}</p>
                     </div>
                 </div>
             </div>

@@ -47,6 +47,7 @@ enum ExpenseType {
   PURCHASE
   SHIPPING
   OTHER
+  ADVERTISING
 }
 
 // ─── MODELOS ─────────────────────────────────────────────────────────────────
@@ -63,6 +64,7 @@ model User {
   orders             Order[]
   stockMovements     StockMovement[]
   expenses           Expense[]
+  recurringExpenses  RecurringExpense[]
   priceConfigUpdates PriceConfig[]
 }
 
@@ -190,6 +192,18 @@ model Expense {
   amountArs   Decimal?    @db.Decimal(12, 2) // monto en ARS (envíos, otros gastos locales)
   dollarRate  Decimal?    @db.Decimal(10, 2) // cotización al momento del gasto
   date        DateTime
+  notes       String?
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model RecurringExpense {
+  id          String      @id @default(uuid())
+  type        ExpenseType
+  description String
+  amountArs   Decimal     @db.Decimal(12, 2)
   notes       String?
   userId      String
   user        User        @relation(fields: [userId], references: [id])

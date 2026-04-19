@@ -3,7 +3,7 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { ExpenseFormData } from "@/lib/validations/expense";
-import { SerializedExpense } from "@/types/expense";
+import { SerializedExpense, SerializedRecurringExpense } from "@/types/expense";
 import { revalidatePath } from "next/cache";
 
 function serialize(e: any): SerializedExpense {
@@ -59,8 +59,9 @@ export async function deleteExpense(id: string) {
 
 export type ExpenseSummary = {
     totalPurchaseUsd: number;
-    totalPurchaseArs: number; // convertido con dollarRate de cada gasto
+    totalPurchaseArs: number;
     totalShippingArs: number;
+    totalAdvertisingArs: number;
     totalOtherArs: number;
     grandTotalArs: number;
 };
@@ -73,6 +74,7 @@ export async function getExpenseSummary(): Promise<ExpenseSummary> {
     let totalPurchaseUsd = 0;
     let totalPurchaseArs = 0;
     let totalShippingArs = 0;
+    let totalAdvertisingArs = 0;
     let totalOtherArs = 0;
 
     for (const e of expenses) {
@@ -82,6 +84,8 @@ export async function getExpenseSummary(): Promise<ExpenseSummary> {
             totalPurchaseArs += e.dollarRate ? usd * Number(e.dollarRate) : 0;
         } else if (e.type === "SHIPPING" && e.amountArs) {
             totalShippingArs += Number(e.amountArs);
+        } else if (e.type === "ADVERTISING" && e.amountArs) {
+            totalAdvertisingArs += Number(e.amountArs);
         } else if (e.type === "OTHER" && e.amountArs) {
             totalOtherArs += Number(e.amountArs);
         }
@@ -91,7 +95,73 @@ export async function getExpenseSummary(): Promise<ExpenseSummary> {
         totalPurchaseUsd,
         totalPurchaseArs,
         totalShippingArs,
+        totalAdvertisingArs,
         totalOtherArs,
-        grandTotalArs: totalPurchaseArs + totalShippingArs + totalOtherArs,
+        grandTotalArs: totalPurchaseArs + totalShippingArs + totalAdvertisingArs + totalOtherArs,
     };
+}
+
+// ─── GASTOS RECURRENTES ───────────────────────────────────────────────────────
+
+export async function getRecurringExpenses(): Promise<SerializedRecurringExpense[]> {
+    const items = await prisma.recurringExpense.findMany({
+        orderBy: { createdAt: "asc" },
+        include: { user: { select: { username: true } } },
+    });
+    return items.map((r) => ({
+        id: r.id,
+        type: r.type as SerializedRecurringExpense["type"],
+        description: r.description,
+        amountArs: Number(r.amountArs),
+        notes: r.notes,
+        user: { username: r.user.username },
+    }));
+}
+
+export async function createRecurringExpense(data: {
+    type: "SHIPPING" | "OTHER" | "ADVERTISING";
+    description: string;
+    amountArs: number;
+    notes?: string;
+}) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    await prisma.recurringExpense.create({
+        data: {
+            type: data.type,
+            description: data.description,
+            amountArs: data.amountArs,
+            notes: data.notes ?? null,
+            userId: session.user.id,
+        },
+    });
+    revalidatePath("/expenses");
+}
+
+export async function deleteRecurringExpense(id: string) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+    if (session.user.role !== "ADMIN") throw new Error("Forbidden");
+    await prisma.recurringExpense.delete({ where: { id } });
+    revalidatePath("/expenses");
+}
+
+export async function registerRecurringExpense(id: string) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    const recurring = await prisma.recurringExpense.findUniqueOrThrow({ where: { id } });
+
+    await prisma.expense.create({
+        data: {
+            type: recurring.type,
+            description: recurring.description,
+            amountArs: recurring.amountArs,
+            notes: recurring.notes,
+            date: new Date(),
+            userId: session.user.id,
+        },
+    });
+    revalidatePath("/expenses");
 }
