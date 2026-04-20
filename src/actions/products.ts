@@ -8,10 +8,16 @@ import { revalidatePath } from "next/cache";
 
 function serialize(p: Product): SerializedProduct {
 	return {
-		...p,
+		id: p.id,
+		sku: p.sku,
+		name: p.name,
+		description: p.description,
+		imageUrl: p.imageUrl,
 		price: Number(p.price),
+		stock: p.stock,
+		category: p.category,
 		unitsPerBox: p.unitsPerBox ?? null,
-		offerDiscountPct: p.offerDiscountPct !== null && p.offerDiscountPct !== undefined ? Number(p.offerDiscountPct) : null,
+		offerDiscountPct: p.offerDiscountPct != null ? Number(p.offerDiscountPct) : null,
 		offerUnit: p.offerUnit ?? null,
 		createdAt: p.createdAt.toISOString(),
 		updatedAt: p.updatedAt.toISOString(),
