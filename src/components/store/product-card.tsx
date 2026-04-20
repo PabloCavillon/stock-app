@@ -20,7 +20,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
     const selectedUnit = hasBox ? unit : "unit";
 
     // Offer applies to the currently selected unit type
-    const offerApplies = product.offerPriceUsd !== null && product.offerUnit === selectedUnit;
+    const offerApplies = product.offerDiscountPct !== null && product.offerUnit === selectedUnit;
 
     // Effective price in USD for the cart
     let effectivePriceUsd: number;
@@ -57,7 +57,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
     };
 
     // Offer badge logic: show if any offer exists
-    const hasOffer = product.offerPriceUsd !== null && product.offerUnit !== null;
+    const hasOffer = product.offerDiscountPct !== null && product.offerUnit !== null;
 
     return (
         <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col shadow-[0_4px_12px_rgba(0,0,0,0.10)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15)] transition-all group relative">
@@ -65,7 +65,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             {hasOffer && (
                 <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-rose-500 text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full shadow-sm">
                     <Tag size={9} />
-                    Oferta {product.offerUnit === "box" ? "caja" : "unidad"}
+                    -{product.offerDiscountPct}% {product.offerUnit === "box" ? "caja" : "unidad"}
                 </div>
             )}
 

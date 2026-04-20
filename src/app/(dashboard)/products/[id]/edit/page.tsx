@@ -1,4 +1,5 @@
 import { getProduct } from "@/actions/products";
+import { getPriceConfig } from "@/actions/config";
 import { ProductForm } from "@/components/products/product-form";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Edit3 } from "lucide-react";
@@ -10,7 +11,7 @@ export const metadata = {
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const product = await getProduct(id);
+    const [product, config] = await Promise.all([getProduct(id), getPriceConfig()]);
 
     if (!product) notFound();
 
@@ -44,7 +45,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
             {/* Contenedor form */}
             <section className="bg-white p-6 md:p-12 rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <ProductForm product={product} />
+                <ProductForm product={product} config={config} />
             </section>
         </div>
     );

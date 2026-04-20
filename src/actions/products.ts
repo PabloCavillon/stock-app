@@ -11,7 +11,7 @@ function serialize(p: Product): SerializedProduct {
 		...p,
 		price: Number(p.price),
 		unitsPerBox: p.unitsPerBox ?? null,
-		offerPriceUsd: p.offerPriceUsd !== null && p.offerPriceUsd !== undefined ? Number(p.offerPriceUsd) : null,
+		offerDiscountPct: p.offerDiscountPct !== null && p.offerDiscountPct !== undefined ? Number(p.offerDiscountPct) : null,
 		offerUnit: p.offerUnit ?? null,
 		createdAt: p.createdAt.toISOString(),
 		updatedAt: p.updatedAt.toISOString(),
@@ -47,7 +47,7 @@ export const createProduct = async (data: {
 	stock: number;
 	category: string;
 	unitsPerBox?: number | null;
-	offerPriceUsd?: number | null;
+	offerDiscountPct?: number | null;
 	offerUnit?: string | null;
 }) => {
 	const session = await auth();
@@ -67,7 +67,7 @@ export const updateProduct = async (
 		price: number;
 		category: string;
 		unitsPerBox?: number | null;
-		offerPriceUsd?: number | null;
+		offerDiscountPct?: number | null;
 		offerUnit?: string | null;
 	},
 ) => {

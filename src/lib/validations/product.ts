@@ -9,7 +9,7 @@ export const productSchema = z.object({
 	stock: z.coerce.number().int().min(0, "Stock cannot be negative"),
 	category: z.string().min(1, "Category is required"),
 	unitsPerBox: z.coerce.number().int().positive().optional().nullable(),
-	offerPriceUsd: z.coerce.number().positive().optional().nullable(),
+	offerDiscountPct: z.coerce.number().min(1).max(99).optional().nullable(),
 	offerUnit: z.enum(["unit", "box"]).optional().nullable(),
 });
 

@@ -17,7 +17,7 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
 
     const hasBox = product.unitsPerBox !== null && product.unitsPerBox > 0;
     const selectedUnit = hasBox ? unit : "unit";
-    const offerApplies = product.offerPriceUsd !== null && product.offerUnit === selectedUnit;
+    const offerApplies = product.offerDiscountPct !== null && product.offerUnit === selectedUnit;
 
     let effectivePriceUsd: number;
     if (selectedUnit === "box") {
@@ -66,10 +66,10 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
                             Sin stock disponible
                         </span>
                     )}
-                    {product.offerPriceUsd !== null && product.offerUnit !== null && (
+                    {product.offerDiscountPct !== null && product.offerUnit !== null && (
                         <span className="flex items-center gap-1 text-[10px] font-bold text-rose-600 bg-rose-50 border border-rose-100 px-2.5 py-1 rounded-full uppercase tracking-wider">
                             <Tag size={9} />
-                            Oferta por {product.offerUnit === "box" ? "caja" : "unidad"}
+                            -{product.offerDiscountPct}% por {product.offerUnit === "box" ? "caja" : "unidad"}
                         </span>
                     )}
                 </div>

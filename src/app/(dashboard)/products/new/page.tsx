@@ -1,3 +1,4 @@
+import { getPriceConfig } from "@/actions/config";
 import { ProductForm } from "@/components/products/product-form";
 import { ChevronLeft, PackagePlus } from "lucide-react";
 import Link from "next/link";
@@ -6,7 +7,8 @@ export const metadata = {
     title: 'Nuevo producto',
 }
 
-export default function NewProductPage() {
+export default async function NewProductPage() {
+    const config = await getPriceConfig();
     return (
         <div className="max-w-3xl mx-auto p-4 md:p-12 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
@@ -37,7 +39,7 @@ export default function NewProductPage() {
 
             {/* Contenedor form */}
             <section className="bg-white p-6 md:p-12 rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <ProductForm />
+                <ProductForm config={config} />
             </section>
 
             <footer className="text-center">

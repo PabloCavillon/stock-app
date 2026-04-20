@@ -15,15 +15,16 @@ export type StoreProduct = {
     priceUsd: number;
     priceArs: number;
     unitsPerBox: number | null;
-    offerPriceUsd: number | null;
-    offerPriceArs: number | null;
+    offerDiscountPct: number | null;
+    offerPriceUsd: number | null;   // derived: priceUsd * (1 - offerDiscountPct/100)
+    offerPriceArs: number | null;   // derived: calcPriceArs(offerPriceUsd)
     offerUnit: "unit" | "box" | null;
 };
 
 const productSelect = {
     id: true, sku: true, name: true, description: true, imageUrl: true,
     category: true, stock: true, price: true,
-    unitsPerBox: true, offerPriceUsd: true, offerUnit: true,
+    unitsPerBox: true, offerDiscountPct: true, offerUnit: true,
 } as const;
 
 function mapProduct(p: {
@@ -31,12 +32,15 @@ function mapProduct(p: {
     imageUrl: string | null; category: string; stock: number;
     price: { toNumber(): number } | number | string;
     unitsPerBox: number | null;
-    offerPriceUsd: { toNumber(): number } | number | string | null;
+    offerDiscountPct: { toNumber(): number } | number | string | null;
     offerUnit: string | null;
 }, priceInfo: PriceInfo): StoreProduct {
     const priceUsd = typeof p.price === "object" ? p.price.toNumber() : Number(p.price);
-    const offerPriceUsd = p.offerPriceUsd !== null && p.offerPriceUsd !== undefined
-        ? (typeof p.offerPriceUsd === "object" ? p.offerPriceUsd.toNumber() : Number(p.offerPriceUsd))
+    const offerDiscountPct = p.offerDiscountPct !== null && p.offerDiscountPct !== undefined
+        ? (typeof p.offerDiscountPct === "object" ? p.offerDiscountPct.toNumber() : Number(p.offerDiscountPct))
+        : null;
+    const offerPriceUsd = offerDiscountPct !== null
+        ? priceUsd * (1 - offerDiscountPct / 100)
         : null;
     return {
         id: p.id, sku: p.sku, name: p.name, description: p.description,
@@ -44,6 +48,7 @@ function mapProduct(p: {
         priceUsd,
         priceArs: Math.round(calcPriceArs(priceUsd, priceInfo)),
         unitsPerBox: p.unitsPerBox,
+        offerDiscountPct,
         offerPriceUsd,
         offerPriceArs: offerPriceUsd !== null ? Math.round(calcPriceArs(offerPriceUsd, priceInfo)) : null,
         offerUnit: (p.offerUnit as "unit" | "box" | null) ?? null,

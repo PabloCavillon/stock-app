@@ -93,9 +93,9 @@ model Product {
   price         Decimal   @db.Decimal(10, 2)
   stock         Int       @default(0)
   category      String
-  unitsPerBox   Int?
-  offerPriceUsd Decimal?  @db.Decimal(10, 2)
-  offerUnit     String?   // "unit" | "box"
+  unitsPerBox      Int?
+  offerDiscountPct Decimal?  @db.Decimal(5, 2)  // % de descuento, ej: 15 = 15% off
+  offerUnit        String?   // "unit" | "box"
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?

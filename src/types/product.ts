@@ -8,7 +8,7 @@ export type SerializedProduct = {
 	stock: number;
 	category: string;
 	unitsPerBox: number | null;
-	offerPriceUsd: number | null;
+	offerDiscountPct: number | null;
 	offerUnit: string | null;
 	createdAt: string;
 	updatedAt: string;

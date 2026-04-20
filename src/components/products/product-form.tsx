@@ -8,11 +8,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createProduct, updateProduct } from "@/actions/products";
 import { ProductFormData, ProductFormInput, productSchema } from '@/lib/validations/product';
 import { SerializedProduct } from "@/types/product";
-import { ImagePlus, Loader2, Save, X } from "lucide-react";
+import { SerializedPriceConfig } from "@/actions/config";
+import { ImagePlus, Loader2, Save, X, TrendingDown, Info } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-export function ProductForm({ product }: { product?: SerializedProduct }) {
+function calcPriceArs(priceUsd: number, config: SerializedPriceConfig) {
+    return priceUsd * config.dollarRate * (1 + config.shippingPct / 100) * (1 + config.profitPct / 100);
+}
+
+function fmtArs(n: number) {
+    return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
+}
+
+interface Props {
+    product?: SerializedProduct;
+    config?: SerializedPriceConfig | null;
+}
+
+export function ProductForm({ product, config }: Props) {
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string>(product?.imageUrl ?? "");
@@ -31,12 +45,38 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             stock: product?.stock ?? 0,
             category: product?.category ?? '',
             unitsPerBox: product?.unitsPerBox ?? undefined,
-            offerPriceUsd: product?.offerPriceUsd ?? undefined,
+            offerDiscountPct: product?.offerDiscountPct ?? undefined,
             offerUnit: (product?.offerUnit as "unit" | "box" | undefined) ?? undefined,
         }
     });
 
+    const priceValue = watch("price");
+    const discountPct = watch("offerDiscountPct");
+    const offerUnit = watch("offerUnit");
     const unitsPerBoxValue = watch("unitsPerBox");
+
+    // Live offer preview
+    const priceNum = Number(priceValue);
+    const discountNum = Number(discountPct);
+    const showPreview = config && priceNum > 0 && discountNum > 0 && discountNum < 100 && offerUnit;
+    let offerPreview: { offerPriceArs: number; regularPriceArs: number; costArs: number; offerProfitArs: number; regularProfitArs: number } | null = null;
+    if (showPreview) {
+        const baseUsd = priceNum;
+        const pct = discountNum;
+        const isBox = offerUnit === "box";
+        const units = isBox && unitsPerBoxValue ? Number(unitsPerBoxValue) : 1;
+
+        const regularUsd = isBox ? baseUsd * units : baseUsd;
+        const offerUsd = regularUsd * (1 - pct / 100);
+
+        const regularPriceArs = Math.round(calcPriceArs(regularUsd, config));
+        const offerPriceArs = Math.round(calcPriceArs(offerUsd, config));
+        const costArs = Math.round(regularUsd * config.dollarRate * (1 + config.shippingPct / 100));
+        const regularProfitArs = regularPriceArs - costArs;
+        const offerProfitArs = offerPriceArs - costArs;
+
+        offerPreview = { offerPriceArs, regularPriceArs, costArs, offerProfitArs, regularProfitArs };
+    }
 
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -64,7 +104,7 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
                 ...data,
                 imageUrl: imageUrl || undefined,
                 unitsPerBox: data.unitsPerBox ?? null,
-                offerPriceUsd: data.offerPriceUsd ?? null,
+                offerDiscountPct: data.offerDiscountPct ?? null,
                 offerUnit: data.offerUnit ?? null,
             };
             if (product) await updateProduct(product.id, payload);
@@ -210,20 +250,29 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             {/* Oferta */}
             <div className="border border-rose-100 bg-rose-50/40 rounded-2xl p-5 space-y-5">
                 <div>
-                    <h3 className="text-sm font-black text-rose-700 uppercase tracking-widest">Oferta</h3>
+                    <h3 className="text-sm font-black text-rose-700 uppercase tracking-widest flex items-center gap-2">
+                        <TrendingDown size={14} />
+                        Oferta
+                    </h3>
                     <p className="text-xs text-zinc-400 mt-0.5">Dejá vacío si no hay oferta activa.</p>
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col">
-                        <label className={labelClasses}>Precio oferta (USD)</label>
-                        <input
-                            {...register("offerPriceUsd")}
-                            type="number"
-                            step="0.01"
-                            placeholder="Ej: 8.50"
-                            className={inputClasses}
-                        />
-                        {errors.offerPriceUsd && <p className="text-sm text-red-500 mt-2 ml-1">{errors.offerPriceUsd.message}</p>}
+                        <label className={labelClasses}>Descuento (%)</label>
+                        <div className="relative">
+                            <input
+                                {...register("offerDiscountPct")}
+                                type="number"
+                                min="1"
+                                max="99"
+                                step="1"
+                                placeholder="Ej: 15"
+                                className={cn(inputClasses, "pr-10")}
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-sm pointer-events-none">%</span>
+                        </div>
+                        {errors.offerDiscountPct && <p className="text-sm text-red-500 mt-2 ml-1">{errors.offerDiscountPct.message}</p>}
                     </div>
                     <div className="flex flex-col">
                         <label className={labelClasses}>Aplica a</label>
@@ -234,6 +283,39 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
                         </select>
                     </div>
                 </div>
+
+                {/* Preview en vivo */}
+                {offerPreview && (
+                    <div className="bg-white border border-rose-100 rounded-xl p-4 space-y-3">
+                        <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest flex items-center gap-1.5">
+                            <Info size={10} />
+                            Preview de la oferta {offerUnit === "box" ? "(por caja)" : "(por unidad)"}
+                        </p>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-0.5">
+                                <p className="text-[10px] text-zinc-400 uppercase tracking-wider font-bold">Precio regular</p>
+                                <p className="text-base font-black text-zinc-400 line-through">{fmtArs(offerPreview.regularPriceArs)}</p>
+                            </div>
+                            <div className="space-y-0.5">
+                                <p className="text-[10px] text-rose-500 uppercase tracking-wider font-bold">Precio con oferta</p>
+                                <p className="text-base font-black text-rose-600">{fmtArs(offerPreview.offerPriceArs)}</p>
+                            </div>
+                            <div className="space-y-0.5">
+                                <p className="text-[10px] text-zinc-400 uppercase tracking-wider font-bold">Ganancia regular</p>
+                                <p className={cn("text-sm font-black", offerPreview.regularProfitArs >= 0 ? "text-emerald-600" : "text-red-500")}>
+                                    {fmtArs(offerPreview.regularProfitArs)}
+                                </p>
+                            </div>
+                            <div className="space-y-0.5">
+                                <p className="text-[10px] text-zinc-400 uppercase tracking-wider font-bold">Ganancia en oferta</p>
+                                <p className={cn("text-sm font-black", offerPreview.offerProfitArs >= 0 ? "text-emerald-600" : "text-red-500")}>
+                                    {fmtArs(offerPreview.offerProfitArs)}
+                                    {offerPreview.offerProfitArs < 0 && <span className="text-[9px] ml-1 font-bold text-red-400">¡Pérdida!</span>}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {serverError && (
