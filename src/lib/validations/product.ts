@@ -8,9 +8,18 @@ export const productSchema = z.object({
 	price: z.coerce.number().positive("Price must be greater than 0"),
 	stock: z.coerce.number().int().min(0, "Stock cannot be negative"),
 	category: z.string().min(1, "Category is required"),
-	unitsPerBox: z.coerce.number().int().positive().optional().nullable(),
-	offerDiscountPct: z.coerce.number().min(1).max(99).optional().nullable(),
-	offerUnit: z.enum(["unit", "box"]).optional().nullable(),
+	unitsPerBox: z.preprocess(
+		(v) => (v === "" || v === null || v === undefined ? null : Number(v)),
+		z.number().int().positive().nullable()
+	),
+	offerDiscountPct: z.preprocess(
+		(v) => (v === "" || v === null || v === undefined ? null : Number(v)),
+		z.number().min(1).max(99).nullable()
+	),
+	offerUnit: z.preprocess(
+		(v) => (v === "" || v === null || v === undefined ? null : v),
+		z.enum(["unit", "box"]).nullable()
+	),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>
