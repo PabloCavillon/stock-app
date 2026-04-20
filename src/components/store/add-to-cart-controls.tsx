@@ -5,11 +5,13 @@ import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 
 interface Props {
     item: Omit<CartItem, "quantity">;
+    maxQuantity?: number;
 }
 
-export function AddToCartControls({ item }: Props) {
+export function AddToCartControls({ item, maxQuantity }: Props) {
     const { addItem, updateQuantity, items } = useCart();
     const inCart = items.find((i) => i.cartKey === item.cartKey);
+    const atMax = maxQuantity !== undefined && inCart !== undefined && inCart.quantity >= maxQuantity;
 
     if (inCart) {
         return (
@@ -24,14 +26,24 @@ export function AddToCartControls({ item }: Props) {
                     <span className="w-8 text-center text-lg font-black text-gray-900">{inCart.quantity}</span>
                     <button
                         onClick={() => updateQuantity(item.cartKey, inCart.quantity + 1)}
-                        className="w-10 h-10 rounded-xl border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-all"
+                        disabled={atMax}
+                        className="w-10 h-10 rounded-xl border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                         <Plus size={15} />
                     </button>
                 </div>
                 <span className="text-sm text-gray-500 font-medium">
                     {inCart.quantity} {item.unit === "box" ? `caja${inCart.quantity !== 1 ? "s" : ""}` : `unidad${inCart.quantity !== 1 ? "es" : ""}`} en el carrito
+                    {atMax && <span className="block text-xs text-orange-500 font-bold">Máximo disponible</span>}
                 </span>
+            </div>
+        );
+    }
+
+    if (maxQuantity !== undefined && maxQuantity <= 0) {
+        return (
+            <div className="w-full flex items-center justify-center py-4 rounded-2xl border-2 border-dashed border-gray-200">
+                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">Sin stock disponible</span>
             </div>
         );
     }

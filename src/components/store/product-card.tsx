@@ -134,7 +134,9 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                     </div>
 
                     {/* Botón agregar / controles cantidad */}
-                    {inCart ? (
+                    {product.stock === 0 ? (
+                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider text-center py-1">Sin stock</p>
+                    ) : inCart ? (
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity - 1)}
@@ -145,7 +147,8 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                             <span className="flex-1 text-center text-sm font-black text-gray-900">{inCart.quantity}</span>
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity + 1)}
-                                className="w-8 h-8 rounded-lg border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0"
+                                disabled={inCart.quantity >= product.stock}
+                                className="w-8 h-8 rounded-lg border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
                             >
                                 <Plus size={13} />
                             </button>
