@@ -3,7 +3,7 @@
 import { useCart } from "@/contexts/cart-context";
 import { createStoreOrder } from "@/actions/store/store-orders.actions";
 import { calcPriceArs, type PriceInfo } from "@/lib/price-utils";
-import { Loader2, Tag, ArrowRight, ShoppingCart, Boxes, Package } from "lucide-react";
+import { Loader2, Tag, ArrowRight, ShoppingCart, Boxes, Package, Box } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -56,6 +56,8 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
                 productId: i.type === "product" ? i.id : undefined,
                 kitId: i.type === "kit" ? i.id : undefined,
                 quantity: i.quantity,
+                unit: i.unit,
+                unitsPerBox: i.unitsPerBox,
             })),
         );
         setLoading(false);
@@ -83,12 +85,23 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
                     return (
                         <div key={item.cartKey} className="flex items-center justify-between px-5 py-4 gap-4">
                             <div className="shrink-0 text-gray-300">
-                                {item.type === "kit" ? <Boxes size={16} /> : <Package size={16} />}
+                                {item.type === "kit" ? <Boxes size={16} /> : item.unit === "box" ? <Box size={16} /> : <Package size={16} />}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1.5">
+                                <div className="flex items-center gap-1.5 flex-wrap">
                                     {item.type === "kit" && (
                                         <span className="text-[9px] font-black uppercase tracking-widest bg-violet-100 text-violet-700 px-1.5 py-0.5 rounded-full">Kit</span>
+                                    )}
+                                    {item.unit === "box" && (
+                                        <span className="text-[9px] font-black uppercase tracking-widest bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">
+                                            Caja ×{item.unitsPerBox}
+                                        </span>
+                                    )}
+                                    {item.isOffer && (
+                                        <span className="text-[9px] font-black uppercase tracking-widest bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                            <Tag size={8} />
+                                            Oferta
+                                        </span>
                                     )}
                                     <p className="font-bold text-gray-900 text-sm">{item.name}</p>
                                 </div>

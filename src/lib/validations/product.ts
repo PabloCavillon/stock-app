@@ -8,6 +8,9 @@ export const productSchema = z.object({
 	price: z.coerce.number().positive("Price must be greater than 0"),
 	stock: z.coerce.number().int().min(0, "Stock cannot be negative"),
 	category: z.string().min(1, "Category is required"),
+	unitsPerBox: z.coerce.number().int().positive().optional().nullable(),
+	offerPriceUsd: z.coerce.number().positive().optional().nullable(),
+	offerUnit: z.enum(["unit", "box"]).optional().nullable(),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>

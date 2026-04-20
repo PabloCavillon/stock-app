@@ -20,7 +20,7 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
     const [uploadError, setUploadError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ProductFormInput, unknown, ProductFormData>({
+    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<ProductFormInput, unknown, ProductFormData>({
         resolver: zodResolver(productSchema),
         defaultValues: {
             sku: product?.sku ?? '',
@@ -30,8 +30,13 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             price: product ? Number(product.price) : undefined,
             stock: product?.stock ?? 0,
             category: product?.category ?? '',
+            unitsPerBox: product?.unitsPerBox ?? undefined,
+            offerPriceUsd: product?.offerPriceUsd ?? undefined,
+            offerUnit: (product?.offerUnit as "unit" | "box" | undefined) ?? undefined,
         }
     });
+
+    const unitsPerBoxValue = watch("unitsPerBox");
 
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -55,7 +60,13 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
     const onSubmit = async (data: ProductFormData) => {
         setServerError(null);
         try {
-            const payload = { ...data, imageUrl: imageUrl || undefined };
+            const payload = {
+                ...data,
+                imageUrl: imageUrl || undefined,
+                unitsPerBox: data.unitsPerBox ?? null,
+                offerPriceUsd: data.offerPriceUsd ?? null,
+                offerUnit: data.offerUnit ?? null,
+            };
             if (product) await updateProduct(product.id, payload);
             else await createProduct(payload);
             router.push("/products");
@@ -65,7 +76,6 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
         }
     };
 
-    // --- MISMAS CLASES QUE EL LOGIN (COHERENCIA) ---
     const labelClasses = "text-xs font-bold text-zinc-600 uppercase tracking-[0.2em] mb-2 ml-1 block";
     const inputClasses = "w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-base transition-all outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900 disabled:bg-zinc-50 placeholder:text-zinc-400 text-zinc-900";
     const buttonPrimary = "flex-1 md:flex-none inline-flex items-center justify-center px-10 py-3.5 rounded-xl text-base font-bold bg-zinc-900 text-white hover:bg-zinc-800 disabled:opacity-70 transition-all active:scale-[0.98] gap-2 shadow-sm";
@@ -102,7 +112,6 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
             <div className="flex flex-col">
                 <label className={labelClasses}>Imagen del producto</label>
                 <div className="flex items-start gap-4">
-                    {/* Preview */}
                     <div
                         onClick={() => fileInputRef.current?.click()}
                         className={cn(
@@ -177,6 +186,54 @@ export function ProductForm({ product }: { product?: SerializedProduct }) {
                 <label className={labelClasses}>Categoría</label>
                 <input {...register("category")} placeholder="Seguridad, Alarmas..." className={inputClasses} />
                 {errors.category && <p className="text-sm text-red-500 mt-2 ml-1">{errors.category.message}</p>}
+            </div>
+
+            {/* Venta por caja */}
+            <div className="border border-zinc-200 rounded-2xl p-5 space-y-5">
+                <div>
+                    <h3 className="text-sm font-black text-zinc-800 uppercase tracking-widest">Venta por caja</h3>
+                    <p className="text-xs text-zinc-400 mt-0.5">Dejá vacío si solo se vende por unidad.</p>
+                </div>
+                <div className="flex flex-col">
+                    <label className={labelClasses}>Unidades por caja</label>
+                    <input
+                        {...register("unitsPerBox")}
+                        type="number"
+                        min="1"
+                        placeholder="Ej: 10"
+                        className={inputClasses}
+                    />
+                    {errors.unitsPerBox && <p className="text-sm text-red-500 mt-2 ml-1">{errors.unitsPerBox.message}</p>}
+                </div>
+            </div>
+
+            {/* Oferta */}
+            <div className="border border-rose-100 bg-rose-50/40 rounded-2xl p-5 space-y-5">
+                <div>
+                    <h3 className="text-sm font-black text-rose-700 uppercase tracking-widest">Oferta</h3>
+                    <p className="text-xs text-zinc-400 mt-0.5">Dejá vacío si no hay oferta activa.</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col">
+                        <label className={labelClasses}>Precio oferta (USD)</label>
+                        <input
+                            {...register("offerPriceUsd")}
+                            type="number"
+                            step="0.01"
+                            placeholder="Ej: 8.50"
+                            className={inputClasses}
+                        />
+                        {errors.offerPriceUsd && <p className="text-sm text-red-500 mt-2 ml-1">{errors.offerPriceUsd.message}</p>}
+                    </div>
+                    <div className="flex flex-col">
+                        <label className={labelClasses}>Aplica a</label>
+                        <select {...register("offerUnit")} className={inputClasses}>
+                            <option value="">— Sin oferta —</option>
+                            <option value="unit">Por unidad</option>
+                            {!!unitsPerBoxValue && <option value="box">Por caja</option>}
+                        </select>
+                    </div>
+                </div>
             </div>
 
             {serverError && (

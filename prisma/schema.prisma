@@ -85,17 +85,20 @@ model Customer {
 }
 
 model Product {
-  id          String    @id @default(uuid())
-  sku         String    @unique
-  name        String
-  description String?
-  imageUrl    String?
-  price       Decimal   @db.Decimal(10, 2)
-  stock       Int       @default(0)
-  category    String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  id            String    @id @default(uuid())
+  sku           String    @unique
+  name          String
+  description   String?
+  imageUrl      String?
+  price         Decimal   @db.Decimal(10, 2)
+  stock         Int       @default(0)
+  category      String
+  unitsPerBox   Int?
+  offerPriceUsd Decimal?  @db.Decimal(10, 2)
+  offerUnit     String?   // "unit" | "box"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
 
   orderItems      OrderItem[]
   stockMovements  StockMovement[]

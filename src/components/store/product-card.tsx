@@ -2,7 +2,7 @@
 
 import { useCart } from "@/contexts/cart-context";
 import { StoreProduct } from "@/actions/store/products.actions";
-import { Minus, Plus, ShoppingCart, Package } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Package, Tag, Box } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,8 +14,31 @@ function fmtArs(n: number) {
 export function ProductCard({ product }: { product: StoreProduct }) {
     const { addItem, updateQuantity, items } = useCart();
     const [imgError, setImgError] = useState(false);
+    const [unit, setUnit] = useState<"unit" | "box">("unit");
 
-    const cartKey = `product:${product.id}`;
+    const hasBox = product.unitsPerBox !== null && product.unitsPerBox > 0;
+    const selectedUnit = hasBox ? unit : "unit";
+
+    // Offer applies to the currently selected unit type
+    const offerApplies = product.offerPriceUsd !== null && product.offerUnit === selectedUnit;
+
+    // Effective price in USD for the cart
+    let effectivePriceUsd: number;
+    if (selectedUnit === "box") {
+        effectivePriceUsd = offerApplies
+            ? product.offerPriceUsd!
+            : product.priceUsd * product.unitsPerBox!;
+    } else {
+        effectivePriceUsd = offerApplies ? product.offerPriceUsd! : product.priceUsd;
+    }
+
+    // Display prices in ARS
+    const regularPriceArs = selectedUnit === "box"
+        ? product.priceArs * product.unitsPerBox!
+        : product.priceArs;
+    const displayPriceArs = offerApplies ? product.offerPriceArs! : regularPriceArs;
+
+    const cartKey = `product:${product.id}:${selectedUnit}`;
     const inCart = items.find((i) => i.cartKey === cartKey);
 
     const handleAdd = () => {
@@ -25,14 +48,28 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             id: product.id,
             name: product.name,
             sku: product.sku,
-            priceUsd: product.priceUsd,
+            priceUsd: effectivePriceUsd,
             imageUrl: product.imageUrl,
+            unit: selectedUnit,
+            unitsPerBox: selectedUnit === "box" ? product.unitsPerBox! : undefined,
+            isOffer: offerApplies,
         });
     };
 
+    // Offer badge logic: show if any offer exists
+    const hasOffer = product.offerPriceUsd !== null && product.offerUnit !== null;
+
     return (
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col shadow-[0_4px_12px_rgba(0,0,0,0.10)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15)] transition-all group">
-            {/* Imagen borde-a-borde */}
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden flex flex-col shadow-[0_4px_12px_rgba(0,0,0,0.10)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.15)] transition-all group relative">
+            {/* Offer badge */}
+            {hasOffer && (
+                <div className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-rose-500 text-white text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-full shadow-sm">
+                    <Tag size={9} />
+                    Oferta {product.offerUnit === "box" ? "caja" : "unidad"}
+                </div>
+            )}
+
+            {/* Imagen */}
             <Link href={`/store/products/${product.id}`} className="block shrink-0">
                 <div className="w-full aspect-square bg-[#f5f5f5] flex items-center justify-center overflow-hidden transition-colors group-hover:bg-[#ebebeb] relative">
                     {product.imageUrl && !imgError ? (
@@ -50,8 +87,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                 </div>
             </Link>
 
-            {/* Info + precio */}
-            <div className="p-3 sm:p-4 flex flex-col gap-3 flex-1">
+            <div className="p-3 sm:p-4 flex flex-col gap-2.5 flex-1">
                 <div className="flex flex-col gap-0.5 flex-1">
                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{product.category}</span>
                     <Link href={`/store/products/${product.id}`}>
@@ -61,14 +97,44 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                     </Link>
                 </div>
 
+                {/* Selector caja/unidad */}
+                {hasBox && (
+                    <div className="flex rounded-lg border border-gray-200 overflow-hidden text-[10px] font-bold">
+                        <button
+                            onClick={() => setUnit("unit")}
+                            className={`flex-1 py-1.5 flex items-center justify-center gap-1 transition-colors ${unit === "unit" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+                        >
+                            <Package size={10} />
+                            Unidad
+                        </button>
+                        <button
+                            onClick={() => setUnit("box")}
+                            className={`flex-1 py-1.5 flex items-center justify-center gap-1 transition-colors ${unit === "box" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+                        >
+                            <Box size={10} />
+                            Caja ×{product.unitsPerBox}
+                        </button>
+                    </div>
+                )}
+
                 <div className="pt-2 border-t border-gray-100 space-y-2">
-                    <div>
-                        <p className="text-base sm:text-lg font-black text-gray-900">{fmtArs(product.priceArs)}</p>
+                    {/* Precio */}
+                    <div className="flex justify-between items-baseline gap-2">
+                        <div className="flex flex-col">
+                            {offerApplies && (
+                                <span className="text-[10px] text-gray-400 line-through leading-none">{fmtArs(regularPriceArs)}</span>
+                            )}
+                            <p className={`text-base sm:text-lg font-black leading-tight ${offerApplies ? "text-rose-600" : "text-gray-900"}`}>
+                                {fmtArs(displayPriceArs)}
+                            </p>
+                        </div>
+                        <span className={`text-[10px] font-bold shrink-0 ${product.stock === 0 ? "text-red-400" : "text-gray-400"}`}>
+                            {product.stock === 0 ? "Sin stock" : `${product.stock} disp.`}
+                        </span>
                     </div>
 
-                    {product.stock === 0 ? (
-                        <p className="text-[11px] font-bold text-red-400 uppercase tracking-wider">Sin stock</p>
-                    ) : inCart ? (
+                    {/* Botón agregar / controles cantidad */}
+                    {inCart ? (
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity - 1)}

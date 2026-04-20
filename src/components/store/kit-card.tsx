@@ -27,6 +27,8 @@ export function KitCard({ kit }: { kit: StoreKit }) {
             sku: kit.sku,
             priceUsd: kit.priceUsd,
             imageUrl: kit.imageUrl,
+            unit: "unit",
+            isOffer: false,
         });
     };
 

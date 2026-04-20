@@ -10,6 +10,9 @@ function serialize(p: Product): SerializedProduct {
 	return {
 		...p,
 		price: Number(p.price),
+		unitsPerBox: p.unitsPerBox ?? null,
+		offerPriceUsd: p.offerPriceUsd !== null && p.offerPriceUsd !== undefined ? Number(p.offerPriceUsd) : null,
+		offerUnit: p.offerUnit ?? null,
 		createdAt: p.createdAt.toISOString(),
 		updatedAt: p.updatedAt.toISOString(),
 		deletedAt: p.deletedAt?.toISOString() ?? null,
@@ -43,6 +46,9 @@ export const createProduct = async (data: {
 	price: number;
 	stock: number;
 	category: string;
+	unitsPerBox?: number | null;
+	offerPriceUsd?: number | null;
+	offerUnit?: string | null;
 }) => {
 	const session = await auth();
 	if (!session?.user?.id) throw new Error("Unauthorized");
@@ -60,6 +66,9 @@ export const updateProduct = async (
 		stock: number;
 		price: number;
 		category: string;
+		unitsPerBox?: number | null;
+		offerPriceUsd?: number | null;
+		offerUnit?: string | null;
 	},
 ) => {
 	const session = await auth();

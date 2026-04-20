@@ -13,6 +13,8 @@ export type CheckoutItem = {
     productId?: string;
     kitId?: string;
     quantity: number;
+    unit?: "unit" | "box";
+    unitsPerBox?: number;
 };
 
 export type CheckoutResult = { code: string } | { error: string };
@@ -58,7 +60,6 @@ export async function createStoreOrder(items: CheckoutItem[]): Promise<CheckoutR
     for (const item of productItems) {
         const p = productMap[item.productId!];
         if (!p) return { error: "Producto no encontrado." };
-        if (p.stock < item.quantity) return { error: `Stock insuficiente para uno de los productos.` };
     }
 
     // --- Validate & price kits ---
@@ -72,12 +73,6 @@ export async function createStoreOrder(items: CheckoutItem[]): Promise<CheckoutR
 
     for (const item of kitItems) {
         if (!kitMap[item.kitId!]) return { error: "Kit no encontrado." };
-        // Check component stock
-        const needed = await getKitLeafProducts(item.kitId!, item.quantity);
-        for (const [productId, qty] of needed) {
-            const product = await prisma.product.findUnique({ where: { id: productId }, select: { stock: true } });
-            if (!product || product.stock < qty) return { error: `Stock insuficiente para un componente del kit.` };
-        }
     }
 
     // --- Totals ---

@@ -22,21 +22,25 @@ function CartTestConsumer() {
 }
 
 const productA: Omit<CartItem, "quantity"> = {
-    cartKey: "product:aaa",
+    cartKey: "product:aaa:unit",
     type: "product",
     id: "aaa",
     name: "Producto A",
     sku: "SKU-A",
     priceUsd: 100,
+    unit: "unit",
+    isOffer: false,
 };
 
 const productB: Omit<CartItem, "quantity"> = {
-    cartKey: "product:bbb",
+    cartKey: "product:bbb:unit",
     type: "product",
     id: "bbb",
     name: "Producto B",
     sku: "SKU-B",
     priceUsd: 200,
+    unit: "unit",
+    isOffer: false,
 };
 
 function setup() {
@@ -139,7 +143,7 @@ describe("CartProvider — itemCount", () => {
 describe("CartProvider — persistencia localStorage", () => {
     it("carga el carrito guardado al montar", async () => {
         const stored = [{ ...productA, quantity: 3 }];
-        localStorage.setItem("projaska_cart_v2", JSON.stringify(stored));
+        localStorage.setItem("projaska_cart_v3", JSON.stringify(stored));
         const { count } = setup();
         // El efecto es asíncrono — esperamos que el DOM actualice
         await act(async () => {});

@@ -3,14 +3,17 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 export type CartItem = {
-    cartKey: string;    // "product:id" | "kit:id"
+    cartKey: string;    // "product:id:unit" | "product:id:box" | "kit:id"
     type: "product" | "kit";
     id: string;         // productId or kitId
     name: string;
     sku: string;
-    priceUsd: number;
+    priceUsd: number;   // effective price: box price if unit=box, offer price if offer applies
     imageUrl?: string | null;
     quantity: number;
+    unit: "unit" | "box";
+    unitsPerBox?: number;   // filled when unit === "box"
+    isOffer: boolean;
 };
 
 type CartContextValue = {
@@ -23,7 +26,7 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
-const STORAGE_KEY = "projaska_cart_v2";
+const STORAGE_KEY = "projaska_cart_v3";
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
     const [items, setItems] = useState<CartItem[]>([]);

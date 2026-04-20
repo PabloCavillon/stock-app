@@ -104,6 +104,8 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                             sku: kit.sku,
                             priceUsd: kit.priceUsd,
                             imageUrl: kit.imageUrl,
+                            unit: "unit",
+                            isOffer: false,
                         }}
                     />
 

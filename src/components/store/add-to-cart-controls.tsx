@@ -5,20 +5,11 @@ import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 
 interface Props {
     item: Omit<CartItem, "quantity">;
-    outOfStock?: boolean;
 }
 
-export function AddToCartControls({ item, outOfStock }: Props) {
+export function AddToCartControls({ item }: Props) {
     const { addItem, updateQuantity, items } = useCart();
     const inCart = items.find((i) => i.cartKey === item.cartKey);
-
-    if (outOfStock) {
-        return (
-            <div className="w-full flex items-center justify-center py-4 rounded-2xl border-2 border-dashed border-red-100">
-                <span className="text-sm font-bold text-red-400 uppercase tracking-widest">Sin stock disponible</span>
-            </div>
-        );
-    }
 
     if (inCart) {
         return (
@@ -39,7 +30,7 @@ export function AddToCartControls({ item, outOfStock }: Props) {
                     </button>
                 </div>
                 <span className="text-sm text-gray-500 font-medium">
-                    {inCart.quantity} en el carrito
+                    {inCart.quantity} {item.unit === "box" ? `caja${inCart.quantity !== 1 ? "s" : ""}` : `unidad${inCart.quantity !== 1 ? "es" : ""}`} en el carrito
                 </span>
             </div>
         );

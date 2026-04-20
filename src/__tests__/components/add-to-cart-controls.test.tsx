@@ -5,21 +5,23 @@ import { AddToCartControls } from "@/components/store/add-to-cart-controls";
 import { CartProvider } from "@/contexts/cart-context";
 
 const item = {
-    cartKey: "product:test-1",
+    cartKey: "product:test-1:unit",
     type: "product" as const,
     id: "test-1",
     name: "Producto Test",
     sku: "TST-001",
     priceUsd: 50,
+    unit: "unit" as const,
+    isOffer: false,
 };
 
 // Los botones +/− no tienen aria-label: los identificamos por posición o por texto
 // del span de cantidad que los rodea.
 
-function setup(outOfStock = false) {
+function setup() {
     render(
         <CartProvider>
-            <AddToCartControls item={item} outOfStock={outOfStock} />
+            <AddToCartControls item={item} />
         </CartProvider>
     );
     return userEvent.setup();
@@ -34,12 +36,6 @@ describe("AddToCartControls", () => {
     it("muestra botón 'Agregar al carrito' cuando el ítem no está en el carrito", () => {
         setup();
         expect(screen.getByRole("button", { name: /agregar al carrito/i })).toBeTruthy();
-    });
-
-    it("muestra aviso de sin stock cuando outOfStock=true", () => {
-        setup(true);
-        expect(screen.getByText(/sin stock/i)).toBeTruthy();
-        expect(screen.queryByRole("button")).toBeNull();
     });
 
     it("agrega el ítem al carrito al hacer click en el botón", async () => {
