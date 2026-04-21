@@ -5,7 +5,7 @@ import { getStoreSession } from "@/lib/store-auth";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: 'Projaska',
+    title: { default: 'Projaska', template: '%s | Projaska' },
     description: 'Tecnología y seguridad para profesionales'
 };
 

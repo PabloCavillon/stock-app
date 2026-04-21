@@ -4,7 +4,7 @@ import { ProductCard } from "@/components/store/product-card";
 import { KitCard } from "@/components/store/kit-card";
 import { Boxes, Package, Settings } from "lucide-react";
 
-export const metadata = { title: "Catálogo | Projaska" };
+export const metadata = { title: "Catálogo" };
 
 export default async function StorePage() {
     const [{ products, config }, { kits }] = await Promise.all([

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Package, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const metadata = { title: "Mis pedidos | Projaska" };
+export const metadata = { title: "Mis pedidos" };
 
 const STATUS_LABEL: Record<string, string> = {
     PENDING: "Pendiente",
