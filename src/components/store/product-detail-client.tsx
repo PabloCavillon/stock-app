@@ -41,17 +41,15 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
         : product.stock;
 
     return (
-        <>
+        <div className="flex flex-col gap-5">
             {/* Botón volver — usa router.back() para preservar scroll del catálogo */}
             <button
                 onClick={() => router.back()}
-                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group col-span-full"
+                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group"
             >
                 <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
                 Volver al catálogo
             </button>
-
-            <div className="flex flex-col gap-5">
                 {/* Badges de stock y oferta */}
                 <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-2.5 py-1 rounded-full">
@@ -152,7 +150,6 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
                 >
                     Ver carrito
                 </Link>
-            </div>
-        </>
+        </div>
     );
 }
