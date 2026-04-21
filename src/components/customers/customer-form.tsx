@@ -32,7 +32,7 @@ export function CustomerForm({ customer }: { customer?: SerializedCustomer }) {
         try {
             if (customer) await updateCustomer(customer.id, data);
             else await createCustomer(data);
-            router.push("/customers");
+            router.push("/admin/customers");
             router.refresh();
         } catch {
             setServerError("Error al procesar el registro del cliente.");

@@ -109,7 +109,7 @@ export function ProductForm({ product, config }: Props) {
             };
             if (product) await updateProduct(product.id, payload);
             else await createProduct(payload);
-            router.push("/products");
+            router.push("/admin/products");
             router.refresh();
         } catch {
             setServerError("Error al guardar el producto.");

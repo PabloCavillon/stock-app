@@ -27,7 +27,7 @@ export function ExpenseForm() {
         setServerError(null);
         try {
             await createExpense(data);
-            router.push("/expenses");
+            router.push("/admin/expenses");
             router.refresh();
         } catch {
             setServerError("Error al registrar el gasto.");

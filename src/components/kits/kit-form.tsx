@@ -76,7 +76,7 @@ export function KitForm({ kit, products, kits }: Props) {
             const payload = { ...data, imageUrl: imageUrl || undefined };
             if (kit) await updateKit(kit.id, payload);
             else await createKit(payload);
-            router.push("/kits");
+            router.push("/admin/kits");
             router.refresh();
         } catch {
             setServerError("Error al guardar el kit.");

@@ -99,7 +99,7 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                                                 <Link
-                                                    href={`/products/${product.id}/edit`}
+                                                    href={`/admin/products/${product.id}/edit`}
                                                     className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all shadow-none hover:shadow-sm"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                 {/* Acciones mobile — siempre visibles */}
                                 <div className="flex items-center gap-1 ml-3 shrink-0">
                                     <Link
-                                        href={`/products/${product.id}/edit`}
+                                        href={`/admin/products/${product.id}/edit`}
                                         className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all"
                                     >
                                         <Edit2 className="w-4 h-4" />

@@ -38,7 +38,7 @@ export default function UserForm({ user }: { user?: SerializedUser }) {
             } else {
                 await createUser(data as CreateUserFormData)
             }
-            router.push("/users")
+            router.push("/admin/users")
             router.refresh()
         } catch (e) {
             setServerError(e instanceof Error ? e.message : "Algo salió mal. Por favor intente de nuevo.")

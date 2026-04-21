@@ -53,7 +53,7 @@ export function OrderForm({ customers, products }: { customers: SerializedCustom
         setServerError(null);
         try {
             await createOrder(data);
-            router.push("/orders");
+            router.push("/admin/orders");
             router.refresh();
         } catch {
             setServerError("Algo salió mal. Por favor intente de nuevo")

@@ -98,7 +98,7 @@ export default function KitsTable({ kits: initialKits }: { kits: SerializedKit[]
                                             <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                                                 <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                                                     <Link
-                                                        href={`/kits/${kit.id}/edit`}
+                                                        href={`/admin/kits/${kit.id}/edit`}
                                                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all"
                                                     >
                                                         <Edit2 className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function KitsTable({ kits: initialKits }: { kits: SerializedKit[]
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-1 ml-3 shrink-0">
-                                        <Link href={`/kits/${kit.id}/edit`}
+                                        <Link href={`/admin/kits/${kit.id}/edit`}
                                             className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-white dark:hover:bg-zinc-700 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-600 transition-all">
                                             <Edit2 className="w-4 h-4" />
                                         </Link>
