@@ -22,7 +22,7 @@ export default async function EditCustomerPage({
         <div className="max-w-3xl mx-auto p-4 md:p-12 space-y-8 animate-in fade-in duration-500">
             <header className="space-y-6">
                 <Link
-                    href="/customers"
+                    href="/admin/customers"
                     className="inline-flex items-center text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors gap-2 group"
                 >
                     <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />

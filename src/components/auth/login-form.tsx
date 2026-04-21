@@ -33,7 +33,7 @@ export default function LoginForm() {
 				return;
 			}
 
-			router.push("/orders");
+			router.push("/admin/orders");
 			router.refresh();
 		} catch (err) {
 			setError("Error de conexión. Inténtalo de nuevo.");

@@ -22,16 +22,16 @@ import {
 } from "lucide-react";
 
 const navigation = [
-    { label: "Dashboard", href: "/", icon: LayoutDashboard, roles: ["ADMIN", "SELLER", "WATCHER"] },
-    { label: "Órdenes", href: "/orders", icon: ScrollText, roles: ["ADMIN", "SELLER", "WAREHOUSE"] },
-    { label: "Productos", href: "/products", icon: Package, roles: ["ADMIN", "SELLER"] },
-    { label: "Clientes", href: "/customers", icon: UserCircle, roles: ["ADMIN", "SELLER"] },
-    { label: "Stock", href: "/stock", icon: Database, roles: ["ADMIN"] },
-    { label: "Kits", href: "/kits", icon: Boxes, roles: ["ADMIN", "SELLER"] },
-    { label: "Gastos", href: "/expenses", icon: Receipt, roles: ["ADMIN", "SELLER"] },
-    { label: "Usuarios", href: "/users", icon: TeamIcon, roles: ["ADMIN"] },
-    { label: "Tienda", href: "/store", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WATCHER"] },
-    { label: "Configuración", href: "/config", icon: Settings, roles: ["ADMIN"] },
+    { label: "Dashboard", href: "/admin", icon: LayoutDashboard, roles: ["ADMIN", "SELLER", "WATCHER"] },
+    { label: "Órdenes", href: "/admin/orders", icon: ScrollText, roles: ["ADMIN", "SELLER", "WAREHOUSE"] },
+    { label: "Productos", href: "/admin/products", icon: Package, roles: ["ADMIN", "SELLER"] },
+    { label: "Clientes", href: "/admin/customers", icon: UserCircle, roles: ["ADMIN", "SELLER"] },
+    { label: "Stock", href: "/admin/stock", icon: Database, roles: ["ADMIN"] },
+    { label: "Kits", href: "/admin/kits", icon: Boxes, roles: ["ADMIN", "SELLER"] },
+    { label: "Gastos", href: "/admin/expenses", icon: Receipt, roles: ["ADMIN", "SELLER"] },
+    { label: "Usuarios", href: "/admin/users", icon: TeamIcon, roles: ["ADMIN"] },
+    { label: "Tienda", href: "/", icon: ShoppingCart, roles: ["ADMIN", "SELLER", "WATCHER"] },
+    { label: "Configuración", href: "/admin/config", icon: Settings, roles: ["ADMIN"] },
 ];
 
 export default function SidebarClient({ role }: { role: string }) {

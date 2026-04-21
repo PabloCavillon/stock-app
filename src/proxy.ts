@@ -8,23 +8,25 @@ const { auth } = NextAuth(authConfig);
 const STORE_JWT_SECRET = new TextEncoder().encode(process.env.STORE_JWT_SECRET);
 const STORE_COOKIE_NAME = "store-token";
 
+// Admin role-based route permissions (paths under /admin)
 const ROLE_ROUTES: Record<string, string[]> = {
-	"/products": ["ADMIN", "SELLER"],
-	"/customers": ["ADMIN", "SELLER"],
-	"/stock": ["ADMIN", "WAREHOUSE"],
-	"/users": ["ADMIN"],
-	"/orders": ["ADMIN", "SELLER", "WAREHOUSE"],
+	"/admin/products": ["ADMIN", "SELLER"],
+	"/admin/customers": ["ADMIN", "SELLER"],
+	"/admin/stock": ["ADMIN", "WAREHOUSE"],
+	"/admin/users": ["ADMIN"],
+	"/admin/orders": ["ADMIN", "SELLER", "WAREHOUSE"],
 };
 
+// Store routes that require a logged-in store customer
 const STORE_PROTECTED_ROUTES = [
-	"/store/orders",
-	"/store/checkout",
-	"/store/cart",
+	"/orders",
+	"/checkout",
+	"/cart",
 ];
 
+const ADMIN_PREFIX = "/admin";
 const ADMIN_LOGIN_PAGE = "/admin/login";
-const STORE_LOGIN_PAGE = "/store/login";
-const STORE_PREFIX = "/store";
+const STORE_LOGIN_PAGE = "/login";
 
 async function verifyStoreToken(token: string): Promise<boolean> {
 	try {
@@ -38,58 +40,48 @@ async function verifyStoreToken(token: string): Promise<boolean> {
 export default auth(async (req) => {
 	const { pathname } = req.nextUrl;
 
-	// ─── STORE ────────────────────────────────────────────────────────────────
-	if (pathname.startsWith(STORE_PREFIX)) {
-		const isProtectedRoute = STORE_PROTECTED_ROUTES.some((route) =>
-			pathname.startsWith(route),
-		);
+	// ─── ADMIN ────────────────────────────────────────────────────────────────
+	if (pathname.startsWith(ADMIN_PREFIX)) {
+		const isLoggedIn = !!req.auth;
+		const isLoginPage = pathname === ADMIN_LOGIN_PAGE;
 
-		if (isProtectedRoute) {
-			const token = req.cookies.get(STORE_COOKIE_NAME)?.value;
-			const isAuthenticated = token
-				? await verifyStoreToken(token)
-				: false;
+		if (!isLoggedIn && !isLoginPage) {
+			return NextResponse.redirect(new URL(ADMIN_LOGIN_PAGE, req.nextUrl.origin));
+		}
 
-			if (!isAuthenticated) {
-				const redirectUrl = new URL(
-					STORE_LOGIN_PAGE,
-					req.nextUrl.origin,
-				);
-				redirectUrl.searchParams.set("redirect", pathname);
-				return NextResponse.redirect(redirectUrl);
+		if (isLoggedIn && isLoginPage) {
+			const role = (req.auth?.user as any)?.role ?? "SELLER";
+			const defaultRoute = role === "WAREHOUSE" ? "/admin/stock" : "/admin/orders";
+			return NextResponse.redirect(new URL(defaultRoute, req.nextUrl.origin));
+		}
+
+		if (isLoggedIn) {
+			const role = (req.auth?.user as any)?.role;
+			for (const [route, allowedRoles] of Object.entries(ROLE_ROUTES)) {
+				if (pathname.startsWith(route)) {
+					if (!role || !allowedRoles.includes(role)) {
+						return NextResponse.redirect(new URL("/admin", req.nextUrl.origin));
+					}
+				}
 			}
 		}
 
 		return NextResponse.next();
 	}
 
-	// ─── ADMIN PANEL ──────────────────────────────────────────────────────────
-	const isLoggedIn = !!req.auth;
-	const isLoginPage = pathname === ADMIN_LOGIN_PAGE;
+	// ─── STORE ────────────────────────────────────────────────────────────────
+	const isStoreProtected = STORE_PROTECTED_ROUTES.some((route) =>
+		pathname.startsWith(route),
+	);
 
-	if (!isLoggedIn && !isLoginPage) {
-		return NextResponse.redirect(
-			new URL(ADMIN_LOGIN_PAGE, req.nextUrl.origin),
-		);
-	}
+	if (isStoreProtected) {
+		const token = req.cookies.get(STORE_COOKIE_NAME)?.value;
+		const isAuthenticated = token ? await verifyStoreToken(token) : false;
 
-	if (isLoggedIn && isLoginPage) {
-		const role = (req.auth?.user as any)?.role ?? "SELLER";
-		const defaultRoute = role === "WAREHOUSE" ? "/stock" : "/orders";
-		return NextResponse.redirect(new URL(defaultRoute, req.nextUrl.origin));
-	}
-
-	if (isLoggedIn) {
-		const role = (req.auth?.user as any)?.role;
-
-		for (const [route, allowedRoles] of Object.entries(ROLE_ROUTES)) {
-			if (pathname.startsWith(route)) {
-				if (!role || !allowedRoles.includes(role)) {
-					return NextResponse.redirect(
-						new URL("/", req.nextUrl.origin),
-					);
-				}
-			}
+		if (!isAuthenticated) {
+			const redirectUrl = new URL(STORE_LOGIN_PAGE, req.nextUrl.origin);
+			redirectUrl.searchParams.set("redirect", pathname);
+			return NextResponse.redirect(redirectUrl);
 		}
 	}
 

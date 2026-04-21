@@ -20,7 +20,7 @@ export default async function NewOrderPage() {
             {/* Navegación Técnica Coherente */}
             <header className="space-y-6">
                 <Link
-                    href="/orders"
+                    href="/admin/orders"
                     className="inline-flex items-center text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-900 transition-colors gap-2 group"
                 >
                     <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
