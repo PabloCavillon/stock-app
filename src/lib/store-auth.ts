@@ -35,8 +35,8 @@ export async function getStoreSession(): Promise<StoreSession | null> {
 	if (!token) return null;
 
 	try {
-		const { payload } = await jwtVerify(token, SECRET);
-		return payload as unknown as StoreSession;
+		const { payload } = await jwtVerify<StoreSession>(token, SECRET);
+		return payload as StoreSession;
 	} catch {
 		return null;
 	}

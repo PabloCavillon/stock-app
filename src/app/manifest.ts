@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
         description: "Tienda online de tecnología y seguridad para profesionales.",
         start_url: "/",
         display: "standalone",
-        background_color: "#f7f8fa",
+        background_color: "#111827",
         theme_color: "#111827",
         icons: [
             {

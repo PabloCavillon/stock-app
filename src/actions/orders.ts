@@ -28,6 +28,9 @@ function serializeOrder(order: any): SerializedOrder {
 }
 
 export async function getOrders(): Promise<SerializedOrder[]> {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const orders = await prisma.order.findMany({
 		orderBy: { createdAt: "desc" },
 		include: {
@@ -44,6 +47,9 @@ export async function getOrders(): Promise<SerializedOrder[]> {
 }
 
 export async function getOrder(id: string): Promise<SerializedOrder | null> {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const order = await prisma.order.findUnique({
 		where: { id },
 		include: {

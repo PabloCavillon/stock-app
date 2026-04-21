@@ -54,7 +54,7 @@ export async function createUser(data: CreateUserFormData) {
     })
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
-      throw new Error("A user with this username already exists")
+      throw new Error("Ya existe un usuario con ese nombre de usuario")
     }
     throw e
   }

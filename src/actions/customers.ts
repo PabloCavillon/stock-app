@@ -15,6 +15,9 @@ function serialize(c: any): SerializedCustomer {
 }
 
 export const getCustomers = async (): Promise<SerializedCustomer[]> => {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const customers = await prisma.customer.findMany({
 		where: { deletedAt: null },
 		orderBy: { name: "asc" },
@@ -24,6 +27,9 @@ export const getCustomers = async (): Promise<SerializedCustomer[]> => {
 };
 
 export const getCustomer = async (id: string): Promise<SerializedCustomer> => {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const customer = await prisma.customer.findUnique({
 		where: { id, deletedAt: null },
 	});

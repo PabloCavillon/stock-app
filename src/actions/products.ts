@@ -26,6 +26,9 @@ function serialize(p: Product): SerializedProduct {
 }
 
 export async function getProducts(): Promise<SerializedProduct[]> {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const products = await prisma.product.findMany({
 		where: { deletedAt: null },
 		orderBy: { createdAt: "desc" },
@@ -36,6 +39,9 @@ export async function getProducts(): Promise<SerializedProduct[]> {
 export async function getProduct(
 	id: string,
 ): Promise<SerializedProduct | null> {
+	const session = await auth();
+	if (!session?.user?.id) throw new Error("No autorizado");
+
 	const product = await prisma.product.findUnique({
 		where: { id, deletedAt: null },
 	});

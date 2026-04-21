@@ -7,7 +7,18 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const product = await getStoreProduct(id);
-    return { title: product ? `${product.name} | Projaska` : "Producto no encontrado" };
+    if (!product) return { title: "Producto no encontrado" };
+    const description = product.description
+        ?? `Comprá ${product.name} en Projaska — tecnología y seguridad para profesionales.`;
+    return {
+        title: product.name,
+        description,
+        openGraph: {
+            title: product.name,
+            description,
+            ...(product.imageUrl && { images: [{ url: product.imageUrl }] }),
+        },
+    };
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -15,8 +26,29 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     const product = await getStoreProduct(id);
     if (!product) notFound();
 
+    const jsonLd = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        name: product.name,
+        description: product.description ?? undefined,
+        image: product.imageUrl ?? undefined,
+        sku: product.sku,
+        offers: {
+            "@type": "Offer",
+            priceCurrency: "ARS",
+            price: product.priceArs,
+            availability: product.stock > 0
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+        },
+    };
+
     return (
         <div className="max-w-4xl mx-auto space-y-4">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                 {/* Imagen */}
                 <div className="w-full aspect-square bg-white rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-200 md:mt-8">

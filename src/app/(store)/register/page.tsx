@@ -3,6 +3,8 @@ import { getStoreSession } from "@/lib/store-auth";
 import { registerStoreCustomer } from "@/actions/store/auth.actions";
 import StoreRegisterForm from "@/components/store/store-register-form";
 
+export const metadata = { title: "Crear cuenta" };
+
 export default async function StoreRegisterPage() {
     const session = await getStoreSession();
     if (session) redirect("/");

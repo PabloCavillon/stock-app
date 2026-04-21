@@ -225,6 +225,9 @@ export type AdminStoreOrder = {
 };
 
 export async function getAdminStoreOrders(): Promise<AdminStoreOrder[]> {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("No autorizado");
+
     const orders = await prisma.storeOrder.findMany({
         where: { deletedAt: null },
         orderBy: { createdAt: "desc" },
@@ -266,6 +269,9 @@ export async function getAdminStoreOrders(): Promise<AdminStoreOrder[]> {
 }
 
 export async function getAdminStoreOrder(id: string): Promise<AdminStoreOrder | null> {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("No autorizado");
+
     const order = await prisma.storeOrder.findUnique({
         where: { id },
         include: {

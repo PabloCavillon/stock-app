@@ -8,7 +8,18 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const kit = await getStoreKit(id);
-    return { title: kit ? `${kit.name} | Projaska` : "Kit no encontrado" };
+    if (!kit) return { title: "Kit no encontrado" };
+    const description = kit.description
+        ?? `Comprá el kit ${kit.name} en Projaska — tecnología y seguridad para profesionales.`;
+    return {
+        title: kit.name,
+        description,
+        openGraph: {
+            title: kit.name,
+            description,
+            ...(kit.imageUrl && { images: [{ url: kit.imageUrl }] }),
+        },
+    };
 }
 
 export default async function KitDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -19,8 +30,27 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
     const fmtArs = (n: number) =>
         n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
 
+    const jsonLd = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        name: kit.name,
+        description: kit.description ?? undefined,
+        image: kit.imageUrl ?? undefined,
+        sku: kit.sku,
+        offers: {
+            "@type": "Offer",
+            priceCurrency: "ARS",
+            price: kit.priceArs,
+            availability: "https://schema.org/InStock",
+        },
+    };
+
     return (
         <div className="max-w-4xl mx-auto space-y-6">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* Back */}
             <Link
                 href="/"
