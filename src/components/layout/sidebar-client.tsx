@@ -115,7 +115,7 @@ export default function SidebarClient({ role }: { role: string }) {
                         `}
                     />
                     <button
-                        onClick={() => signOut({ callbackUrl: "/login" })}
+                        onClick={() => signOut({ callbackUrl: "/admin/login" })}
                         className={`
                             w-full flex items-center gap-3 px-3 py-3 rounded-xl text-base font-bold text-zinc-500
                             hover:bg-red-50 hover:text-red-600 transition-all active:scale-[0.98]
@@ -155,7 +155,7 @@ export default function SidebarClient({ role }: { role: string }) {
 
                     {/* Logout */}
                     <button
-                        onClick={() => signOut({ callbackUrl: "/login" })}
+                        onClick={() => signOut({ callbackUrl: "/admin/login" })}
                         className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0 min-w-14"
                     >
                         <LogOut size={20} strokeWidth={1.8} />

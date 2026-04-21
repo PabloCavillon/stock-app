@@ -22,7 +22,7 @@ const STORE_PROTECTED_ROUTES = [
 	"/store/cart",
 ];
 
-const ADMIN_LOGIN_PAGE = "/login";
+const ADMIN_LOGIN_PAGE = "/admin/login";
 const STORE_LOGIN_PAGE = "/store/login";
 const STORE_PREFIX = "/store";
 
