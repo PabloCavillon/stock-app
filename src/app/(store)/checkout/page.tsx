@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getStoreSession } from "@/lib/store-auth";
 import { getPriceConfig } from "@/actions/config";
 import { prisma } from "@/lib/prisma";
-import { CheckoutClient } from "@/components/checkout-client";
+import { CheckoutClient } from "@/components/store/checkout-client";
 
 export const metadata = { title: "Checkout | Projaska" };
 

@@ -1,4 +1,4 @@
-import { getStoreKit } from "@/actions/kits.actions";
+import { getStoreKit } from "@/actions/store/kits.actions";
 import { AddToCartControls } from "@/components/store/add-to-cart-controls";
 import { ChevronLeft, Boxes, Package } from "lucide-react";
 import Image from "next/image";
