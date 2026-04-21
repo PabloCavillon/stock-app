@@ -76,7 +76,9 @@ export default function SidebarClient({ role }: { role: string }) {
                 {/* Nav */}
                 <nav className="flex-1 px-3 py-6 flex flex-col gap-1.5">
                     {filteredNavigation.map((item) => {
-                        const isActive = pathname === item.href;
+                        const isActive = item.href === "/admin" || item.href === "/"
+                            ? pathname === item.href
+                            : pathname === item.href || pathname.startsWith(item.href + "/");
                         const Icon = item.icon;
 
                         return (
@@ -133,7 +135,9 @@ export default function SidebarClient({ role }: { role: string }) {
             <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-100 safe-area-inset-bottom">
                 <div className="flex items-center overflow-x-auto scrollbar-none px-1">
                     {mobileNav.map((item) => {
-                        const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                        const isActive = item.href === "/admin" || item.href === "/"
+                            ? pathname === item.href
+                            : pathname === item.href || pathname.startsWith(item.href + "/");
                         const Icon = item.icon;
 
                         return (
