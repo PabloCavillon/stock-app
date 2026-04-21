@@ -71,7 +71,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
 
             {/* Imagen */}
             <Link href={`/products/${product.id}`} className="block shrink-0">
-                <div className="w-full aspect-square bg-[#f5f5f5] flex items-center justify-center overflow-hidden transition-colors group-hover:bg-[#ebebeb] relative">
+                <div className="w-full aspect-square bg-white flex items-center justify-center overflow-hidden relative">
                     {product.imageUrl && !imgError ? (
                         <Image
                             src={product.imageUrl}
