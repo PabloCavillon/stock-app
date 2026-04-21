@@ -102,7 +102,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                     <div className="flex rounded-lg border border-gray-200 overflow-hidden text-[10px] font-bold">
                         <button
                             onClick={() => setUnit("unit")}
-                            className={`flex-1 py-1.5 flex items-center justify-center gap-1 transition-colors ${unit === "unit" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+                            className={`flex-1 py-1.5 flex items-center justify-center gap-1 transition-colors cursor-pointer ${unit === "unit" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
                         >
                             <Package size={10} />
                             Unidad
@@ -140,7 +140,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity - 1)}
-                                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors shrink-0 cursor-pointer"
                             >
                                 <Minus size={13} />
                             </button>
@@ -148,7 +148,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity + 1)}
                                 disabled={inCart.quantity >= product.stock}
-                                className="w-8 h-8 rounded-lg border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
+                                className="w-8 h-8 rounded-lg border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-colors shrink-0 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                             >
                                 <Plus size={13} />
                             </button>
@@ -156,7 +156,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
                     ) : (
                         <button
                             onClick={handleAdd}
-                            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold bg-gray-900 text-white hover:bg-gray-800 transition-all active:scale-[0.97]"
+                            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold bg-gray-900 text-white hover:bg-gray-700 hover:-translate-y-0.5 hover:shadow-md hover:shadow-gray-300 transition-all active:scale-[0.97] cursor-pointer"
                         >
                             <ShoppingCart size={12} />
                             Agregar

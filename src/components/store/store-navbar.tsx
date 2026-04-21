@@ -89,7 +89,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                             </Link>
                             <Link
                                 href="/register"
-                                className="flex items-center gap-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                                className="flex items-center gap-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-200 text-white font-semibold px-3 py-1.5 rounded-lg transition-all"
                             >
                                 <UserPlus size={14} />
                                 Registrarse
@@ -115,7 +115,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     </Link>
                     <button
                         onClick={() => setMenuOpen((prev) => !prev)}
-                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
+                        className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all cursor-pointer"
                         aria-label="Menú"
                     >
                         {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -162,7 +162,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                             <Link
                                 href="/register"
                                 onClick={() => setMenuOpen(false)}
-                                className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-3 rounded-lg transition-colors flex items-center gap-2"
+                                className="text-sm bg-indigo-600 hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-200 text-white font-semibold px-3 py-3 rounded-lg transition-all flex items-center gap-2"
                             >
                                 <UserPlus size={14} />
                                 Registrarse

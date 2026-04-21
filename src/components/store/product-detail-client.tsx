@@ -45,7 +45,7 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
             {/* Botón volver — usa router.back() para preservar scroll del catálogo */}
             <button
                 onClick={() => router.back()}
-                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group"
+                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group cursor-pointer"
             >
                 <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
                 Volver al catálogo
@@ -93,7 +93,7 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
                         <div className="flex rounded-xl border border-gray-200 overflow-hidden text-sm font-bold max-w-xs">
                             <button
                                 onClick={() => setUnit("unit")}
-                                className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors ${unit === "unit" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
+                                className={`flex-1 py-3 flex items-center justify-center gap-2 transition-colors cursor-pointer ${unit === "unit" ? "bg-gray-900 text-white" : "text-gray-500 hover:bg-gray-50"}`}
                             >
                                 <Package size={14} />
                                 Por unidad

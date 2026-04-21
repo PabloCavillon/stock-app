@@ -129,7 +129,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Unified
                                                             onClick={() => handleAdvanceStatus(order)}
                                                             disabled={updating === order.id}
                                                             title={`Marcar como ${getNextLabel(order, next)}`}
-                                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all disabled:opacity-50"
+                                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all disabled:opacity-50 cursor-pointer"
                                                         >
                                                             {updating === order.id ? (
                                                                 <span className="animate-pulse">...</span>
@@ -189,7 +189,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Unified
                                             <button
                                                 onClick={() => handleAdvanceStatus(order)}
                                                 disabled={updating === order.id}
-                                                className="mt-1 self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-white border border-zinc-200 transition-all disabled:opacity-50"
+                                                className="mt-1 self-start inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-white border border-zinc-200 transition-all disabled:opacity-50 cursor-pointer"
                                             >
                                                 {updating === order.id ? (
                                                     <span className="animate-pulse">...</span>

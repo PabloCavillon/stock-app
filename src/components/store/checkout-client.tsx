@@ -161,7 +161,7 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
             <button
                 onClick={handleConfirm}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-bold py-3.5 rounded-xl text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-60 disabled:translate-y-0 disabled:shadow-none cursor-pointer text-white font-bold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]"
             >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
                 {loading ? "Procesando..." : "Confirmar pedido"}

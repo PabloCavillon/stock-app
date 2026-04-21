@@ -21,7 +21,7 @@ export default function CartPage() {
                 </div>
                 <Link
                     href="/"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
+                    className="bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 cursor-pointer text-white font-bold px-6 py-3 rounded-xl text-sm transition-all active:scale-[0.98]"
                 >
                     Ver catálogo
                 </Link>
@@ -68,21 +68,21 @@ export default function CartPage() {
                             <div className="flex items-center gap-1.5">
                                 <button
                                     onClick={() => updateQuantity(item.cartKey, item.quantity - 1)}
-                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
                                 >
                                     <Minus size={13} />
                                 </button>
                                 <span className="w-7 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
                                 <button
                                     onClick={() => updateQuantity(item.cartKey, item.quantity + 1)}
-                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+                                    className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
                                 >
                                     <Plus size={13} />
                                 </button>
                             </div>
                             <button
                                 onClick={() => removeItem(item.cartKey)}
-                                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all cursor-pointer"
                             >
                                 <Trash2 size={14} />
                             </button>
@@ -97,7 +97,7 @@ export default function CartPage() {
                 </p>
                 <button
                     onClick={() => router.push("/checkout")}
-                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 cursor-pointer text-white font-bold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]"
                 >
                     Confirmar pedido
                     <ArrowRight size={16} />

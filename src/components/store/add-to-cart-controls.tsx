@@ -19,7 +19,7 @@ export function AddToCartControls({ item, maxQuantity }: Props) {
                 <div className="flex items-center gap-3 bg-gray-50 rounded-2xl p-1.5">
                     <button
                         onClick={() => updateQuantity(item.cartKey, inCart.quantity - 1)}
-                        className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all"
+                        className="w-10 h-10 rounded-xl border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all cursor-pointer"
                     >
                         {inCart.quantity === 1 ? <Trash2 size={15} /> : <Minus size={15} />}
                     </button>
@@ -27,7 +27,7 @@ export function AddToCartControls({ item, maxQuantity }: Props) {
                     <button
                         onClick={() => updateQuantity(item.cartKey, inCart.quantity + 1)}
                         disabled={atMax}
-                        className="w-10 h-10 rounded-xl border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="w-10 h-10 rounded-xl border border-indigo-200 bg-indigo-50 flex items-center justify-center text-indigo-600 hover:bg-indigo-100 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                         <Plus size={15} />
                     </button>
@@ -51,7 +51,7 @@ export function AddToCartControls({ item, maxQuantity }: Props) {
     return (
         <button
             onClick={() => addItem(item)}
-            className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gray-900 text-white font-bold text-base hover:bg-gray-700 transition-all active:scale-[0.98] shadow-lg shadow-gray-200"
+            className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gray-900 text-white font-bold text-base hover:bg-gray-700 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gray-300 transition-all active:scale-[0.98] shadow-lg shadow-gray-200 cursor-pointer"
         >
             <ShoppingCart size={18} />
             Agregar al carrito

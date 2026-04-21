@@ -87,14 +87,14 @@ export function KitCard({ kit }: { kit: StoreKit }) {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity - 1)}
-                                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                                className="w-8 h-8 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors shrink-0 cursor-pointer"
                             >
                                 <Minus size={13} />
                             </button>
                             <span className="flex-1 text-center text-sm font-black text-gray-900">{inCart.quantity}</span>
                             <button
                                 onClick={() => updateQuantity(cartKey, inCart.quantity + 1)}
-                                className="w-8 h-8 rounded-lg border border-violet-200 bg-violet-50 flex items-center justify-center text-violet-600 hover:bg-violet-100 transition-colors shrink-0"
+                                className="w-8 h-8 rounded-lg border border-violet-200 bg-violet-50 flex items-center justify-center text-violet-600 hover:bg-violet-100 transition-colors shrink-0 cursor-pointer"
                             >
                                 <Plus size={13} />
                             </button>
@@ -102,7 +102,7 @@ export function KitCard({ kit }: { kit: StoreKit }) {
                     ) : (
                         <button
                             onClick={handleAdd}
-                            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold bg-gray-900 text-white hover:bg-gray-800 transition-all active:scale-[0.97]"
+                            className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold bg-gray-900 text-white hover:bg-gray-700 hover:-translate-y-0.5 hover:shadow-md hover:shadow-gray-300 transition-all active:scale-[0.97] cursor-pointer"
                         >
                             <ShoppingCart size={12} />
                             Agregar

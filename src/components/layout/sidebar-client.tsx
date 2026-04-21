@@ -67,7 +67,7 @@ export default function SidebarClient({ role }: { role: string }) {
                     )}
                     <button
                         onClick={() => setCollapsed(!collapsed)}
-                        className="p-1.5 rounded-xl bg-zinc-50 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all active:scale-95"
+                        className="p-1.5 rounded-xl bg-zinc-50 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all active:scale-95 cursor-pointer"
                     >
                         {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
                     </button>
@@ -120,7 +120,7 @@ export default function SidebarClient({ role }: { role: string }) {
                         onClick={() => signOut({ callbackUrl: "/admin/login" })}
                         className={`
                             w-full flex items-center gap-3 px-3 py-3 rounded-xl text-base font-bold text-zinc-500
-                            hover:bg-red-50 hover:text-red-600 transition-all active:scale-[0.98]
+                            hover:bg-red-50 hover:text-red-600 transition-all active:scale-[0.98] cursor-pointer
                             ${collapsed ? "justify-center" : ""}
                         `}
                         title={collapsed ? "Cerrar sesión" : undefined}
@@ -160,7 +160,7 @@ export default function SidebarClient({ role }: { role: string }) {
                     {/* Logout */}
                     <button
                         onClick={() => signOut({ callbackUrl: "/admin/login" })}
-                        className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0 min-w-14"
+                        className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-red-500 transition-all shrink-0 min-w-14 cursor-pointer"
                     >
                         <LogOut size={20} strokeWidth={1.8} />
                         <span className="text-[9px] font-bold uppercase tracking-wide leading-none">Salir</span>

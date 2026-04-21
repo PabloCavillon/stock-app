@@ -107,7 +107,7 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                                 <button
                                                     onClick={() => handleDelete(product.id)}
                                                     disabled={isDeletingId === product.id}
-                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all"
+                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all cursor-pointer"
                                                 >
                                                     {isDeletingId === product.id ? (
                                                         <Loader2 className="w-4 h-4 animate-spin" />

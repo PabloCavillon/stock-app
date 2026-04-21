@@ -81,7 +81,7 @@ export default function StoreLoginForm({ action, redirectTo }: StoreLoginFormPro
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm uppercase tracking-wide"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none cursor-pointer text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm uppercase tracking-wide"
             >
                 {isSubmitting ? <><Loader2 size={16} className="animate-spin" />Ingresando...</> : "Ingresar"}
             </button>
