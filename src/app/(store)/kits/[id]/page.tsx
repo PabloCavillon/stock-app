@@ -1,4 +1,4 @@
-import { getStoreKit } from "@/actions/store/kits.actions";
+import { getStoreKit } from "@/actions/kits.actions";
 import { AddToCartControls } from "@/components/store/add-to-cart-controls";
 import { ChevronLeft, Boxes, Package } from "lucide-react";
 import Image from "next/image";
@@ -110,7 +110,7 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                     />
 
                     <Link
-                        href="/store/cart"
+                        href="/cart"
                         className="text-center text-sm text-gray-400 hover:text-gray-700 transition-colors"
                     >
                         Ver carrito

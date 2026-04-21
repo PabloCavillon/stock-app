@@ -45,7 +45,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     </Link>
                     {session && (
                         <Link
-                            href="/store/orders"
+                            href="/orders"
                             className="hover:text-gray-900 transition-colors flex items-center gap-1.5"
                         >
                             <Package size={14} />
@@ -59,7 +59,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     <ThemeToggle className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all" />
                     {/* Carrito — siempre visible */}
                     <Link
-                        href="/store/cart"
+                        href="/cart"
                         className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
                         title="Carrito"
                     >
@@ -81,14 +81,14 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     ) : (
                         <>
                             <Link
-                                href="/store/login"
+                                href="/login"
                                 className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100"
                             >
                                 <LogIn size={14} />
                                 Ingresar
                             </Link>
                             <Link
-                                href="/store/register"
+                                href="/register"
                                 className="flex items-center gap-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition-colors"
                             >
                                 <UserPlus size={14} />
@@ -102,7 +102,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                 <div className="flex md:hidden items-center gap-1">
                     <ThemeToggle className="p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all" />
                     <Link
-                        href="/store/cart"
+                        href="/cart"
                         className="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all"
                         title="Carrito"
                     >
@@ -137,7 +137,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     {session ? (
                         <>
                             <Link
-                                href="/store/orders"
+                                href="/orders"
                                 onClick={() => setMenuOpen(false)}
                                 className="text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-3 py-3 rounded-lg transition-all flex items-center gap-2"
                             >
@@ -152,7 +152,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                     ) : (
                         <div className="flex flex-col gap-2 mt-1 pt-2 border-t border-gray-100">
                             <Link
-                                href="/store/login"
+                                href="/login"
                                 onClick={() => setMenuOpen(false)}
                                 className="text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-3 py-3 rounded-lg transition-all flex items-center gap-2"
                             >
@@ -160,7 +160,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                                 Ingresar
                             </Link>
                             <Link
-                                href="/store/register"
+                                href="/register"
                                 onClick={() => setMenuOpen(false)}
                                 className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-3 rounded-lg transition-colors flex items-center gap-2"
                             >

@@ -31,7 +31,7 @@ function fmtArs(n: number) {
 
 export default async function MyOrdersPage() {
     const session = await getStoreSession();
-    if (!session) redirect("/store/login?redirect=/store/orders");
+    if (!session) redirect("/login?redirect=/orders");
 
     const orders = await getMyStoreOrders();
 
@@ -55,7 +55,7 @@ export default async function MyOrdersPage() {
                     {orders.map((order) => (
                         <Link
                             key={order.id}
-                            href={`/store/orders/${order.code}`}
+                            href={`/orders/${order.code}`}
                             className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors group"
                         >
                             <div className="flex flex-col gap-1.5 flex-1 min-w-0">

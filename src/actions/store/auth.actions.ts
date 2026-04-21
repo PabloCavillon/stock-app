@@ -69,7 +69,7 @@ export async function registerStoreCustomer(
 
 export async function logoutStoreCustomer(): Promise<void> {
 	await deleteStoreSession();
-	redirect("/store/login");
+	redirect("/login");
 }
 
 export async function updateStoreCustomerProfile(data: {

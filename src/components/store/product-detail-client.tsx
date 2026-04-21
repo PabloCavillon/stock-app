@@ -147,7 +147,7 @@ export function ProductDetailClient({ product }: { product: StoreProduct }) {
                 />
 
                 <Link
-                    href="/store/cart"
+                    href="/cart"
                     className="text-center text-sm text-gray-400 hover:text-gray-700 transition-colors"
                 >
                     Ver carrito

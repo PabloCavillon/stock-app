@@ -29,7 +29,7 @@ export default async function StoreLoginPage({ searchParams }: LoginPageProps) {
 
                 <p className="mt-6 text-center text-sm text-gray-400">
                     ¿No tenés cuenta?{" "}
-                    <a href="/store/register" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
+                    <a href="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
                         Registrate acá
                     </a>
                 </p>

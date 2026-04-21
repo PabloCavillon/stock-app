@@ -39,7 +39,7 @@ export function KitCard({ kit }: { kit: StoreKit }) {
             </span>
 
             {/* Imagen borde-a-borde */}
-            <Link href={`/store/kits/${kit.id}`} className="block shrink-0">
+            <Link href={`/kits/${kit.id}`} className="block shrink-0">
                 <div className="w-full aspect-square bg-[#f5f5f5] flex items-center justify-center overflow-hidden transition-colors group-hover:bg-[#ebebeb] relative">
                     {kit.imageUrl && !imgError ? (
                         <Image
@@ -59,7 +59,7 @@ export function KitCard({ kit }: { kit: StoreKit }) {
             {/* Info + precio */}
             <div className="p-3 sm:p-4 flex flex-col gap-3 flex-1">
                 <div className="flex flex-col gap-0.5 flex-1">
-                    <Link href={`/store/kits/${kit.id}`}>
+                    <Link href={`/kits/${kit.id}`}>
                         <h3 className="font-bold text-gray-900 leading-snug text-xs sm:text-sm hover:text-violet-600 transition-colors line-clamp-2">
                             {kit.name}
                         </h3>

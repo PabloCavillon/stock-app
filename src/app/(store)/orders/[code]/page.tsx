@@ -36,7 +36,7 @@ export default async function OrderDetailPage({
 }) {
     const { code } = await params;
     const session = await getStoreSession();
-    if (!session) redirect(`/store/login?redirect=/store/orders/${code}`);
+    if (!session) redirect(`/login?redirect=/orders/${code}`);
 
     const [order, config] = await Promise.all([getMyStoreOrder(code), getPriceConfig()]);
     if (!order) notFound();
@@ -61,7 +61,7 @@ export default async function OrderDetailPage({
     return (
         <div className="max-w-lg mx-auto space-y-6">
             <Link
-                href="/store/orders"
+                href="/orders"
                 className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-900 transition-colors gap-1.5 group"
             >
                 <ChevronLeft size={13} className="group-hover:-translate-x-0.5 transition-transform" />

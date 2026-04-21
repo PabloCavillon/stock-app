@@ -133,7 +133,7 @@ export async function createStoreOrder(items: CheckoutItem[]): Promise<CheckoutR
         },
     });
 
-    revalidatePath("/store/orders");
+    revalidatePath("/orders");
     return { code };
 }
 

@@ -1,5 +1,5 @@
-import { getStoreProducts } from "@/actions/store/products.actions";
-import { getStoreKits } from "@/actions/store/kits.actions";
+import { getStoreProducts } from "@/actions/products.actions";
+import { getStoreKits } from "@/actions/kits.actions";
 import { ProductCard } from "@/components/store/product-card";
 import { KitCard } from "@/components/store/kit-card";
 import { Boxes, Package, Settings } from "lucide-react";

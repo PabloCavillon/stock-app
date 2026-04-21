@@ -96,7 +96,7 @@ export default function CartPage() {
                     El precio final en pesos se confirma al momento del pedido según la cotización del día. Pueden aplicar descuentos de gremio o por volumen.
                 </p>
                 <button
-                    onClick={() => router.push("/store/checkout")}
+                    onClick={() => router.push("/checkout")}
                     className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition-colors"
                 >
                     Confirmar pedido

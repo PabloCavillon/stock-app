@@ -70,7 +70,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             )}
 
             {/* Imagen */}
-            <Link href={`/store/products/${product.id}`} className="block shrink-0">
+            <Link href={`/products/${product.id}`} className="block shrink-0">
                 <div className="w-full aspect-square bg-[#f5f5f5] flex items-center justify-center overflow-hidden transition-colors group-hover:bg-[#ebebeb] relative">
                     {product.imageUrl && !imgError ? (
                         <Image
@@ -90,7 +90,7 @@ export function ProductCard({ product }: { product: StoreProduct }) {
             <div className="p-3 sm:p-4 flex flex-col gap-2.5 flex-1">
                 <div className="flex flex-col gap-0.5 flex-1">
                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">{product.category}</span>
-                    <Link href={`/store/products/${product.id}`}>
+                    <Link href={`/products/${product.id}`}>
                         <h3 className="font-bold text-gray-900 leading-snug text-xs sm:text-sm hover:text-indigo-600 transition-colors line-clamp-2">
                             {product.name}
                         </h3>

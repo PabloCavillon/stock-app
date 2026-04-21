@@ -68,7 +68,7 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
         }
 
         clearCart();
-        router.push(`/store/orders/${result.code}`);
+        router.push(`/orders/${result.code}`);
     };
 
     return (
@@ -167,7 +167,7 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
                 {loading ? "Procesando..." : "Confirmar pedido"}
             </button>
 
-            <Link href="/store/cart" className="block text-center text-sm text-gray-400 hover:text-gray-700 transition-colors">
+            <Link href="/cart" className="block text-center text-sm text-gray-400 hover:text-gray-700 transition-colors">
                 Volver al carrito
             </Link>
         </div>

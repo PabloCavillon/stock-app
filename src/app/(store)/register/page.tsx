@@ -23,7 +23,7 @@ export default async function StoreRegisterPage() {
 
                 <p className="mt-6 text-center text-sm text-gray-400">
                     ¿Ya tenés cuenta?{" "}
-                    <a href="/store/login" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
+                    <a href="/login" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
                         Ingresá acá
                     </a>
                 </p>

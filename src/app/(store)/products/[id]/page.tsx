@@ -1,4 +1,4 @@
-import { getStoreProduct } from "@/actions/store/products.actions";
+import { getStoreProduct } from "@/actions/products.actions";
 import { ProductDetailClient } from "@/components/store/product-detail-client";
 import { Package } from "lucide-react";
 import Image from "next/image";

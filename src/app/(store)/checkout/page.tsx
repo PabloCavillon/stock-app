@@ -2,13 +2,13 @@ import { redirect } from "next/navigation";
 import { getStoreSession } from "@/lib/store-auth";
 import { getPriceConfig } from "@/actions/config";
 import { prisma } from "@/lib/prisma";
-import { CheckoutClient } from "@/components/store/checkout-client";
+import { CheckoutClient } from "@/components/checkout-client";
 
 export const metadata = { title: "Checkout | Projaska" };
 
 export default async function CheckoutPage() {
     const session = await getStoreSession();
-    if (!session) redirect("/store/login?redirect=/store/checkout");
+    if (!session) redirect("/login?redirect=/checkout");
 
     const config = await getPriceConfig();
     if (!config) redirect("/store");
