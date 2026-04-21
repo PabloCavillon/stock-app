@@ -14,7 +14,7 @@ export function TopProductsChart({ data }: Props) {
 	const gridColor      = isDark ? '#27272a' : '#f4f4f5';
 	const labelColor     = isDark ? '#71717a' : '#a1a1aa';
 	const yLabelColor    = isDark ? '#e4e4e7' : '#18181b';
-	const barColor       = isDark ? '#ffffff' : '#18181b';
+	const barColor       = isDark ? '#a1a1aa' : '#18181b';
 	const tooltipBg      = isDark ? '#18181b' : '#ffffff';
 	const tooltipBorder  = isDark ? '#3f3f46' : '#f4f4f5';
 	const tooltipText    = isDark ? '#e4e4e7' : '#18181b';
@@ -38,7 +38,7 @@ export function TopProductsChart({ data }: Props) {
 				</div>
 			) : (
 				<ResponsiveContainer width="100%" height={240}>
-					<BarChart data={data} layout="vertical" margin={{ left: -20, right: 20 }}>
+					<BarChart data={data} layout="vertical" margin={{ left: -20, right: 20 }} style={{ background: 'transparent' }}>
 						<CartesianGrid strokeDasharray="3 3" horizontal={false} stroke={gridColor} />
 						<XAxis type="number" tick={{ fontSize: 11, fill: labelColor, fontWeight: 600 }} axisLine={false} tickLine={false} />
 						<YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: yLabelColor, fontWeight: 700 }} axisLine={false} tickLine={false} width={120} tickFormatter={(v) => v.length > 15 ? v.slice(0, 15) + "…" : v} />
