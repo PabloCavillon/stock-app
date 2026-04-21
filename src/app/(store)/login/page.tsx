@@ -11,7 +11,7 @@ export default async function StoreLoginPage({ searchParams }: LoginPageProps) {
     const session = await getStoreSession();
     const params = await searchParams;
 
-    if (session) redirect(params.redirect ?? "/store");
+    if (session) redirect(params.redirect ?? "/");
 
     return (
         <div className="min-h-[calc(100vh-56px)] flex items-center justify-center px-4 py-8 sm:py-12">

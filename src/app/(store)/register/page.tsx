@@ -5,7 +5,7 @@ import StoreRegisterForm from "@/components/store/store-register-form";
 
 export default async function StoreRegisterPage() {
     const session = await getStoreSession();
-    if (session) redirect("/store");
+    if (session) redirect("/");
 
     return (
         <div className="min-h-[calc(100vh-56px)] flex items-center justify-center px-4 py-8 sm:py-12">

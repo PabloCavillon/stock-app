@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "Projaska — Tecnología y Seguridad",
         short_name: "Projaska",
         description: "Tienda online de tecnología y seguridad para profesionales.",
-        start_url: "/store",
+        start_url: "/",
         display: "standalone",
         background_color: "#f7f8fa",
         theme_color: "#111827",

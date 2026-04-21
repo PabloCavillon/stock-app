@@ -30,7 +30,7 @@ export async function loginStoreCustomer(
 		email: customer.email,
 	});
 
-	return { redirectTo: data.redirect ?? "/store" };
+	return { redirectTo: data.redirect ?? "/" };
 }
 
 export async function registerStoreCustomer(
@@ -64,7 +64,7 @@ export async function registerStoreCustomer(
 		email: newCustomer.email,
 	});
 
-	return { redirectTo: "/store" };
+	return { redirectTo: "/" };
 }
 
 export async function logoutStoreCustomer(): Promise<void> {

@@ -11,7 +11,7 @@ export default async function CheckoutPage() {
     if (!session) redirect("/login?redirect=/checkout");
 
     const config = await getPriceConfig();
-    if (!config) redirect("/store");
+    if (!config) redirect("/");
 
     // Obtener si el cliente es del gremio (vía customer vinculado)
     const storeCustomer = await prisma.storeCustomer.findUnique({
