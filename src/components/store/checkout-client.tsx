@@ -29,7 +29,7 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
             <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
                 <ShoppingCart size={36} className="text-gray-300" />
                 <p className="text-gray-500 font-medium">Tu carrito está vacío.</p>
-                <Link href="/store" className="text-indigo-600 hover:text-indigo-700 font-semibold text-sm">
+                <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold text-sm">
                     Ir al catálogo
                 </Link>
             </div>

@@ -22,7 +22,7 @@ export function RecentOrdersTable({ orders }: { orders: ChartOrder[] }) {
                         <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Actividad reciente del sistema</p>
                     </div>
                 </div>
-                <Link href="/orders" className="text-xs font-bold text-zinc-400 hover:text-zinc-900 uppercase tracking-widest transition-colors">
+                <Link href="/admin/orders" className="text-xs font-bold text-zinc-400 hover:text-zinc-900 uppercase tracking-widest transition-colors">
                     Ver todas
                 </Link>
             </div>

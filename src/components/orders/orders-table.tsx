@@ -145,7 +145,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Unified
                                                         <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
                                                     )}
                                                     <Link
-                                                        href={order.source === "store" ? `/store-orders/${order.id}` : `/orders/${order.id}`}
+                                                        href={order.source === "store" ? `/admin/store-orders/${order.id}` : `/admin/orders/${order.id}`}
                                                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all hover:shadow-sm"
                                                     >
                                                         <Eye className="w-4 h-4" />
@@ -208,7 +208,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Unified
                                             <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
                                         )}
                                         <Link
-                                            href={order.source === "store" ? `/store-orders/${order.id}` : `/orders/${order.id}`}
+                                            href={order.source === "store" ? `/admin/store-orders/${order.id}` : `/admin/orders/${order.id}`}
                                             className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all"
                                         >
                                             <Eye className="w-4 h-4" />

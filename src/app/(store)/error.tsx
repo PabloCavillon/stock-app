@@ -36,7 +36,7 @@ export default function StoreError({
                     Intentar de nuevo
                 </button>
                 <a
-                    href="/store"
+                    href="/"
                     className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-bold hover:bg-gray-50 transition-colors"
                 >
                     Volver al catálogo

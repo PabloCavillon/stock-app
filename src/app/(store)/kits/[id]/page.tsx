@@ -23,7 +23,7 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
         <div className="max-w-4xl mx-auto space-y-6">
             {/* Back */}
             <Link
-                href="/store"
+                href="/"
                 className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group"
             >
                 <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />

@@ -22,7 +22,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
 
                 {/* Logo */}
                 <Link
-                    href="/store"
+                    href="/"
                     onClick={() => setMenuOpen(false)}
                     className="flex items-baseline gap-1.5 shrink-0"
                 >
@@ -38,7 +38,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
                 {/* Nav — desktop */}
                 <nav className="hidden md:flex items-center gap-6 text-sm text-gray-500">
                     <Link
-                        href="/store"
+                        href="/"
                         className="hover:text-gray-900 transition-colors"
                     >
                         Catálogo
@@ -127,7 +127,7 @@ export default function StoreNavbar({ session }: StoreNavbarProps) {
             {menuOpen && (
                 <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-1">
                     <Link
-                        href="/store"
+                        href="/"
                         onClick={() => setMenuOpen(false)}
                         className="text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 px-3 py-3 rounded-lg transition-all"
                     >

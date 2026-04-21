@@ -57,7 +57,7 @@ export function LowStockTable({ products }: { products: Product[] }) {
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <Link href="/stock" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors group/link">
+                                    <Link href="/admin/stock" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors group/link">
                                         Ajustar
                                         <ArrowRight size={12} className="group-hover/link:translate-x-1 transition-transform" />
                                     </Link>
@@ -86,7 +86,7 @@ export function LowStockTable({ products }: { products: Product[] }) {
                                 </span>
                             </div>
                         </div>
-                        <Link href="/stock" className="ml-3 shrink-0 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors group/link">
+                        <Link href="/admin/stock" className="ml-3 shrink-0 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors group/link">
                             Ajustar
                             <ArrowRight size={12} className="group-hover/link:translate-x-1 transition-transform" />
                         </Link>

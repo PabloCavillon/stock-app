@@ -20,7 +20,7 @@ export default function CartPage() {
                     <p className="text-sm text-gray-400 mt-1">Explorá el catálogo y agregá productos</p>
                 </div>
                 <Link
-                    href="/store"
+                    href="/"
                     className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-colors"
                 >
                     Ver catálogo
@@ -103,7 +103,7 @@ export default function CartPage() {
                     <ArrowRight size={16} />
                 </button>
                 <Link
-                    href="/store"
+                    href="/"
                     className="block text-center text-sm text-gray-400 hover:text-gray-700 transition-colors"
                 >
                     Seguir comprando
