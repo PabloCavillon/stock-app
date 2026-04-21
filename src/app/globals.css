@@ -65,6 +65,11 @@
 	--color-emerald-100: #112e20;
 	--color-emerald-700: #34d399;
 
+	/* Purple (publicidad) */
+	--color-purple-50: #150d2a;
+	--color-purple-100: #1e1340;
+	--color-purple-700: #c084fc;
+
 	/* Red (sin stock, errores) */
 	--color-red-50: #2a1515;
 	--color-red-100: #381a1a;

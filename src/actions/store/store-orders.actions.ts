@@ -6,6 +6,8 @@ import { getStoreSession } from "@/lib/store-auth";
 import { calcPriceArs } from "@/lib/price-utils";
 import { customAlphabet } from "nanoid";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
+import { StoreOrderStatus } from "@/generated/prisma/enums";
 
 const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
 
@@ -194,6 +196,176 @@ const orderInclude = {
         },
     },
 } as const;
+
+// ─── ADMIN ───────────────────────────────────────────────────────────────────
+
+export type AdminStoreOrder = {
+    id: string;
+    code: string;
+    status: string;
+    customerName: string;
+    subtotalUsd: number;
+    discountApplied: number;
+    discountType: string | null;
+    dollarRateAtCreation: number;
+    totalArs: number | null;
+    notes: string | null;
+    createdAt: string;
+    items: {
+        id: string;
+        productId: string | null;
+        productName: string | null;
+        productSku: string | null;
+        kitId: string | null;
+        kitName: string | null;
+        kitSku: string | null;
+        quantity: number;
+        unitPriceUsd: number;
+    }[];
+};
+
+export async function getAdminStoreOrders(): Promise<AdminStoreOrder[]> {
+    const orders = await prisma.storeOrder.findMany({
+        where: { deletedAt: null },
+        orderBy: { createdAt: "desc" },
+        include: {
+            storeCustomer: { select: { name: true } },
+            items: {
+                include: {
+                    product: { select: { name: true, sku: true } },
+                    kit: { select: { name: true, sku: true } },
+                },
+            },
+        },
+    });
+
+    return orders.map((o) => ({
+        id: o.id,
+        code: o.code,
+        status: o.status,
+        customerName: o.storeCustomer.name,
+        subtotalUsd: Number(o.subtotalUsd),
+        discountApplied: Number(o.discountApplied),
+        discountType: o.discountType,
+        dollarRateAtCreation: Number(o.dollarRateAtCreation),
+        totalArs: o.totalArs !== null ? Number(o.totalArs) : null,
+        notes: o.notes,
+        createdAt: o.createdAt.toISOString(),
+        items: o.items.map((i) => ({
+            id: i.id,
+            productId: i.productId,
+            productName: i.product?.name ?? null,
+            productSku: i.product?.sku ?? null,
+            kitId: i.kitId,
+            kitName: i.kit?.name ?? null,
+            kitSku: i.kit?.sku ?? null,
+            quantity: i.quantity,
+            unitPriceUsd: Number(i.unitPriceUsd),
+        })),
+    }));
+}
+
+export async function getAdminStoreOrder(id: string): Promise<AdminStoreOrder | null> {
+    const order = await prisma.storeOrder.findUnique({
+        where: { id },
+        include: {
+            storeCustomer: { select: { name: true } },
+            items: {
+                include: {
+                    product: { select: { name: true, sku: true } },
+                    kit: { select: { name: true, sku: true } },
+                },
+            },
+        },
+    });
+    if (!order) return null;
+    return {
+        id: order.id,
+        code: order.code,
+        status: order.status,
+        customerName: order.storeCustomer.name,
+        subtotalUsd: Number(order.subtotalUsd),
+        discountApplied: Number(order.discountApplied),
+        discountType: order.discountType,
+        dollarRateAtCreation: Number(order.dollarRateAtCreation),
+        totalArs: order.totalArs !== null ? Number(order.totalArs) : null,
+        notes: order.notes,
+        createdAt: order.createdAt.toISOString(),
+        items: order.items.map((i) => ({
+            id: i.id,
+            productId: i.productId,
+            productName: i.product?.name ?? null,
+            productSku: i.product?.sku ?? null,
+            kitId: i.kitId,
+            kitName: i.kit?.name ?? null,
+            kitSku: i.kit?.sku ?? null,
+            quantity: i.quantity,
+            unitPriceUsd: Number(i.unitPriceUsd),
+        })),
+    };
+}
+
+export async function updateStoreOrderStatusAdmin(id: string, status: StoreOrderStatus) {
+    const session = await auth();
+    if (!session?.user?.id) throw new Error("Unauthorized");
+
+    const order = await prisma.storeOrder.findUnique({
+        where: { id },
+        include: { items: true },
+    });
+    if (!order) throw new Error("Order not found");
+
+    const isConfirming =
+        status === StoreOrderStatus.CONFIRMED &&
+        (order.status === StoreOrderStatus.PENDING || order.status === StoreOrderStatus.PAYMENT_REGISTERED);
+
+    if (isConfirming) {
+        await prisma.$transaction(async (tx) => {
+            // Decrement stock for product items
+            for (const item of order.items) {
+                if (item.productId) {
+                    await tx.product.update({
+                        where: { id: item.productId },
+                        data: { stock: { decrement: item.quantity } },
+                    });
+                    await tx.stockMovement.create({
+                        data: {
+                            productId: item.productId,
+                            userId: session.user!.id!,
+                            type: "OUT",
+                            quantity: item.quantity,
+                            reason: "Venta Tienda",
+                        },
+                    });
+                } else if (item.kitId) {
+                    const leafProducts = await getKitLeafProducts(item.kitId, item.quantity);
+                    for (const [productId, qty] of leafProducts) {
+                        await tx.product.update({
+                            where: { id: productId },
+                            data: { stock: { decrement: qty } },
+                        });
+                        await tx.stockMovement.create({
+                            data: {
+                                productId,
+                                userId: session.user!.id!,
+                                type: "OUT",
+                                quantity: qty,
+                                reason: "Venta Tienda (Kit)",
+                            },
+                        });
+                    }
+                }
+            }
+            await tx.storeOrder.update({ where: { id }, data: { status } });
+        });
+    } else {
+        await prisma.storeOrder.update({ where: { id }, data: { status } });
+    }
+
+    revalidatePath("/orders");
+}
+
+// ─── CUSTOMER ─────────────────────────────────────────────────────────────────
 
 export async function getMyStoreOrders(): Promise<SerializedStoreOrder[]> {
     const session = await getStoreSession();

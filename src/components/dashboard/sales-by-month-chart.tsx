@@ -25,7 +25,7 @@ export function SalesByMonthChart({ data }: Props) {
                     <TrendingUp size={18} />
                 </div>
                 <div>
-                    <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-tight">
+                    <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight">
                         Rendimiento de Ventas
                     </h2>
                     <p className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">

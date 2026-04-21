@@ -2,51 +2,72 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, Calendar, ChevronRight } from "lucide-react";
+import { Eye, Calendar, ChevronRight, Store } from "lucide-react";
 import { SearchInput } from "../ui/search-input";
-import { STATUS_FLOW, STATUS_LABEL } from "@/types/order-status";
+import { STATUS_FLOW, STATUS_LABEL, STATUS_STYLE, STORE_STATUS_FLOW, STORE_STATUS_LABEL, STORE_STATUS_STYLE } from "@/types/order-status";
 import { updateOrderStatus } from "@/actions/orders";
-import { SerializedOrder } from "@/types/order";
-import { OrderStatus } from "@/generated/prisma/enums";
+import { updateStoreOrderStatusAdmin } from "@/actions/store/store-orders.actions";
+import { UnifiedOrder } from "@/types/unified-order";
+import { OrderStatus, StoreOrderStatus } from "@/generated/prisma/enums";
 import { useRouter } from "next/navigation";
-import OrderStatusTooltip from './order-status-tooltip';
+import { cn } from "@/lib/utils";
 import DownloadReceiptButton from "../receipts/DownloadReceiptButton";
 
-export default function OrdersTable({ orders: initialOrders }: { orders: SerializedOrder[] }) {
-    const router = useRouter()
-    const [orders, setOrders] = useState(initialOrders)
-    const [search, setSearch] = useState("")
-    const [updating, setUpdating] = useState<string | null>(null)
+function StatusBadge({ order }: { order: UnifiedOrder }) {
+    if (order.source === "store") {
+        const style = STORE_STATUS_STYLE[order.status as StoreOrderStatus] ?? "bg-zinc-50 text-zinc-500 border-zinc-100";
+        const label = STORE_STATUS_LABEL[order.status as StoreOrderStatus] ?? order.status;
+        return (
+            <span className={cn("inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border", style)}>
+                {label}
+            </span>
+        );
+    }
+    const style = STATUS_STYLE[order.status as OrderStatus] ?? "bg-zinc-50 text-zinc-500 border-zinc-100";
+    const label = STATUS_LABEL[order.status as OrderStatus] ?? order.status;
+    return (
+        <span className={cn("inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border", style)}>
+            {label}
+        </span>
+    );
+}
 
-    const filtered: SerializedOrder[] = orders.filter(order => {
-        const searchTerm = search.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function getNextStatus(order: UnifiedOrder): string | null {
+    if (order.source === "store") return STORE_STATUS_FLOW[order.status as StoreOrderStatus] ?? null;
+    return STATUS_FLOW[order.status as OrderStatus] ?? null;
+}
 
-        const customerName = order.customer?.name
-            ? order.customer.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            : "";
+function getNextLabel(order: UnifiedOrder, next: string): string {
+    if (order.source === "store") return STORE_STATUS_LABEL[next as StoreOrderStatus] ?? next;
+    return STATUS_LABEL[next as OrderStatus] ?? next;
+}
 
-        const orderId = order.id
-            ? order.id.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            : "";
+export default function OrdersTable({ orders: initialOrders }: { orders: UnifiedOrder[] }) {
+    const router = useRouter();
+    const [orders, setOrders] = useState(initialOrders);
+    const [search, setSearch] = useState("");
+    const [updating, setUpdating] = useState<string | null>(null);
 
-        const orderCode = order.code
-            ? order.code.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            : "";
-
-        return customerName.includes(searchTerm) || orderId.includes(searchTerm) || orderCode.includes(searchTerm);
+    const filtered = orders.filter((order) => {
+        const term = search.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        const name = order.customerName.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        const code = order.code.toLowerCase();
+        return name.includes(term) || code.includes(term);
     });
 
-    const handleAdvanceStatus = async (order: SerializedOrder) => {
-        const nextStatus: OrderStatus = STATUS_FLOW[order.status] as OrderStatus
-        if (!nextStatus) return
-        setUpdating(order.id)
-        await updateOrderStatus(order.id, nextStatus as OrderStatus)
-        setOrders((prev) =>
-            prev.map((o) => o.id === order.id ? { ...o, status: nextStatus } : o)
-        )
-        setUpdating(null)
-        router.refresh()
-    }
+    const handleAdvanceStatus = async (order: UnifiedOrder) => {
+        const next = getNextStatus(order);
+        if (!next) return;
+        setUpdating(order.id);
+        if (order.source === "store") {
+            await updateStoreOrderStatusAdmin(order.id, next as StoreOrderStatus);
+        } else {
+            await updateOrderStatus(order.id, next as OrderStatus);
+        }
+        setOrders((prev) => prev.map((o) => o.id === order.id ? { ...o, status: next } : o));
+        setUpdating(null);
+        router.refresh();
+    };
 
     const thClasses = "px-6 py-4 text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] text-left";
 
@@ -75,14 +96,19 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                             </thead>
                             <tbody className="divide-y divide-zinc-50">
                                 {filtered.map((order) => {
-                                    const nextStatus = STATUS_FLOW[order.status] as OrderStatus | undefined;
+                                    const next = getNextStatus(order);
                                     return (
                                         <tr key={order.id} className="group hover:bg-zinc-50/50 transition-colors">
                                             <td className="px-6 py-4 font-mono text-sm text-zinc-500 uppercase tracking-tighter">
-                                                {order.code.split('-')[1]}
+                                                <div className="flex items-center gap-2">
+                                                    {order.source === "store" && (
+                                                        <Store className="w-3 h-3 text-indigo-400 shrink-0" aria-label="Pedido de tienda" />
+                                                    )}
+                                                    {order.code.split('-')[1]}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4 font-bold text-base text-zinc-900">
-                                                {order.customer?.name || "Consumidor Final"}
+                                                {order.customerName}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-zinc-500">
                                                 <span className="flex items-center gap-2">
@@ -91,33 +117,35 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 font-bold text-base text-zinc-900">
-                                                ${Number(order.total).toLocaleString('es-AR')}
+                                                ${order.totalArs.toLocaleString('es-AR')}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <OrderStatusTooltip order={order} />
+                                                <StatusBadge order={order} />
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
-                                                    {nextStatus && (
+                                                    {next && (
                                                         <button
                                                             onClick={() => handleAdvanceStatus(order)}
                                                             disabled={updating === order.id}
-                                                            title={`Marcar como ${STATUS_LABEL[nextStatus]}`}
+                                                            title={`Marcar como ${getNextLabel(order, next)}`}
                                                             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-500 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all disabled:opacity-50"
                                                         >
                                                             {updating === order.id ? (
                                                                 <span className="animate-pulse">...</span>
                                                             ) : (
                                                                 <>
-                                                                    {STATUS_LABEL[nextStatus]}
+                                                                    {getNextLabel(order, next)}
                                                                     <ChevronRight className="w-3 h-3" />
                                                                 </>
                                                             )}
                                                         </button>
                                                     )}
-                                                    <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
+                                                    {order.source === "manual" && (
+                                                        <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
+                                                    )}
                                                     <Link
-                                                        href={`/orders/${order.id}`}
+                                                        href={order.source === "store" ? `/store-orders/${order.id}` : `/orders/${order.id}`}
                                                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all hover:shadow-sm"
                                                     >
                                                         <Eye className="w-4 h-4" />
@@ -134,18 +162,19 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                     {/* ── MOBILE: cards ── */}
                     <div className="flex flex-col divide-y divide-zinc-100 md:hidden">
                         {filtered.map((order) => {
-                            const nextStatus = STATUS_FLOW[order.status] as OrderStatus | undefined;
+                            const next = getNextStatus(order);
                             return (
                                 <div key={order.id} className="flex items-start justify-between px-4 py-4 hover:bg-zinc-50/50 transition-colors">
                                     <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap">
-                                            <span className="font-mono text-xs text-zinc-400 uppercase tracking-tighter bg-zinc-100/50 px-2 py-0.5 rounded">
+                                            <span className="font-mono text-xs text-zinc-400 uppercase tracking-tighter bg-zinc-100/50 px-2 py-0.5 rounded flex items-center gap-1">
+                                                {order.source === "store" && <Store className="w-2.5 h-2.5 text-indigo-400" />}
                                                 {order.code.split('-')[1]}
                                             </span>
-                                            <OrderStatusTooltip order={order} />
+                                            <StatusBadge order={order} />
                                         </div>
                                         <p className="font-bold text-base text-zinc-900 leading-snug">
-                                            {order.customer?.name || "Consumidor Final"}
+                                            {order.customerName}
                                         </p>
                                         <div className="flex items-center gap-3 flex-wrap">
                                             <span className="text-sm text-zinc-500 flex items-center gap-1">
@@ -153,10 +182,10 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                                 {new Date(order.createdAt).toLocaleDateString('es-AR')}
                                             </span>
                                             <span className="font-bold text-base text-zinc-900">
-                                                ${Number(order.total).toLocaleString('es-AR')}
+                                                ${order.totalArs.toLocaleString('es-AR')}
                                             </span>
                                         </div>
-                                        {nextStatus && (
+                                        {next && (
                                             <button
                                                 onClick={() => handleAdvanceStatus(order)}
                                                 disabled={updating === order.id}
@@ -166,7 +195,7 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                                     <span className="animate-pulse">...</span>
                                                 ) : (
                                                     <>
-                                                        {STATUS_LABEL[nextStatus]}
+                                                        {getNextLabel(order, next)}
                                                         <ChevronRight className="w-3 h-3" />
                                                     </>
                                                 )}
@@ -175,9 +204,11 @@ export default function OrdersTable({ orders: initialOrders }: { orders: Seriali
                                     </div>
 
                                     <div className="flex items-center gap-1 ml-3 shrink-0">
-                                        <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
+                                        {order.source === "manual" && (
+                                            <DownloadReceiptButton orderId={order.id} orderCode={order.code} variant="icon" />
+                                        )}
                                         <Link
-                                            href={`/orders/${order.id}`}
+                                            href={order.source === "store" ? `/store-orders/${order.id}` : `/orders/${order.id}`}
                                             className="inline-flex items-center justify-center w-9 h-9 rounded-lg text-zinc-400 hover:text-zinc-900 hover:bg-white border border-transparent hover:border-zinc-200 transition-all"
                                         >
                                             <Eye className="w-4 h-4" />
