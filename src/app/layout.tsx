@@ -24,10 +24,11 @@ export const metadata: Metadata = {
 	creator: "Projaska",
 	icons: {
 		icon: [
-			{ url: "/favicon.ico", sizes: "any" },
 			{ url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+			{ url: "/icon-512.png", type: "image/png", sizes: "512x512" },
 		],
-		apple: "/icon-192.png",
+		apple: { url: "/icon-192.png", sizes: "192x192" },
+		shortcut: "/favicon.ico",
 	},
 };
 
