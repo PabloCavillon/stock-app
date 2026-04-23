@@ -26,7 +26,7 @@ export default async function OrdersPage() {
             subtitle={`Registro Histórico: ${unified.length} pedidos`}
             icon={ShoppingCart}
             buttonText="Nueva Orden"
-            buttonHref="/orders/new"
+            buttonHref="/admin/orders/new"
         >
             <OrdersTable orders={unified} />
         </PageLayout>

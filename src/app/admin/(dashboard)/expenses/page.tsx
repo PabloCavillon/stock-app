@@ -30,7 +30,7 @@ export default async function ExpensesPage() {
             subtitle={`${expenses.length} registros`}
             icon={Receipt}
             buttonText="Nuevo Gasto"
-            buttonHref="/expenses/new"
+            buttonHref="/admin/expenses/new"
         >
             {/* Resumen */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 p-6 border-b border-zinc-100">

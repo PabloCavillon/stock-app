@@ -16,7 +16,7 @@ export default async function CustomersPage() {
 			subtitle={`Directorio: ${customers.length} contactos`}
 			icon={UserCircle}
 			buttonText="Nuevo Cliente"
-			buttonHref="/customers/new"
+			buttonHref="/admin/customers/new"
 		>
 			<CustomersTable customers={customers} />
 		</PageLayout>

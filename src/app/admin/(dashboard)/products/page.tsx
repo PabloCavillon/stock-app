@@ -16,7 +16,7 @@ export default async function ProductsPage() {
 			subtitle={`Inventario Total: ${products.length} artículos`}
 			icon={Package}
 			buttonText="Agregar Producto"
-			buttonHref="/products/new"
+			buttonHref="/admin/products/new"
 		>
 			<ProductsTable products={products} />
 		</PageLayout>

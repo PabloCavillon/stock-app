@@ -16,7 +16,7 @@ export default async function UsersPage() {
             subtitle={`${users.length} usuarios en total`}
             icon={Users}
             buttonText="Nuevo Usuario"
-            buttonHref="/users/new"
+            buttonHref="/admin/users/new"
         >
             <UsersTable users={users} />
         </PageLayout>

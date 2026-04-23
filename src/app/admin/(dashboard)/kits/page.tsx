@@ -14,7 +14,7 @@ export default async function KitsPage() {
             subtitle={`${kits.length} kit${kits.length !== 1 ? "s" : ""} registrado${kits.length !== 1 ? "s" : ""}`}
             icon={Boxes}
             buttonText="Nuevo Kit"
-            buttonHref="/kits/new"
+            buttonHref="/admin/kits/new"
         >
             <KitsTable kits={kits} />
         </PageLayout>
