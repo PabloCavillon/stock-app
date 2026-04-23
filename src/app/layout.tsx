@@ -23,7 +23,10 @@ export const metadata: Metadata = {
 	authors: [{ name: "Projaska" }],
 	creator: "Projaska",
 	icons: {
-		icon: "/icon-192.png",
+		icon: [
+			{ url: "/favicon.ico", sizes: "any" },
+			{ url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+		],
 		apple: "/icon-192.png",
 	},
 };
