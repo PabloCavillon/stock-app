@@ -10,6 +10,7 @@ export type SerializedProduct = {
 	unitsPerBox: number | null;
 	offerDiscountPct: number | null;
 	offerUnit: string | null;
+	isMadeToOrder: boolean;
 	createdAt: string;
 	updatedAt: string;
 	deletedAt: string | null;

@@ -4,3 +4,16 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
+
+/**
+ * Formatea un número como pesos argentinos con separador de miles por punto.
+ * Usa regex en lugar de Intl/toLocaleString para garantizar output idéntico
+ * entre Node.js (SSR) y el browser, evitando hydration mismatches.
+ * Ej: 244243 → "$ 244.243"
+ */
+export function fmtArs(n: number): string {
+    const abs = Math.round(Math.abs(n));
+    const sign = n < 0 ? "-" : "";
+    const formatted = abs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return `${sign}$ ${formatted}`;
+}

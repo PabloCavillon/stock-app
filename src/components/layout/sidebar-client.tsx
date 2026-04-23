@@ -20,6 +20,7 @@ import {
     Receipt,
     Boxes,
 } from "lucide-react";
+import { PushSubscribeButton } from "@/components/layout/push-subscribe-button";
 
 const navigation = [
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard, roles: ["ADMIN", "SELLER", "WATCHER"] },
@@ -108,6 +109,7 @@ export default function SidebarClient({ role }: { role: string }) {
 
                 {/* Sign out + theme */}
                 <div className="p-4 border-t border-zinc-100 flex flex-col gap-1">
+                    <PushSubscribeButton collapsed={collapsed} />
                     <ThemeToggle
                         showLabel={!collapsed}
                         className={`
@@ -156,6 +158,8 @@ export default function SidebarClient({ role }: { role: string }) {
 
                     {/* Theme toggle */}
                     <ThemeToggle className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-zinc-900 transition-all shrink-0 min-w-14" />
+                    {/* Push notifications */}
+                    <PushSubscribeButton />
 
                     {/* Logout */}
                     <button

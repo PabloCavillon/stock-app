@@ -1,6 +1,5 @@
 'use client';
 
-import { cn } from "@/lib/utils";
 import { Package, Users as UsersIcon, ShoppingBag, AlertTriangle, TrendingUp, TrendingDown, Megaphone } from "lucide-react";
 
 type Stats = {
@@ -20,12 +19,18 @@ const countCards = [
     { key: "lowStockCount", label: "Stock Bajo", icon: AlertTriangle, warning: true },
 ] as const;
 
+// Regex-based formatter — output idéntico en Node.js y browser, evita hydration mismatch
 function fmtArs(n: number) {
-    if (Math.abs(n) >= 1_000_000)
-        return (n / 1_000_000).toLocaleString("es-AR", { maximumFractionDigits: 1 }) + "M";
-    if (Math.abs(n) >= 1_000)
-        return (n / 1_000).toLocaleString("es-AR", { maximumFractionDigits: 0 }) + "k";
-    return n.toLocaleString("es-AR", { maximumFractionDigits: 0 });
+    const abs = Math.abs(n);
+    const sign = n < 0 ? "-" : "";
+    if (abs >= 1_000_000) {
+        const val = Math.round(abs / 100_000) / 10;
+        return `${sign}${val}M`;
+    }
+    if (abs >= 1_000) {
+        return `${sign}${Math.round(abs / 1_000)}k`;
+    }
+    return `${sign}${Math.round(abs).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
 }
 
 export function StatsCards({ stats }: { stats: Stats }) {
@@ -34,7 +39,7 @@ export function StatsCards({ stats }: { stats: Stats }) {
 
     return (
         <div className="space-y-4">
-            {/* Contadores — bg-white y colores zinc se invierten solos via CSS vars en dark mode */}
+            {/* Contadores */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {countCards.map((card) => {
                     const value = stats[card.key as keyof Pick<Stats, "totalProducts" | "totalCustomers" | "totalOrders" | "lowStockCount">];
@@ -43,18 +48,19 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     return (
                         <div
                             key={card.key}
-                            className={cn(
-                                "bg-white rounded-3xl border p-4 flex flex-col items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-200/50 group",
-                                isWarning ? "border-amber-200 bg-amber-50" : "border-zinc-200"
-                            )}
+                            // No usar cn()/twMerge aquí — stripe dark: variants junto a clases base conflictivas
+                            className={`bg-white rounded-3xl border p-4 flex flex-col items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-200/50 group ${
+                                isWarning
+                                    ? "border-amber-200 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800/40"
+                                    : "border-zinc-200"
+                            }`}
                         >
                             <div className="flex items-center gap-2">
-                                <div className={cn(
-                                    "p-2 rounded-xl transition-all duration-300",
+                                <div className={`p-2 rounded-xl transition-all duration-300 ${
                                     isWarning
-                                        ? "bg-amber-100 text-amber-600"
+                                        ? "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
                                         : "bg-zinc-100 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white"
-                                )}>
+                                }`}>
                                     <Icon size={18} strokeWidth={2} />
                                 </div>
                                 <span className="text-2xl sm:text-3xl font-black text-zinc-900 tracking-tight leading-none">{value}</span>
@@ -65,9 +71,9 @@ export function StatsCards({ stats }: { stats: Stats }) {
                 })}
             </div>
 
-            {/* P&L — bg-*-50 y border-*-100 se oscurecen solos via CSS vars en dark mode */}
+            {/* P&L */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                {/* Ingresos: text-emerald-700 → #34d399 en dark (overrideado), value necesita dark:text-white */}
+                {/* Ingresos */}
                 <div className="bg-emerald-50 border border-emerald-100 rounded-3xl p-4 flex items-center gap-3">
                     <div className="p-2 bg-emerald-100 rounded-xl shrink-0">
                         <TrendingUp size={18} className="text-emerald-700" />
@@ -78,7 +84,7 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     </div>
                 </div>
 
-                {/* Gastos: text-red-600 → #f87171 en dark (overrideado), value necesita dark:text-white */}
+                {/* Gastos */}
                 <div className="bg-red-50 border border-red-100 rounded-3xl p-4 flex items-center gap-3">
                     <div className="p-2 bg-red-100 rounded-xl shrink-0">
                         <TrendingDown size={18} className="text-red-600" />
@@ -89,7 +95,7 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     </div>
                 </div>
 
-                {/* Publicidad: purple-50/100/700 ahora están en globals.css */}
+                {/* Publicidad */}
                 <div className="bg-purple-50 border border-purple-100 rounded-3xl p-4 flex items-center gap-3">
                     <div className="p-2 bg-purple-100 rounded-xl shrink-0">
                         <Megaphone size={18} className="text-purple-700" />
@@ -100,11 +106,12 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     </div>
                 </div>
 
-                {/* Resultado */}
-                <div className={cn(
-                    "rounded-3xl p-4 flex items-center gap-3 border",
-                    isProfit ? "bg-zinc-900 border-zinc-900" : "bg-red-900 border-red-900"
-                )}>
+                {/* Resultado — template string directa, no cn(), para evitar que twMerge elimine dark: */}
+                <div className={`rounded-3xl p-4 flex items-center gap-3 border ${
+                    isProfit
+                        ? "bg-zinc-900 border-zinc-800"
+                        : "bg-red-600 border-red-600 dark:bg-red-700 dark:border-red-700"
+                }`}>
                     <div className="p-2 rounded-xl shrink-0 bg-white/10">
                         {isProfit
                             ? <TrendingUp size={18} className="text-white" />
@@ -114,7 +121,7 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     <div className="min-w-0">
                         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Resultado</p>
                         <p className="text-xl sm:text-2xl font-black text-white">$ {fmtArs(Math.abs(netArs))}</p>
-                        <p className="text-[10px] text-zinc-500 mt-0.5">{isProfit ? "ganancia est." : "pérdida est."}</p>
+                        <p className="text-[10px] text-zinc-400 mt-0.5">{isProfit ? "ganancia est." : "pérdida est."}</p>
                     </div>
                 </div>
             </div>

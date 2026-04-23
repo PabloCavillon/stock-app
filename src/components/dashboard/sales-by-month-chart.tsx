@@ -19,9 +19,9 @@ export function SalesByMonthChart({ data }: Props) {
     const gradientId  = isDark ? 'salesGradientDark' : 'salesGradientLight';
 
     return (
-        <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none p-6">
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none p-6">
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-900 dark:text-zinc-100 shrink-0">
+                <div className="p-2 bg-zinc-100 rounded-xl text-zinc-900 shrink-0">
                     <TrendingUp size={18} />
                 </div>
                 <div>

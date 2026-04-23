@@ -15,9 +15,9 @@ export default function StoreError({
     }, [error]);
 
     return (
-        <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
-            <div className="p-4 bg-red-50 rounded-2xl">
-                <AlertTriangle className="w-8 h-8 text-red-400" />
+        <div className="flex flex-col items-center justify-center py-32 text-center gap-5">
+            <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-red-400" />
             </div>
             <div>
                 <h2 className="font-bold text-gray-900 text-lg">Algo salió mal</h2>
@@ -25,19 +25,19 @@ export default function StoreError({
                     Ocurrió un error inesperado. Podés intentar de nuevo.
                 </p>
                 {error.digest && (
-                    <p className="text-xs font-mono text-gray-300 mt-1">ref: {error.digest}</p>
+                    <p className="text-xs font-mono text-gray-300 mt-2">ref: {error.digest}</p>
                 )}
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+            <div className="flex flex-col sm:flex-row gap-3">
                 <button
                     onClick={reset}
-                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition-colors"
+                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-colors cursor-pointer"
                 >
                     Intentar de nuevo
                 </button>
                 <a
                     href="/"
-                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-gray-200 text-gray-500 text-sm font-bold hover:bg-gray-50 transition-colors"
+                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
                 >
                     Volver al catálogo
                 </a>

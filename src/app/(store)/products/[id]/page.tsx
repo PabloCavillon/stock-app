@@ -51,7 +51,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
                 {/* Imagen */}
-                <div className="w-full aspect-square bg-white rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-200 md:mt-8">
+                <div className="w-full aspect-square bg-gray-50 rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-100 md:mt-8">
                     {product.imageUrl ? (
                         <Image
                             src={product.imageUrl}

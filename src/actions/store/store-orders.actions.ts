@@ -8,6 +8,7 @@ import { customAlphabet } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
 import { StoreOrderStatus } from "@/generated/prisma/enums";
+import { sendPushToAdminsAndSellers } from "@/lib/web-push";
 
 const nanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", 8);
 
@@ -108,7 +109,7 @@ export async function createStoreOrder(items: CheckoutItem[]): Promise<CheckoutR
 
     const code = `STR-${nanoid()}`;
 
-    await prisma.storeOrder.create({
+    const order = await prisma.storeOrder.create({
         data: {
             code,
             storeCustomerId: session.id,
@@ -132,6 +133,12 @@ export async function createStoreOrder(items: CheckoutItem[]): Promise<CheckoutR
             },
         },
     });
+
+    sendPushToAdminsAndSellers({
+        title: "Nuevo pedido en tienda",
+        body: `${session.name} realizó el pedido ${code}`,
+        url: `/admin/store-orders/${order.id}`,
+    }).catch(() => {});
 
     revalidatePath("/orders");
     return { code };
@@ -317,7 +324,11 @@ export async function updateStoreOrderStatusAdmin(id: string, status: StoreOrder
 
     const order = await prisma.storeOrder.findUnique({
         where: { id },
-        include: { items: true },
+        include: {
+            items: {
+                include: { product: { select: { isMadeToOrder: true } } },
+            },
+        },
     });
     if (!order) throw new Error("Order not found");
 
@@ -327,9 +338,10 @@ export async function updateStoreOrderStatusAdmin(id: string, status: StoreOrder
 
     if (isConfirming) {
         await prisma.$transaction(async (tx) => {
-            // Decrement stock for product items
             for (const item of order.items) {
                 if (item.productId) {
+                    // Productos por encargo no tienen stock real — no decrementar
+                    if (item.product?.isMadeToOrder) continue;
                     await tx.product.update({
                         where: { id: item.productId },
                         data: { stock: { decrement: item.quantity } },

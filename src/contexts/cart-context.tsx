@@ -14,6 +14,7 @@ export type CartItem = {
     unit: "unit" | "box";
     unitsPerBox?: number;   // filled when unit === "box"
     isOffer: boolean;
+    isMadeToOrder?: boolean;
 };
 
 type CartContextValue = {

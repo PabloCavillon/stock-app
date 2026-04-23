@@ -3,14 +3,11 @@
 import { useCart } from "@/contexts/cart-context";
 import { createStoreOrder } from "@/actions/store/store-orders.actions";
 import { calcPriceArs, type PriceInfo } from "@/lib/price-utils";
+import { fmtArs } from "@/lib/utils";
 import { Loader2, Tag, ArrowRight, ShoppingCart, Boxes, Package, Box } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-function fmtArs(n: number) {
-    return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
-}
 
 interface CheckoutClientProps {
     config: PriceInfo & { guildDiscountPct: number; volumeDiscountPct: number; volumeThresholdArs: number };
@@ -26,10 +23,12 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
 
     if (items.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
-                <ShoppingCart size={36} className="text-gray-300" />
+            <div className="flex flex-col items-center justify-center py-32 text-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
+                    <ShoppingCart size={24} className="text-gray-400" />
+                </div>
                 <p className="text-gray-500 font-medium">Tu carrito está vacío.</p>
-                <Link href="/" className="text-indigo-600 hover:text-indigo-700 font-semibold text-sm">
+                <Link href="/" className="text-indigo-600 hover:text-indigo-500 font-semibold text-sm transition-colors">
                     Ir al catálogo
                 </Link>
             </div>
@@ -72,38 +71,40 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
     };
 
     return (
-        <div className="space-y-6">
+        <div className="max-w-lg mx-auto space-y-6">
             <div>
-                <h1 className="text-2xl font-black text-gray-900 tracking-tight">Confirmá tu pedido</h1>
-                <p className="text-sm text-gray-400 mt-1">Hola, <strong>{customerName}</strong></p>
+                <h1 className="text-3xl font-black text-gray-900 tracking-tight">Confirmá tu pedido</h1>
+                <p className="text-sm text-gray-400 mt-1">
+                    Hola, <span className="font-semibold text-gray-700">{customerName}</span>
+                </p>
             </div>
 
             {/* Items */}
-            <div className="bg-white rounded-2xl border border-gray-200 divide-y divide-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-100 divide-y divide-gray-50 overflow-hidden shadow-sm">
                 {items.map((item) => {
                     const lineArs = calcPriceArs(item.priceUsd, config) * item.quantity;
                     return (
                         <div key={item.cartKey} className="flex items-center justify-between px-5 py-4 gap-4">
                             <div className="shrink-0 text-gray-300">
-                                {item.type === "kit" ? <Boxes size={16} /> : item.unit === "box" ? <Box size={16} /> : <Package size={16} />}
+                                {item.type === "kit" ? <Boxes size={15} /> : item.unit === "box" ? <Box size={15} /> : <Package size={15} />}
                             </div>
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                     {item.type === "kit" && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest bg-violet-100 text-violet-700 px-1.5 py-0.5 rounded-full">Kit</span>
+                                        <span className="text-[9px] font-bold uppercase tracking-wider bg-violet-600 text-white px-1.5 py-0.5 rounded-full">Kit</span>
                                     )}
                                     {item.unit === "box" && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">
+                                        <span className="text-[9px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full">
                                             Caja ×{item.unitsPerBox}
                                         </span>
                                     )}
                                     {item.isOffer && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                                        <span className="text-[9px] font-bold uppercase tracking-wider bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
                                             <Tag size={8} />
                                             Oferta
                                         </span>
                                     )}
-                                    <p className="font-bold text-gray-900 text-sm">{item.name}</p>
+                                    <p className="font-semibold text-gray-900 text-sm">{item.name}</p>
                                 </div>
                                 <p className="text-xs text-gray-400 mt-0.5">
                                     {item.quantity} × {fmtArs(calcPriceArs(item.priceUsd, config))}
@@ -115,11 +116,11 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
                 })}
             </div>
 
-            {/* Totales */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
-                <div className="flex justify-between text-sm text-gray-500">
-                    <span>Subtotal</span>
-                    <span className="font-bold text-gray-900">{fmtArs(subtotalArs)}</span>
+            {/* Totals */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-3 shadow-sm">
+                <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Subtotal</span>
+                    <span className="font-semibold text-gray-900">{fmtArs(subtotalArs)}</span>
                 </div>
 
                 {discountPct > 0 && (
@@ -128,7 +129,7 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
                             <Tag size={13} />
                             Descuento {discountType === "GUILD" ? "gremio" : "por volumen"} ({discountPct}%)
                         </span>
-                        <span className="font-bold">−{fmtArs(discountArs)}</span>
+                        <span className="font-semibold">−{fmtArs(discountArs)}</span>
                     </div>
                 )}
 
@@ -143,12 +144,12 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
 
                 <div className="flex justify-between items-center pt-3 border-t border-gray-100">
                     <span className="font-black text-gray-900">Total estimado</span>
-                    <span className="text-xl font-black text-gray-900">{fmtArs(totalArs)}</span>
+                    <span className="text-2xl font-black text-gray-900">{fmtArs(totalArs)}</span>
                 </div>
 
-                <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-4 py-3">
+                <p className="text-xs text-gray-400 bg-gray-50 rounded-xl px-4 py-3 leading-relaxed">
                     El total definitivo se confirma al momento del pago según la cotización vigente.
-                    Cotización de referencia: $&thinsp;{config.dollarRate.toLocaleString("es-AR")} ARS/USD
+                    Cotización de referencia: {fmtArs(config.dollarRate)} ARS/USD
                 </p>
             </div>
 
@@ -161,9 +162,9 @@ export function CheckoutClient({ config, isGuild, customerName }: CheckoutClient
             <button
                 onClick={handleConfirm}
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-60 disabled:translate-y-0 disabled:shadow-none cursor-pointer text-white font-bold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-60 disabled:hover:bg-indigo-600 disabled:hover:shadow-none cursor-pointer text-white font-semibold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]"
             >
-                {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={15} />}
                 {loading ? "Procesando..." : "Confirmar pedido"}
             </button>
 

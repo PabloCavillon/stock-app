@@ -25,9 +25,9 @@ describe("loginSchema", () => {
     });
 
     it("acepta redirect opcional", () => {
-        const result = loginSchema.safeParse({ email: "a@b.com", password: "x", redirect: "/store" });
+        const result = loginSchema.safeParse({ email: "a@b.com", password: "x", redirect: "/checkout" });
         expect(result.success).toBe(true);
-        if (result.success) expect(result.data.redirect).toBe("/store");
+        if (result.success) expect(result.data.redirect).toBe("/checkout");
     });
 });
 

@@ -66,6 +66,7 @@ model User {
   expenses           Expense[]
   recurringExpenses  RecurringExpense[]
   priceConfigUpdates PriceConfig[]
+  pushSubscriptions  PushSubscription[]
 }
 
 model Customer {
@@ -96,6 +97,7 @@ model Product {
   unitsPerBox      Int?
   offerDiscountPct Decimal?  @db.Decimal(5, 2)  // % de descuento, ej: 15 = 15% off
   offerUnit        String?   // "unit" | "box"
+  isMadeToOrder    Boolean   @default(false)     // se puede pedir sin stock
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
@@ -321,4 +323,16 @@ model StoreOrderItem {
 
   @@unique([storeOrderId, productId])
   @@unique([storeOrderId, kitId])
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }

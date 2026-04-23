@@ -14,10 +14,14 @@ export default async function StorePage() {
 
     if (!config) {
         return (
-            <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
-                <Settings size={40} className="text-gray-300" />
-                <p className="text-gray-500 font-medium">La tienda no está disponible en este momento.</p>
-                <p className="text-sm text-gray-400">El administrador debe configurar la cotización del dólar.</p>
+            <div className="flex flex-col items-center justify-center py-32 text-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
+                    <Settings size={24} className="text-gray-400" />
+                </div>
+                <div>
+                    <p className="font-semibold text-gray-900">Tienda no disponible</p>
+                    <p className="text-sm text-gray-400 mt-1">El administrador debe configurar la cotización del dólar.</p>
+                </div>
             </div>
         );
     }
@@ -25,22 +29,30 @@ export default async function StorePage() {
     const categories = [...new Set(products.map((p) => p.category))].sort();
 
     return (
-        <div className="space-y-12">
+        <div className="space-y-10">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-black text-gray-900 tracking-tight">Catálogo</h1>
-                <p className="text-sm text-gray-400 mt-1">
-                    {products.length} productos · {kits.length} kits · Precios en pesos argentinos
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                <div>
+                    <h1 className="text-3xl font-black text-gray-900 tracking-tight">Catálogo</h1>
+                    <p className="text-sm text-gray-400 mt-1">
+                        {products.length} productos · {kits.length} kits
+                    </p>
+                </div>
+                <p className="text-xs text-gray-400 bg-white border border-gray-100 rounded-xl px-3 py-2 self-start sm:self-auto shadow-sm">
+                    Precios en pesos argentinos
                 </p>
             </div>
 
-            {/* ── Kits & Ofertas ── */}
+            {/* Kits & Offers */}
             {kits.length > 0 && (
                 <section className="space-y-4">
-                    <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
-                        <Boxes size={15} className="text-violet-500" />
-                        <h2 className="text-xs font-black text-gray-400 uppercase tracking-widest">
-                            Kits & Ofertas <span className="text-gray-400 font-normal">({kits.length})</span>
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-violet-100 flex items-center justify-center">
+                            <Boxes size={13} className="text-violet-600" />
+                        </div>
+                        <h2 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+                            Kits & Ofertas
+                            <span className="ml-1.5 text-gray-400 font-normal">({kits.length})</span>
                         </h2>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
@@ -51,10 +63,12 @@ export default async function StorePage() {
                 </section>
             )}
 
-            {/* ── Productos por categoría ── */}
+            {/* Products by category */}
             {products.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-center gap-4">
-                    <Package size={40} className="text-gray-300" />
+                <div className="flex flex-col items-center justify-center py-32 text-center gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
+                        <Package size={24} className="text-gray-400" />
+                    </div>
                     <p className="text-gray-500 font-medium">No hay productos disponibles por el momento.</p>
                 </div>
             ) : (
@@ -62,9 +76,15 @@ export default async function StorePage() {
                     const catProducts = products.filter((p) => p.category === category);
                     return (
                         <section key={category} className="space-y-4">
-                            <h2 className="text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-3">
-                                {category} <span className="text-gray-400 font-normal">({catProducts.length})</span>
-                            </h2>
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center">
+                                    <Package size={12} className="text-indigo-500" />
+                                </div>
+                                <h2 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+                                    {category}
+                                    <span className="ml-1.5 text-gray-400 font-normal">({catProducts.length})</span>
+                                </h2>
+                            </div>
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
                                 {catProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />

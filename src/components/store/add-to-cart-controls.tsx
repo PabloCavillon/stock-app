@@ -48,13 +48,19 @@ export function AddToCartControls({ item, maxQuantity }: Props) {
         );
     }
 
+    const isMadeToOrder = item.isMadeToOrder ?? false;
+
     return (
         <button
             onClick={() => addItem(item)}
-            className="flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gray-900 text-white font-bold text-base hover:bg-gray-700 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gray-300 transition-all active:scale-[0.98] shadow-lg shadow-gray-200 cursor-pointer"
+            className={`flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-base hover:-translate-y-0.5 hover:shadow-lg transition-all active:scale-[0.98] cursor-pointer ${
+                isMadeToOrder
+                    ? "bg-amber-500 text-white hover:bg-amber-400 hover:shadow-amber-200"
+                    : "bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-indigo-200"
+            }`}
         >
-            <ShoppingCart size={18} />
-            Agregar al carrito
+            <ShoppingCart size={17} />
+            {isMadeToOrder ? "Pedir por encargo" : "Agregar al carrito"}
         </button>
     );
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = "projaska-v3";
+const CACHE_NAME = "projaska-v4";
 const STATIC_PREFIXES = ["/_next/static/", "/icon-", "/favicon"];
 
 self.addEventListener("install", (event) => {
@@ -60,4 +60,33 @@ self.addEventListener("fetch", (event) => {
                 .catch(() => caches.match(event.request))
         );
     }
+});
+
+self.addEventListener("push", (event) => {
+    const data = event.data?.json() ?? {};
+    event.waitUntil(
+        self.registration.showNotification(data.title ?? "Projaska", {
+            body: data.body ?? "",
+            icon: "/icon-192.png",
+            badge: "/icon-192.png",
+            tag: "store-order",
+            renotify: true,
+            data: { url: data.url ?? "/admin/store-orders" },
+        })
+    );
+});
+
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();
+    const url = event.notification.data?.url ?? "/admin/store-orders";
+    event.waitUntil(
+        clients
+            .matchAll({ type: "window", includeUncontrolled: true })
+            .then((clientList) => {
+                for (const client of clientList) {
+                    if ("focus" in client) return client.focus();
+                }
+                if (clients.openWindow) return clients.openWindow(url);
+            })
+    );
 });

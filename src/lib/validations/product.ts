@@ -20,6 +20,7 @@ export const productSchema = z.object({
 		(v) => (v === "" || v === null || v === undefined ? null : v),
 		z.enum(["unit", "box"]).nullable()
 	),
+	isMadeToOrder: z.boolean().default(false),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>

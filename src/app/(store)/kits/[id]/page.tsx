@@ -54,15 +54,15 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
             {/* Back */}
             <Link
                 href="/"
-                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-gray-700 transition-colors group"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-gray-400 hover:text-gray-900 transition-colors group"
             >
-                <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+                <ChevronLeft size={13} className="group-hover:-translate-x-0.5 transition-transform" />
                 Volver al catálogo
             </Link>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-                {/* Imagen */}
-                <div className="w-full aspect-square bg-[#f5f5f5] rounded-3xl flex items-center justify-center overflow-hidden relative border border-gray-200">
+                {/* Image */}
+                <div className="w-full aspect-square bg-violet-50 rounded-3xl flex items-center justify-center overflow-hidden relative border border-violet-100">
                     {kit.imageUrl ? (
                         <Image
                             src={kit.imageUrl}
@@ -72,46 +72,43 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                             unoptimized
                         />
                     ) : (
-                        <Boxes size={64} className="text-gray-200" />
+                        <Boxes size={64} className="text-violet-200" />
                     )}
                 </div>
 
                 {/* Info */}
                 <div className="flex flex-col gap-5">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-widest bg-violet-100 text-violet-700 px-2.5 py-1 rounded-full">
-                                Kit
-                            </span>
-                        </div>
-                        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-tight">
+                    <div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-violet-600 text-white px-2.5 py-1 rounded-full">
+                            Kit
+                        </span>
+                        <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight leading-tight mt-3">
                             {kit.name}
                         </h1>
-                        <p className="text-xs font-mono text-gray-500 uppercase tracking-widest">#{kit.sku}</p>
+                        <p className="text-xs font-mono text-gray-400 uppercase tracking-widest mt-1">#{kit.sku}</p>
                     </div>
 
-                    {/* Descripción */}
                     {kit.description && (
                         <div className="text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
                             {kit.description}
                         </div>
                     )}
 
-                    {/* Contenido del kit */}
-                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                    {/* Kit contents */}
+                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4 space-y-3">
+                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
                             Incluye
                         </p>
                         <ul className="space-y-2">
                             {kit.items.map((item, i) => (
                                 <li key={i} className="flex items-center gap-3">
-                                    <div className="w-7 h-7 rounded-lg bg-white border border-gray-200 flex items-center justify-center shrink-0">
-                                        <Package size={13} className="text-gray-400" />
+                                    <div className="w-7 h-7 rounded-lg bg-white border border-gray-100 flex items-center justify-center shrink-0">
+                                        <Package size={12} className="text-gray-400" />
                                     </div>
                                     <span className="text-sm text-gray-700 font-medium flex-1">
                                         {item.productName ?? item.childKitName}
                                     </span>
-                                    <span className="text-xs font-bold text-gray-400 bg-white border border-gray-200 px-2 py-0.5 rounded-lg">
+                                    <span className="text-xs font-semibold text-gray-400 bg-white border border-gray-100 px-2 py-0.5 rounded-lg">
                                         ×{item.quantity}
                                     </span>
                                 </li>
@@ -119,9 +116,9 @@ export default async function KitDetailPage({ params }: { params: Promise<{ id: 
                         </ul>
                     </div>
 
-                    {/* Precio */}
-                    <div className="bg-violet-50 border border-violet-100 rounded-2xl p-4 space-y-1">
-                        <p className="text-3xl font-black text-gray-900">{fmtArs(kit.priceArs)}</p>
+                    {/* Price */}
+                    <div className="bg-gray-50 border border-gray-100 rounded-2xl p-4">
+                        <p className="text-3xl font-black text-gray-900 leading-none">{fmtArs(kit.priceArs)}</p>
                     </div>
 
                     {/* Controles de carrito */}

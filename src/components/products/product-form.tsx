@@ -9,7 +9,7 @@ import { createProduct, updateProduct } from "@/actions/products";
 import { ProductFormData, ProductFormInput, productSchema } from '@/lib/validations/product';
 import { SerializedProduct } from "@/types/product";
 import { SerializedPriceConfig } from "@/actions/config";
-import { ImagePlus, Loader2, Save, X, TrendingDown, Info } from "lucide-react";
+import { ImagePlus, Loader2, Save, X, TrendingDown, Info, ClipboardList } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +34,7 @@ export function ProductForm({ product, config }: Props) {
     const [uploadError, setUploadError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<ProductFormInput, unknown, ProductFormData>({
+    const { register, handleSubmit, watch, setValue, formState: { errors, isSubmitting } } = useForm<ProductFormInput, unknown, ProductFormData>({
         resolver: zodResolver(productSchema),
         defaultValues: {
             sku: product?.sku ?? '',
@@ -47,6 +47,7 @@ export function ProductForm({ product, config }: Props) {
             unitsPerBox: product?.unitsPerBox ?? undefined,
             offerDiscountPct: product?.offerDiscountPct ?? undefined,
             offerUnit: (product?.offerUnit as "unit" | "box" | undefined) ?? undefined,
+            isMadeToOrder: product?.isMadeToOrder ?? false,
         }
     });
 
@@ -54,6 +55,7 @@ export function ProductForm({ product, config }: Props) {
     const discountPct = watch("offerDiscountPct");
     const offerUnit = watch("offerUnit");
     const unitsPerBoxValue = watch("unitsPerBox");
+    const isMadeToOrderValue = watch("isMadeToOrder");
 
     // Live offer preview
     const priceNum = Number(priceValue);
@@ -106,6 +108,7 @@ export function ProductForm({ product, config }: Props) {
                 unitsPerBox: data.unitsPerBox ?? null,
                 offerDiscountPct: data.offerDiscountPct ?? null,
                 offerUnit: data.offerUnit ?? null,
+                isMadeToOrder: data.isMadeToOrder ?? false,
             };
             if (product) await updateProduct(product.id, payload);
             else await createProduct(payload);
@@ -245,6 +248,35 @@ export function ProductForm({ product, config }: Props) {
                     />
                     {errors.unitsPerBox && <p className="text-sm text-red-500 mt-2 ml-1">{errors.unitsPerBox.message}</p>}
                 </div>
+            </div>
+
+            {/* Venta por encargo */}
+            <div className="border border-zinc-200 rounded-2xl p-5">
+                <div className="flex items-start justify-between gap-4">
+                    <div>
+                        <h3 className="text-sm font-black text-zinc-800 uppercase tracking-widest flex items-center gap-2">
+                            <ClipboardList size={14} className="text-zinc-500" />
+                            Venta por encargo
+                        </h3>
+                        <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                            El cliente puede pedirlo aunque no haya stock disponible.<br />
+                            El stock no se descuenta al confirmar la orden.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setValue("isMadeToOrder", !isMadeToOrderValue)}
+                        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
+                            isMadeToOrderValue ? "bg-zinc-900" : "bg-zinc-200"
+                        }`}
+                        aria-pressed={isMadeToOrderValue}
+                    >
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                            isMadeToOrderValue ? "translate-x-6" : "translate-x-1"
+                        }`} />
+                    </button>
+                </div>
+                <input type="hidden" {...register("isMadeToOrder")} />
             </div>
 
             {/* Oferta */}

@@ -40,7 +40,7 @@ export default function DashboardError({
                     Intentar de nuevo
                 </button>
                 <button
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push("/admin")}
                     className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl border border-zinc-200 text-zinc-600 text-sm font-bold hover:bg-zinc-100 transition-colors"
                 >
                     <Home className="w-4 h-4" />

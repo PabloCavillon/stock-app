@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "@/lib/validations/store-auth";
 import { Loader2 } from "lucide-react";
 
-const labelClass = "text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-2 ml-1 block";
-const inputClass = "w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-base sm:text-sm transition-all outline-none focus:ring-1 focus:ring-indigo-400 placeholder:text-zinc-300";
+const labelClass = "text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-1.5 block";
+const inputClass = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-900 transition-all outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/20 placeholder:text-gray-300";
 
 interface StoreLoginFormProps {
     action: (data: LoginFormData) => Promise<{ error: string } | { redirectTo: string }>;
@@ -43,7 +43,7 @@ export default function StoreLoginForm({ action, redirectTo }: StoreLoginFormPro
     };
 
     return (
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <input type="hidden" {...register("redirect")} />
 
             <div>
@@ -56,7 +56,7 @@ export default function StoreLoginForm({ action, redirectTo }: StoreLoginFormPro
                     placeholder="tu@email.com"
                     {...register("email")}
                 />
-                {errors.email && <p className="text-xs text-red-500 mt-1 ml-1">{errors.email.message}</p>}
+                {errors.email && <p className="text-xs text-red-500 mt-1.5">{errors.email.message}</p>}
             </div>
 
             <div>
@@ -69,7 +69,7 @@ export default function StoreLoginForm({ action, redirectTo }: StoreLoginFormPro
                     placeholder="••••••••"
                     {...register("password")}
                 />
-                {errors.password && <p className="text-xs text-red-500 mt-1 ml-1">{errors.password.message}</p>}
+                {errors.password && <p className="text-xs text-red-500 mt-1.5">{errors.password.message}</p>}
             </div>
 
             {serverError && (
@@ -81,9 +81,9 @@ export default function StoreLoginForm({ action, redirectTo }: StoreLoginFormPro
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none cursor-pointer text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm uppercase tracking-wide"
+                className="w-full bg-indigo-600 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600 disabled:hover:shadow-none cursor-pointer text-white font-semibold py-3 rounded-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm mt-2"
             >
-                {isSubmitting ? <><Loader2 size={16} className="animate-spin" />Ingresando...</> : "Ingresar"}
+                {isSubmitting ? <><Loader2 size={15} className="animate-spin" />Ingresando...</> : "Ingresar"}
             </button>
         </form>
     );

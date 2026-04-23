@@ -21,7 +21,7 @@ export function TopProductsChart({ data }: Props) {
 	const tooltipText = isDark ? '#e4e4e7' : '#18181b';
 
 	return (
-		<div className="bg-white rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6">
+		<div className="bg-white rounded-3xl border border-zinc-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none p-6">
 			<div className="flex items-center gap-3 mb-6">
 				<div className="p-2 bg-zinc-100 rounded-xl text-zinc-900 shrink-0">
 					<Star size={18} />

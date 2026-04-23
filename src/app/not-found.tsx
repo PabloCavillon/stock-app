@@ -14,7 +14,7 @@ export default function NotFound() {
             </div>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
-                    href="/"
+                    href="/admin"
                     className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-zinc-900 text-white text-sm font-bold hover:bg-zinc-800 transition-colors"
                 >
                     Ir al panel
