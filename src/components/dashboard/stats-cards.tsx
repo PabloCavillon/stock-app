@@ -64,7 +64,7 @@ export function StatsCards({ stats }: { stats: Stats }) {
                                 </div>
                                 <span className="text-2xl sm:text-3xl font-black text-zinc-900 tracking-tight leading-none">{value}</span>
                             </div>
-                            <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest text-center">{card.label}</span>
+                            <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest text-center">{card.label}</span>
                         </div>
                     );
                 })}
