@@ -21,6 +21,7 @@ export const productSchema = z.object({
 		z.enum(["unit", "box"]).nullable()
 	),
 	isMadeToOrder: z.boolean().default(false),
+	showInStore: z.boolean().default(true),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>

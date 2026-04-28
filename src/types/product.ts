@@ -11,6 +11,7 @@ export type SerializedProduct = {
 	offerDiscountPct: number | null;
 	offerUnit: string | null;
 	isMadeToOrder: boolean;
+	showInStore: boolean;
 	createdAt: string;
 	updatedAt: string;
 	deletedAt: string | null;

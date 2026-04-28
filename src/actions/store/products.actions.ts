@@ -60,7 +60,7 @@ function mapProduct(p: {
 
 export async function getStoreProduct(id: string): Promise<StoreProduct | null> {
     const [product, config] = await Promise.all([
-        prisma.product.findUnique({ where: { id, deletedAt: null }, select: productSelect }),
+        prisma.product.findUnique({ where: { id, deletedAt: null, showInStore: true }, select: productSelect }),
         getPriceConfig(),
     ]);
     if (!product || !config) return null;
@@ -71,7 +71,7 @@ export async function getStoreProduct(id: string): Promise<StoreProduct | null> 
 export async function getStoreProducts(): Promise<{ products: StoreProduct[]; config: PriceInfo | null }> {
     const [products, config] = await Promise.all([
         prisma.product.findMany({
-            where: { deletedAt: null },
+            where: { deletedAt: null, showInStore: true },
             orderBy: { name: "asc" },
             select: productSelect,
         }),

@@ -20,6 +20,7 @@ function serialize(p: Product): SerializedProduct {
 		offerDiscountPct: p.offerDiscountPct != null ? Number(p.offerDiscountPct) : null,
 		offerUnit: p.offerUnit ?? null,
 		isMadeToOrder: p.isMadeToOrder,
+		showInStore: p.showInStore,
 		createdAt: p.createdAt.toISOString(),
 		updatedAt: p.updatedAt.toISOString(),
 		deletedAt: p.deletedAt?.toISOString() ?? null,
@@ -63,6 +64,7 @@ export const createProduct = async (data: {
 	offerDiscountPct?: number | null;
 	offerUnit?: string | null;
 	isMadeToOrder?: boolean;
+	showInStore?: boolean;
 }) => {
 	const session = await auth();
 	if (!session?.user?.id) throw new Error("Unauthorized");
@@ -84,6 +86,7 @@ export const updateProduct = async (
 		offerDiscountPct?: number | null;
 		offerUnit?: string | null;
 		isMadeToOrder?: boolean;
+		showInStore?: boolean;
 	},
 ) => {
 	const session = await auth();

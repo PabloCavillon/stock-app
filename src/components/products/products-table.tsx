@@ -66,6 +66,7 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                     <th className={thClasses}>Categoría</th>
                                     <th className={thClasses}>Precio</th>
                                     <th className={thClasses}>Stock</th>
+                                    <th className={thClasses}>Tienda</th>
                                     <th className="px-6 py-4"></th>
                                 </tr>
                             </thead>
@@ -94,6 +95,16 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                                         "bg-red-50 text-red-700 border-red-100"
                                             )}>
                                                 {product.stock} {product.stock > 1 ? 'disponibles' : 'disponible'}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={cn(
+                                                "inline-flex px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest border",
+                                                product.showInStore
+                                                    ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                                    : "bg-zinc-100 text-zinc-400 border-zinc-200"
+                                            )}>
+                                                {product.showInStore ? "Visible" : "Oculto"}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
@@ -146,6 +157,14 @@ export default function ProductsTable({ products: initialProducts }: Props) {
                                                     "bg-red-50 text-red-700 border-red-100"
                                         )}>
                                             {product.stock} {product.stock > 1 ? 'disponibles' : 'disponible'}
+                                        </span>
+                                        <span className={cn(
+                                            "inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-widest border",
+                                            product.showInStore
+                                                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                                                : "bg-zinc-100 text-zinc-400 border-zinc-200"
+                                        )}>
+                                            {product.showInStore ? "Visible" : "Oculto"}
                                         </span>
                                     </div>
                                 </div>

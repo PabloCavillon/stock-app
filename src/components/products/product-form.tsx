@@ -9,7 +9,7 @@ import { createProduct, updateProduct } from "@/actions/products";
 import { ProductFormData, ProductFormInput, productSchema } from '@/lib/validations/product';
 import { SerializedProduct } from "@/types/product";
 import { SerializedPriceConfig } from "@/actions/config";
-import { ImagePlus, Loader2, Save, X, TrendingDown, Info, ClipboardList } from "lucide-react";
+import { ImagePlus, Loader2, Save, X, TrendingDown, Info, ClipboardList, Store } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +48,7 @@ export function ProductForm({ product, config }: Props) {
             offerDiscountPct: product?.offerDiscountPct ?? undefined,
             offerUnit: (product?.offerUnit as "unit" | "box" | undefined) ?? undefined,
             isMadeToOrder: product?.isMadeToOrder ?? false,
+            showInStore: product?.showInStore ?? true,
         }
     });
 
@@ -56,6 +57,7 @@ export function ProductForm({ product, config }: Props) {
     const offerUnit = watch("offerUnit");
     const unitsPerBoxValue = watch("unitsPerBox");
     const isMadeToOrderValue = watch("isMadeToOrder");
+    const showInStoreValue = watch("showInStore");
 
     // Live offer preview
     const priceNum = Number(priceValue);
@@ -109,6 +111,7 @@ export function ProductForm({ product, config }: Props) {
                 offerDiscountPct: data.offerDiscountPct ?? null,
                 offerUnit: data.offerUnit ?? null,
                 isMadeToOrder: data.isMadeToOrder ?? false,
+                showInStore: data.showInStore ?? true,
             };
             if (product) await updateProduct(product.id, payload);
             else await createProduct(payload);
@@ -277,6 +280,34 @@ export function ProductForm({ product, config }: Props) {
                     </button>
                 </div>
                 <input type="hidden" {...register("isMadeToOrder")} />
+            </div>
+
+            {/* Visible en tienda */}
+            <div className="border border-zinc-200 rounded-2xl p-5">
+                <div className="flex items-start justify-between gap-4">
+                    <div>
+                        <h3 className="text-sm font-black text-zinc-800 uppercase tracking-widest flex items-center gap-2">
+                            <Store size={14} className="text-zinc-500" />
+                            Visible en tienda
+                        </h3>
+                        <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                            Si está desactivado, el producto no aparece en la tienda online.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => setValue("showInStore", !showInStoreValue)}
+                        className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${
+                            showInStoreValue ? "bg-zinc-900" : "bg-zinc-200"
+                        }`}
+                        aria-pressed={showInStoreValue}
+                    >
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                            showInStoreValue ? "translate-x-6" : "translate-x-1"
+                        }`} />
+                    </button>
+                </div>
+                <input type="hidden" {...register("showInStore")} />
             </div>
 
             {/* Oferta */}

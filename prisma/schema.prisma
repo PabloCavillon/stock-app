@@ -98,6 +98,7 @@ model Product {
   offerDiscountPct Decimal?  @db.Decimal(5, 2)  // % de descuento, ej: 15 = 15% off
   offerUnit        String?   // "unit" | "box"
   isMadeToOrder    Boolean   @default(false)     // se puede pedir sin stock
+  showInStore      Boolean   @default(true)      // visible en la tienda online
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   deletedAt     DateTime?
