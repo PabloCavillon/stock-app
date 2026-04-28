@@ -4,7 +4,7 @@ import { getPriceConfig } from "@/actions/config";
 import { prisma } from "@/lib/prisma";
 import { CheckoutClient } from "@/components/store/checkout-client";
 
-export const metadata = { title: "Checkout" };
+export const metadata = { title: "Checkout", robots: { index: false } };
 
 export default async function CheckoutPage() {
     const session = await getStoreSession();

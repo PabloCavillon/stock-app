@@ -4,7 +4,26 @@ import { ProductCard } from "@/components/store/product-card";
 import { KitCard } from "@/components/store/kit-card";
 import { Boxes, Package, Settings } from "lucide-react";
 
-export const metadata = { title: "Catálogo" };
+export const metadata = {
+    title: "Catálogo de Productos",
+    description: "Explorá nuestro catálogo de tecnología y seguridad: cámaras, alarmas, cerraduras inteligentes, domótica y accesorios. Precios en pesos argentinos.",
+    openGraph: {
+        title: "Catálogo | Projaska",
+        description: "Tecnología y seguridad para profesionales. Cámaras, alarmas, cerraduras y más.",
+        url: "/",
+    },
+    alternates: { canonical: "/" },
+};
+
+const orgJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Projaska",
+    url: process.env.NEXT_PUBLIC_BASE_URL ?? "https://projaska.com",
+    logo: `${process.env.NEXT_PUBLIC_BASE_URL ?? "https://projaska.com"}/icon-512.png`,
+    description: "Tienda online de tecnología y seguridad para profesionales.",
+    sameAs: [],
+};
 
 export default async function StorePage() {
     const [{ products, config }, { kits }] = await Promise.all([
@@ -30,6 +49,10 @@ export default async function StorePage() {
 
     return (
         <div className="space-y-10">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+            />
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
                 <div>

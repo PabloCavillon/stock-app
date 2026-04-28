@@ -2,11 +2,9 @@ import { Sidebar } from "@/components/layout/sidebar"
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: {
-        template: '%s | Projaska', // El %s se reemplaza por el título de la página hija
-        default: 'Dashboard | Projaska', // Título si la página hija no define uno
-    },
+    title: { template: "%s | Projaska Admin", default: "Dashboard | Projaska" },
     description: "Sistema de gestión de inventario profesional",
+    robots: { index: false, follow: false },
 };
 
 export default function DashboardLayout({

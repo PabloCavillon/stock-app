@@ -3,7 +3,7 @@ import { getStoreSession } from "@/lib/store-auth";
 import { loginStoreCustomer } from "@/actions/store/auth.actions";
 import StoreLoginForm from "@/components/store/store-login-form";
 
-export const metadata = { title: "Ingresar" };
+export const metadata = { title: "Ingresar", robots: { index: false } };
 
 interface LoginPageProps {
     searchParams: Promise<{ redirect?: string }>;

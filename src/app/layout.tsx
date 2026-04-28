@@ -14,14 +14,34 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://projaska.com";
+
 export const metadata: Metadata = {
+	metadataBase: new URL(BASE_URL),
 	title: {
 		template: "%s | Projaska",
-		default: "Projaska",
+		default: "Projaska — Tecnología y Seguridad",
 	},
-	description: "Sistema de gestión de inventario y tienda para Projaska — tecnología y seguridad.",
+	description: "Tienda online de tecnología y seguridad para profesionales. Cámaras, alarmas, cerraduras y más con envío a todo el país.",
+	keywords: ["tecnología", "seguridad", "cámaras", "alarmas", "cerraduras", "domótica", "Projaska"],
 	authors: [{ name: "Projaska" }],
 	creator: "Projaska",
+	robots: { index: true, follow: true },
+	openGraph: {
+		type: "website",
+		locale: "es_AR",
+		url: BASE_URL,
+		siteName: "Projaska",
+		title: "Projaska — Tecnología y Seguridad",
+		description: "Tienda online de tecnología y seguridad para profesionales. Cámaras, alarmas, cerraduras y más.",
+		images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "Projaska" }],
+	},
+	twitter: {
+		card: "summary",
+		title: "Projaska — Tecnología y Seguridad",
+		description: "Tienda online de tecnología y seguridad para profesionales.",
+		images: ["/icon-512.png"],
+	},
 	icons: {
 		icon: [
 			{ url: "/icon-192.png", type: "image/png", sizes: "192x192" },

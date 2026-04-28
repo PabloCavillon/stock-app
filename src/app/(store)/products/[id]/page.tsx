@@ -13,10 +13,19 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return {
         title: product.name,
         description,
+        alternates: { canonical: `/products/${id}` },
         openGraph: {
+            title: `${product.name} | Projaska`,
+            description,
+            url: `/products/${id}`,
+            type: "website",
+            ...(product.imageUrl && { images: [{ url: product.imageUrl, alt: product.name }] }),
+        },
+        twitter: {
+            card: "summary_large_image",
             title: product.name,
             description,
-            ...(product.imageUrl && { images: [{ url: product.imageUrl }] }),
+            ...(product.imageUrl && { images: [product.imageUrl] }),
         },
     };
 }

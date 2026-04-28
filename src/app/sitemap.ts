@@ -6,11 +6,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://projaska.com";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const [products, kits] = await Promise.all([
         prisma.product.findMany({
-            where: { deletedAt: null },
+            where: { deletedAt: null, showInStore: true },
             select: { id: true, updatedAt: true },
         }),
         prisma.kit.findMany({
-            where: { deletedAt: null },
+            where: { deletedAt: null, isActive: true },
             select: { id: true, updatedAt: true },
         }),
     ]);

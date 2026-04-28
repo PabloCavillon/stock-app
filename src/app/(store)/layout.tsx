@@ -5,8 +5,14 @@ import { getStoreSession } from "@/lib/store-auth";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: { default: 'Projaska', template: '%s | Projaska' },
-    description: 'Tecnología y seguridad para profesionales'
+    title: { default: "Projaska — Tecnología y Seguridad", template: "%s | Projaska" },
+    description: "Tienda online de tecnología y seguridad para profesionales. Cámaras, alarmas, cerraduras y más con envío a todo el país.",
+    openGraph: {
+        type: "website",
+        locale: "es_AR",
+        siteName: "Projaska",
+    },
+    twitter: { card: "summary_large_image" },
 };
 
 export default async function StoreLayout({
