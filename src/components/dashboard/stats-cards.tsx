@@ -48,24 +48,23 @@ export function StatsCards({ stats }: { stats: Stats }) {
                     return (
                         <div
                             key={card.key}
-                            // No usar cn()/twMerge aquí — stripe dark: variants junto a clases base conflictivas
-                            className={`bg-white rounded-3xl border p-4 flex flex-col items-center gap-2 transition-all hover:shadow-md hover:shadow-zinc-200/50 group ${
+                            className={`rounded-3xl border p-4 flex flex-col items-center gap-2 transition-all hover:shadow-md group ${
                                 isWarning
-                                    ? "border-amber-200 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-800/40"
-                                    : "border-zinc-200"
+                                    ? "bg-amber-50 border-amber-200 hover:shadow-amber-100/50 dark:bg-amber-950/30 dark:border-amber-800/40 dark:hover:shadow-amber-900/20"
+                                    : "bg-white border-zinc-200 hover:shadow-zinc-200/50 dark:bg-zinc-900 dark:border-zinc-700/40 dark:hover:shadow-black/30"
                             }`}
                         >
                             <div className="flex items-center gap-2">
                                 <div className={`p-2 rounded-xl transition-all duration-300 ${
                                     isWarning
                                         ? "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400"
-                                        : "bg-zinc-100 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white"
+                                        : "bg-zinc-100 dark:bg-white/10 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white dark:group-hover:bg-white/20"
                                 }`}>
                                     <Icon size={18} strokeWidth={2} />
                                 </div>
                                 <span className="text-2xl sm:text-3xl font-black text-zinc-900 tracking-tight leading-none">{value}</span>
                             </div>
-                            <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest text-center">{card.label}</span>
+                            <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest text-center">{card.label}</span>
                         </div>
                     );
                 })}
