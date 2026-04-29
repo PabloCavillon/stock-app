@@ -4,6 +4,8 @@ import { ServiceWorkerRegistrar } from "@/components/store/service-worker-regist
 import { getStoreSession } from "@/lib/store-auth";
 import { Metadata } from "next";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
     title: { default: "Projaska — Tecnología y Seguridad", template: "%s | Projaska" },
     description: "Tienda online de tecnología y seguridad para profesionales. Cámaras, alarmas, cerraduras y más con envío a todo el país.",

@@ -1,6 +1,8 @@
 import { Sidebar } from "@/components/layout/sidebar"
 import { Metadata } from "next";
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
     title: { template: "%s | Projaska Admin", default: "Dashboard | Projaska" },
     description: "Sistema de gestión de inventario profesional",
